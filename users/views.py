@@ -402,7 +402,7 @@ class PublicProfileView(APIView):
     )
     def get(self, request, username):
         # Look up by email (username) or uuid
-        user = User.objects.filter(email=username).first()
+        user = User.objects.filter(email__iexact=username).first()
         if not user:
             try:
                 user = User.objects.filter(uuid=username).first()

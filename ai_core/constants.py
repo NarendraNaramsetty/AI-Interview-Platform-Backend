@@ -2,11 +2,13 @@
 PROVIDER_OLLAMA = 'Ollama'
 PROVIDER_GEMINI = 'Gemini'
 PROVIDER_OPENAI = 'OpenAI'
+PROVIDER_GROQ = 'Groq'
 
 PROVIDER_CHOICES = [
     (PROVIDER_OLLAMA, 'Ollama'),
     (PROVIDER_GEMINI, 'Gemini'),
     (PROVIDER_OPENAI, 'OpenAI'),
+    (PROVIDER_GROQ, 'Groq'),
 ]
 
 # Model Types

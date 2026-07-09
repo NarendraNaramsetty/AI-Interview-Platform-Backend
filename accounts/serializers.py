@@ -51,6 +51,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, attrs):
+        if 'email' in attrs:
+            attrs['email'] = attrs['email'].lower().strip()
         if attrs['password'] != attrs['password_confirm']:
             raise serializers.ValidationError(
                 {"password_confirm": _("Passwords do not match.")}
@@ -82,6 +84,8 @@ class LoginSerializer(serializers.Serializer):
         password = attrs.get('password')
 
         if email and password:
+            email = email.lower().strip()
+            attrs['email'] = email
             user = authenticate(request=self.context.get('request'), email=email, password=password)
             if not user:
                 raise serializers.ValidationError(
@@ -150,11 +154,12 @@ class ForgotPasswordSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
 
     def validate_email(self, value):
-        if not CustomUser.objects.filter(email=value).exists():
+        normalized = value.lower().strip()
+        if not CustomUser.objects.filter(email__iexact=normalized).exists():
             raise serializers.ValidationError(
                 _("No active account exists matching this email address.")
             )
-        return value
+        return normalized
 
 
 class VerifyOTPSerializer(serializers.Serializer):
@@ -165,10 +170,11 @@ class VerifyOTPSerializer(serializers.Serializer):
     otp = serializers.CharField(required=True, min_length=6, max_length=6)
 
     def validate(self, attrs):
-        email = attrs.get('email')
+        email = attrs.get('email', '').lower().strip()
+        attrs['email'] = email
         otp = attrs.get('otp')
         
-        user = CustomUser.objects.filter(email=email).first()
+        user = CustomUser.objects.filter(email__iexact=email).first()
         if not user:
             raise serializers.ValidationError({"email": _("No account found matching this email.")})
             
@@ -197,7 +203,9 @@ class ResetPasswordSerializer(serializers.Serializer):
                 {"password_confirm": _("Passwords do not match.")}
             )
             
-        user = CustomUser.objects.filter(email=attrs['email']).first()
+        email = attrs.get('email', '').lower().strip()
+        attrs['email'] = email
+        user = CustomUser.objects.filter(email__iexact=email).first()
         if not user:
             raise serializers.ValidationError({"email": _("No account found matching this email.")})
             
@@ -214,6 +222,11 @@ class VerifyEmailSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     token = serializers.CharField(required=True)
 
+    def validate(self, attrs):
+        if 'email' in attrs:
+            attrs['email'] = attrs['email'].lower().strip()
+        return attrs
+
 
 class ResendVerificationSerializer(serializers.Serializer):
     """
@@ -222,9 +235,10 @@ class ResendVerificationSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
 
     def validate_email(self, value):
-        user = CustomUser.objects.filter(email=value).first()
+        normalized = value.lower().strip()
+        user = CustomUser.objects.filter(email__iexact=normalized).first()
         if not user:
             raise serializers.ValidationError(_("No account exists matching this email address."))
         if user.is_verified:
             raise serializers.ValidationError(_("This email is already verified."))
-        return value
+        return normalized

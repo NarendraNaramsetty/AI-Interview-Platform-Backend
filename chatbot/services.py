@@ -134,8 +134,9 @@ class ChatbotService:
                 processing_time=0.01
             )
 
-            # 2. Create mock AI Message
-            ai_text = f"This is a placeholder AI response to your message: '{user_message}'. RAG and LLM models will be integrated here later."
+            # 2. Create actual AI Message using Orchestrator
+            from ai_core.orchestrator import AIOrchestrator
+            ai_text = AIOrchestrator.answer_chatbot_query(session.id, user_message, user)
             ai_msg = ChatMessage.objects.create(
                 session=session,
                 sender=SENDER_AI,

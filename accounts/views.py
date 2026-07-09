@@ -256,7 +256,7 @@ class ForgotPasswordView(APIView):
         serializer.is_valid(raise_exception=True)
         
         email = serializer.validated_data['email']
-        user = CustomUser.objects.get(email=email)
+        user = CustomUser.objects.get(email__iexact=email)
         
         otp = AuthService.set_user_otp(user)
         AuthService.send_password_reset_email(user, otp)
@@ -290,7 +290,7 @@ class VerifyOTPView(APIView):
         
         email = serializer.validated_data['email']
         otp = serializer.validated_data['otp']
-        user = CustomUser.objects.get(email=email)
+        user = CustomUser.objects.get(email__iexact=email)
         
         is_valid = AuthService.verify_user_otp(user, otp)
         if not is_valid:
@@ -333,7 +333,7 @@ class ResetPasswordView(APIView):
         serializer.is_valid(raise_exception=True)
         
         email = serializer.validated_data['email']
-        user = CustomUser.objects.get(email=email)
+        user = CustomUser.objects.get(email__iexact=email)
         
         user.set_password(serializer.validated_data['new_password'])
         user.otp_code = ''
@@ -366,7 +366,7 @@ class VerifyEmailView(APIView):
         
         email = serializer.validated_data['email']
         token = serializer.validated_data['token']
-        user = CustomUser.objects.get(email=email)
+        user = CustomUser.objects.get(email__iexact=email)
         
         is_valid = AuthService.verify_user_otp(user, token)
         if not is_valid:
@@ -404,7 +404,7 @@ class ResendVerificationView(APIView):
         serializer.is_valid(raise_exception=True)
         
         email = serializer.validated_data['email']
-        user = CustomUser.objects.get(email=email)
+        user = CustomUser.objects.get(email__iexact=email)
         
         otp = AuthService.set_user_otp(user)
         AuthService.send_verification_email(user, otp)

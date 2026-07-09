@@ -17,13 +17,17 @@ class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('The Email field must be set')
-        email = self.normalize_email(email)
+        email = self.normalize_email(email).lower().strip()
         extra_fields.setdefault('is_active', True)
         user = self.model(email=email, **extra_fields)
         if password:
             user.set_password(password)
         user.save(using=self._db)
         return user
+
+    def get_by_natural_key(self, username):
+        return self.get(**{f"{self.model.USERNAME_FIELD}__iexact": username})
+
 
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
