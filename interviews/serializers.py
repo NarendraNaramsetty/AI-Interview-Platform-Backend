@@ -53,13 +53,15 @@ class InterviewTimelineSerializer(serializers.ModelSerializer):
 
 
 class InterviewSessionSerializer(serializers.ModelSerializer):
+    result = InterviewResultSerializer(read_only=True)
+
     class Meta:
         model = InterviewSession
         fields = [
             'id', 'uuid', 'title', 'target_role', 'target_company', 'interview_type',
             'difficulty', 'interview_mode', 'language', 'total_questions', 'answered_questions',
             'current_question_index', 'duration_minutes', 'elapsed_time_seconds', 'status',
-            'started_at', 'completed_at', 'created_at', 'updated_at'
+            'started_at', 'completed_at', 'result', 'created_at', 'updated_at'
         ]
         read_only_fields = fields
 
