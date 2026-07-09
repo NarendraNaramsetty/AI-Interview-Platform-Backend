@@ -1,0 +1,215 @@
+import os
+from django.utils import timezone
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+from .models import Resume, ResumeAnalysis, ResumeActivity
+from .utils import parse_resume_document
+from .validators import calculate_file_sha256
+
+class ResumeService:
+    """
+    Service layer to process uploaded documents, increment version counters,
+    audit activities, and interface with future AI tools.
+    """
+
+    @classmethod
+    def process_new_resume(cls, user, title: str, uploaded_file, upload_source: str = 'Web') -> Resume:
+        """
+        Step 1: Validate file sizes/hashes (Duplicate checks).
+        Step 2: Save metadata and file to the filesystem/database.
+        Step 3: Extract text contents.
+        Step 4: Count document pages.
+        Step 5: Instantiate placeholder assessments.
+        Step 6: Write audit logs.
+        """
+        file_hash = calculate_file_sha256(uploaded_file)
+        
+        # Check duplicate sha-256 file
+        if Resume.objects.filter(user=user, file_hash=file_hash).exists():
+            raise ValidationError(
+                _('This resume document has already been uploaded previously.'),
+                code='duplicate_file_upload'
+            )
+            
+        # File type
+        original_filename = uploaded_file.name
+        file_ext = original_filename.split('.')[-1].lower()
+        
+        # If title is not provided, use filename without extension
+        if not title:
+            title = ".".join(original_filename.split('.')[:-1])
+            
+        # Create Resume Instance (Status = Active, Processing = Pending)
+        resume = Resume.objects.create(
+            user=user,
+            title=title,
+            original_filename=original_filename,
+            file=uploaded_file,
+            file_size=uploaded_file.size,
+            file_type=file_ext,
+            upload_source=upload_source,
+            file_hash=file_hash,
+            processing_status='Pending'
+        )
+
+        # Parse text & count pages
+        try:
+            extracted_text, pages_count = parse_resume_document(resume.file.path, file_ext)
+            resume.resume_text = extracted_text
+            resume.total_pages = pages_count
+            resume.processing_status = 'Completed'
+        except Exception:
+            resume.processing_status = 'Failed'
+            
+        resume.save()
+        
+        # Create default placeholder analysis
+        cls.analyze_resume(resume.id)
+
+        # Write activity log
+        cls.log_activity(resume, 'Uploaded Resume', f"Uploaded resume file '{original_filename}'.")
+        
+        return resume
+
+    @classmethod
+    def replace_resume_file(cls, resume: Resume, replacement_file) -> Resume:
+        """
+        Replaces the document file binary, increments version counters, 
+        re-parses contents, and audits activities.
+        """
+        original_filename = replacement_file.name
+        file_ext = original_filename.split('.')[-1].lower()
+        file_hash = calculate_file_sha256(replacement_file)
+
+        # Check duplicates
+        if Resume.objects.filter(user=resume.user, file_hash=file_hash).exclude(id=resume.id).exists():
+            raise ValidationError(
+                _('A duplicate of this file already exists in your resume database.'),
+                code='duplicate_file_upload'
+            )
+
+        # Delete old binary physically
+        if resume.file and os.path.exists(resume.file.path):
+            try:
+                os.remove(resume.file.path)
+            except OSError:
+                pass
+
+        resume.file = replacement_file
+        resume.file_size = replacement_file.size
+        resume.file_type = file_ext
+        resume.original_filename = original_filename
+        resume.file_hash = file_hash
+        resume.resume_version += 1
+        resume.processing_status = 'Pending'
+
+        # Extract text & pages
+        try:
+            extracted_text, pages_count = parse_resume_document(resume.file.path, file_ext)
+            resume.resume_text = extracted_text
+            resume.total_pages = pages_count
+            resume.processing_status = 'Completed'
+        except Exception:
+            resume.processing_status = 'Failed'
+
+        resume.save()
+        
+        # Log activity
+        cls.log_activity(
+            resume, 
+            'Updated Resume', 
+            f"Replaced document file with version v{resume.resume_version} ({original_filename})."
+        )
+        
+        return resume
+
+    @classmethod
+    def set_default_resume(cls, resume: Resume):
+        """
+        Sets target resume as user's default, resetting all other user resumes default states.
+        """
+        # Clear others default flags
+        Resume.objects.filter(user=resume.user, is_default=True).update(is_default=False)
+        
+        resume.is_default = True
+        resume.save(update_fields=['is_default'])
+        
+        cls.log_activity(resume, 'Marked Default', "Marked resume as default profile document.")
+
+    @classmethod
+    def soft_delete_resume(cls, resume: Resume):
+        """
+        Stamps deletion timestamp and registers activity.
+        """
+        resume.delete()
+        cls.log_activity(resume, 'Deleted Resume', "Soft-deleted resume record from files registry.")
+
+    @staticmethod
+    def log_activity(resume: Resume, action: str, description: str = '') -> ResumeActivity:
+        """
+        Utility log register.
+        """
+        return ResumeActivity.objects.create(
+            resume=resume,
+            action=action,
+            description=description
+        )
+
+    # ----------------------------------------------------
+    # Future AI Integration Placeholders
+    # ----------------------------------------------------
+
+    @staticmethod
+    def generate_embeddings(resume_text: str) -> list:
+        """
+        Placeholder service for Sentence Transformers embeddings calculations.
+        Returns a mock vector array.
+        """
+        # Embeddings generation will go here later
+        return [0.0] * 384  # Mock 384-dimensional vector
+
+    @staticmethod
+    def send_to_qdrant(resume_id: int, embeddings: list) -> bool:
+        """
+        Placeholder service for Vector Storage (Qdrant).
+        """
+        # Qdrant client connection will go here later
+        return True
+
+    @staticmethod
+    def analyze_resume(resume_id: int) -> ResumeAnalysis:
+        """
+        Placeholder service for LLM Resume Analysis scoring.
+        Populates a dummy evaluation report.
+        """
+        resume = Resume.objects.get(id=resume_id)
+        
+        # Create or update analysis report with dummy scores
+        analysis, _ = ResumeAnalysis.objects.get_or_create(resume=resume)
+        analysis.overall_score = 78
+        analysis.ats_score = 80
+        analysis.grammar_score = 85
+        analysis.keyword_score = 70
+        analysis.completeness_score = 85
+        analysis.summary = (
+            "Extracted candidate profile shows strong foundations in Backend Engineering. "
+            "Keywords match Django and SQL stacks, with minor missing coverage in cloud containers."
+        )
+        analysis.strengths = ["Django REST framework proficiency", "Consistent databases management knowledge"]
+        analysis.weaknesses = ["Limited Cloud/AWS deployment description", "Missing Docker/Kubernetes container parameters"]
+        analysis.missing_skills = ["Docker", "Kubernetes", "Amazon Web Services (AWS)"]
+        analysis.recommended_roles = ["Junior Backend Developer", "Python Software Engineer"]
+        analysis.analysis_status = 'Completed'
+        analysis.save()
+        return analysis
+
+    @staticmethod
+    def generate_questions(resume_id: int) -> list:
+        """
+        Placeholder service to generate personalized RAG questions.
+        """
+        return [
+            "Explain your database tuning approach for Django queries.",
+            "How do you secure simple JWT credentials routing in production?",
+            "Can you describe your experience implementing custom REST exception middleware?"
+        ]
