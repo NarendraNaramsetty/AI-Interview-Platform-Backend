@@ -152,12 +152,14 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+FRONTEND_URL = config("FRONTEND_URL", default="http://localhost:5173")
+
 # CORS Config
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    config("FRONTEND_URL", default="https://ai-interview-platform-frontend-mnop.onrender.com")
+    FRONTEND_URL
 ]
 CORS_ALLOW_CREDENTIALS = True
 
