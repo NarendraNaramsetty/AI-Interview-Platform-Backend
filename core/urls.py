@@ -36,6 +36,7 @@ urlpatterns = [
 
     # Coding Module APIs
     path('api/coding/', include('coding.urls')),
+    path('api/ai/', include('coding.ai_urls')),
 
     # Learning Roadmap Module APIs
     path('api/roadmap/', include('roadmap.urls')),

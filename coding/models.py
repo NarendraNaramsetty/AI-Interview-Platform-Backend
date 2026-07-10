@@ -223,3 +223,131 @@ class FavoriteProblem(models.Model):
 
     def __str__(self):
         return f"Favorite: {self.user.email} -> {self.problem.title}"
+
+
+class CodingSession(models.Model):
+    """
+    Groups AI-generated challenges under a configured practice parameters block.
+    """
+    id = models.BigAutoField(primary_key=True)
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='coding_sessions'
+    )
+    practice_type = models.CharField(max_length=150)
+    role = models.CharField(max_length=150)
+    tech_stack = models.JSONField(default=list, blank=True)
+    company = models.CharField(max_length=150, blank=True)
+    experience = models.CharField(max_length=100, blank=True)
+    difficulty = models.CharField(max_length=50)
+    question_count = models.IntegerField(default=5)
+    focus_areas = models.JSONField(default=list, blank=True)
+    interview_goal = models.CharField(max_length=150, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Session {self.uuid} - User: {self.user.email} - Role: {self.role}"
+
+
+class GeneratedQuestion(models.Model):
+    """
+    Coding problem dynamically constructed by the LLM for a session config.
+    """
+    id = models.BigAutoField(primary_key=True)
+    session = models.ForeignKey(
+        CodingSession,
+        on_delete=models.CASCADE,
+        related_name='questions',
+        null=True,
+        blank=True
+    )
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    difficulty = models.CharField(max_length=50)
+    programming_language = models.CharField(max_length=50)
+    starter_code = models.TextField()
+    test_cases = models.JSONField(default=list, blank=True)
+    hints = models.JSONField(default=list, blank=True)
+    optimal_solution = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Generated Challenge: {self.title} ({self.difficulty})"
+
+
+class QuestionAttempt(models.Model):
+    """
+    Submissions and evaluation scores for an AI-generated question.
+    """
+    id = models.BigAutoField(primary_key=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='question_attempts'
+    )
+    question = models.ForeignKey(
+        GeneratedQuestion,
+        on_delete=models.CASCADE,
+        related_name='attempts'
+    )
+    source_code = models.TextField()
+    programming_language = models.CharField(max_length=50)
+    passed_test_cases = models.IntegerField(default=0)
+    total_test_cases = models.IntegerField(default=0)
+    execution_time = models.FloatField(default=0.0)
+    memory_used = models.FloatField(default=0.0)
+    status = models.CharField(max_length=50, default='Pending')
+    score = models.IntegerField(default=0)
+    
+    # Detailed reviews returned by the LLM
+    ai_review = models.JSONField(default=dict, blank=True)
+    follow_up_questions = models.JSONField(default=list, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Attempt {self.id} for Q: {self.question.title} - Score: {self.score}"
+
+
+class HintUsage(models.Model):
+    """
+    Tracks hint counts used per challenge.
+    """
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    question = models.ForeignKey(
+        GeneratedQuestion,
+        on_delete=models.CASCADE
+    )
+    hints_used = models.IntegerField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'question')
+
+
+class LearningProgress(models.Model):
+    """
+    Accumulates student gamification statistics, readiness metrics, and strengths.
+    """
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='coding_progress'
+    )
+    problems_solved = models.IntegerField(default=0)
+    current_streak = models.IntegerField(default=0)
+    average_score = models.FloatField(default=0.0)
+    languages_used = models.JSONField(default=list, blank=True)
+    top_skills = models.JSONField(default=list, blank=True)
+    weak_skills = models.JSONField(default=list, blank=True)
+    readiness_score = models.IntegerField(default=50)
+    xp = models.IntegerField(default=0)
+    coins = models.IntegerField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Progress for: {self.user.email} - Solved: {self.problems_solved}"
