@@ -1,3 +1,5 @@
+import requests
+from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
@@ -439,3 +441,171 @@ class CustomTokenRefreshView(TokenRefreshView):
                 "message": "Token refresh error",
                 "errors": {"detail": [str(e)]}
             }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GoogleLoginView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        code = request.data.get('code')
+        redirect_uri = request.data.get('redirect_uri')
+        if not code:
+            return Response({"success": False, "message": "Code is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        client_id = settings.GOOGLE_CLIENT_ID
+        client_secret = settings.GOOGLE_CLIENT_SECRET
+
+        if not client_id or not client_secret:
+            return Response({
+                "success": False,
+                "message": "Google Social Auth is not configured on the server. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET."
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        # Exchange code for token
+        token_url = "https://oauth2.googleapis.com/token"
+        payload = {
+            "code": code,
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "redirect_uri": redirect_uri,
+            "grant_type": "authorization_code"
+        }
+        
+        token_response = requests.post(token_url, data=payload)
+        if not token_response.ok:
+            return Response({
+                "success": False,
+                "message": "Failed to exchange code for token with Google.",
+                "errors": token_response.json()
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        token_data = token_response.json()
+        access_token = token_data.get('access_token')
+
+        # Fetch user info
+        user_info_url = "https://www.googleapis.com/oauth2/v3/userinfo"
+        headers = {"Authorization": f"Bearer {access_token}"}
+        user_info_response = requests.get(user_info_url, headers=headers)
+        
+        if not user_info_response.ok:
+            return Response({
+                "success": False,
+                "message": "Failed to fetch user info from Google."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        user_info = user_info_response.json()
+        email = user_info.get('email', '').lower().strip()
+        first_name = user_info.get('given_name', '')
+        last_name = user_info.get('family_name', '')
+
+        if not email:
+            return Response({
+                "success": False,
+                "message": "Email not returned from Google account."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        user, created = CustomUser.objects.get_or_create(
+            email=email,
+            defaults={
+                "first_name": first_name,
+                "last_name": last_name or '.',
+                "is_verified": True,
+                "role": "Developer"
+            }
+        )
+
+        tokens = get_tokens_for_user(user)
+        user_data = UserSerializer(user).data
+
+        return Response({
+            "success": True,
+            "message": "Google Login Successful",
+            "data": {
+                "user": user_data,
+                "tokens": tokens
+            }
+        }, status=status.HTTP_200_OK)
+
+
+class LinkedInLoginView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        code = request.data.get('code')
+        redirect_uri = request.data.get('redirect_uri')
+        if not code:
+            return Response({"success": False, "message": "Code is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        client_id = settings.LINKEDIN_CLIENT_ID
+        client_secret = settings.LINKEDIN_CLIENT_SECRET
+
+        if not client_id or not client_secret:
+            return Response({
+                "success": False,
+                "message": "LinkedIn Social Auth is not configured on the server. Please set LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET."
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        # Exchange code for token
+        token_url = "https://www.linkedin.com/oauth/v2/accessToken"
+        payload = {
+            "code": code,
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "redirect_uri": redirect_uri,
+            "grant_type": "authorization_code"
+        }
+        
+        token_response = requests.post(token_url, data=payload)
+        if not token_response.ok:
+            return Response({
+                "success": False,
+                "message": "Failed to exchange code for token with LinkedIn.",
+                "errors": token_response.json()
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        token_data = token_response.json()
+        access_token = token_data.get('access_token')
+
+        # Fetch user info
+        user_info_url = "https://api.linkedin.com/v2/userinfo"
+        headers = {"Authorization": f"Bearer {access_token}"}
+        user_info_response = requests.get(user_info_url, headers=headers)
+        
+        if not user_info_response.ok:
+            return Response({
+                "success": False,
+                "message": "Failed to fetch user info from LinkedIn."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        user_info = user_info_response.json()
+        email = user_info.get('email', '').lower().strip()
+        first_name = user_info.get('given_name', '')
+        last_name = user_info.get('family_name', '')
+
+        if not email:
+            return Response({
+                "success": False,
+                "message": "Email not returned from LinkedIn account."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        user, created = CustomUser.objects.get_or_create(
+            email=email,
+            defaults={
+                "first_name": first_name,
+                "last_name": last_name or '.',
+                "is_verified": True,
+                "role": "Developer"
+            }
+        )
+
+        tokens = get_tokens_for_user(user)
+        user_data = UserSerializer(user).data
+
+        return Response({
+            "success": True,
+            "message": "LinkedIn Login Successful",
+            "data": {
+                "user": user_data,
+                "tokens": tokens
+            }
+        }, status=status.HTTP_200_OK)

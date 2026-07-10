@@ -13,12 +13,20 @@ from .views import (
     ResendVerificationView,
     CustomTokenRefreshView
 )
+from .oauth_views import (
+    GoogleOAuthLoginView,
+    LinkedInOAuthLoginView,
+    LinkedInOAuthCallbackView
+)
 
 urlpatterns = [
     path('register', RegisterView.as_view(), name='auth_register'),
     path('login', LoginView.as_view(), name='auth_login'),
     path('logout', LogoutView.as_view(), name='auth_logout'),
     path('token/refresh', CustomTokenRefreshView.as_view(), name='token_refresh'),
+    path('google/', GoogleOAuthLoginView.as_view(), name='auth_google_login'),
+    path('linkedin/login/', LinkedInOAuthLoginView.as_view(), name='auth_linkedin_login'),
+    path('linkedin/callback/', LinkedInOAuthCallbackView.as_view(), name='auth_linkedin_callback'),
     
     path('me', CurrentUserView.as_view(), name='auth_me'),
     path('profile', UpdateProfileView.as_view(), name='auth_profile_update'),

@@ -66,6 +66,7 @@ class CustomUser(AbstractUser):
     github_url = models.URLField(blank=True, validators=[validate_github_url])
     portfolio_url = models.URLField(blank=True)
     role = models.CharField(max_length=50, default='Developer')
+    provider = models.CharField(max_length=50, default='local')
     
     is_verified = models.BooleanField(default=False)
     

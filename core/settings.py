@@ -14,6 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-default-fallback-key-2026-make-sure-to-change-in-prod')
+JWT_SECRET_KEY = config('JWT_SECRET_KEY', default=SECRET_KEY)
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
@@ -112,6 +113,12 @@ else:
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
+# Social OAuth Credentials
+GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', default='')
+GOOGLE_CLIENT_SECRET = config('GOOGLE_CLIENT_SECRET', default='')
+LINKEDIN_CLIENT_ID = config('LINKEDIN_CLIENT_ID', default='')
+LINKEDIN_CLIENT_SECRET = config('LINKEDIN_CLIENT_SECRET', default='')
+
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -146,7 +153,12 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS Config
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    config("FRONTEND_URL", default="https://ai-interview-platform-frontend-mnop.onrender.com")
+]
 CORS_ALLOW_CREDENTIALS = True
 
 # Django REST Framework Settings
@@ -180,7 +192,7 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': True,
     'ALGORITHM': 'HS256',
-    'SIGNING_KEY': SECRET_KEY,
+    'SIGNING_KEY': JWT_SECRET_KEY,
     'AUTH_HEADER_TYPES': ('Bearer',),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
     'USER_ID_FIELD': 'id',
