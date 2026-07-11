@@ -26,7 +26,7 @@ class InterviewService:
     @classmethod
     def start_interview(cls, user, target_role: str, target_company: str, interview_type: str,
                         difficulty: str, interview_mode: str, language: str, total_questions: int,
-                        duration_minutes: int, resume=None) -> InterviewSession:
+                        duration_minutes: int, resume=None, tech_stack: list = None, adaptive_mode: bool = True) -> InterviewSession:
         """
         Creates a new interview session, loads mock questions, sets started dates,
         and starts progress tracking.
@@ -45,6 +45,8 @@ class InterviewService:
             language=language,
             total_questions=total_questions,
             duration_minutes=duration_minutes,
+            tech_stack=tech_stack if tech_stack else [],
+            adaptive_mode=adaptive_mode,
             status=STATUS_IN_PROGRESS,
             started_at=timezone.now()
         )
@@ -303,3 +305,165 @@ class InterviewService:
     @staticmethod
     def generate_followup(session_id: int, question_id: int) -> list:
         return []
+
+    @classmethod
+    def get_next_question_ai(cls, session: InterviewSession) -> dict:
+        """
+        Invokes Gemini/Claude router to adaptively fetch the next interview question and evaluate the last candidate response.
+        """
+        # Gather answers so far to extract scores and candidate answers
+        answers = session.answers.order_by('submitted_at')
+        questions_asked_count = answers.count()
+
+        # Last candidate response
+        last_answer = answers.last()
+        last_answer_text = last_answer.answer_text if last_answer else ""
+
+        # Rolling performance scores (last 3 scores)
+        scored_answers = [ans.score for ans in answers if ans.score is not None]
+        last_3_scores = scored_answers[-3:]
+
+        # Time remaining
+        time_elapsed_mins = int(session.elapsed_time_seconds / 60)
+        time_remaining_mins = max(0, session.duration_minutes - time_elapsed_mins)
+
+        # Technical skills stack
+        selected_skills_list = session.tech_stack if session.tech_stack else [session.target_role]
+
+        # Formatting user turn prompt
+        user_prompt = f"""
+INTERVIEW SESSION CONTEXT:
+- Target Role: {session.target_role}
+- Experience Level: {session.difficulty}
+- Difficulty: {session.difficulty}
+- Interview Mode: {session.interview_mode}
+- Mock Duration Remaining: {time_remaining_mins} mins
+- Score Goal: 80%
+- Selected Tech Stack: {selected_skills_list}
+
+SESSION STATE:
+- Questions Asked So Far: {questions_asked_count}
+- Candidate's Last Answer: "{last_answer_text}"
+- Rolling Performance Trend: {last_3_scores}
+- Adaptive Mode: {session.adaptive_mode}
+
+TASK:
+Based on the context above, generate the NEXT interview question (or, if this 
+is the first turn, generate the OPENING question). If evaluating a previous 
+answer, include feedback and a score.
+
+Respond strictly in this JSON schema:
+
+{{
+  "action": "ask_question" | "give_feedback_and_ask_next" | "end_interview",
+  "feedback": {{
+    "score": <int 0-100 or null>,
+    "strengths": ["..."],
+    "improvements": ["..."],
+    "correct_answer_summary": "<1-2 lines, only if candidate missed key points>"
+  }},
+  "next_question": {{
+    "question_text": "...",
+    "category": "<one of the selected tech stack items>",
+    "difficulty_tag": "easy" | "medium" | "hard",
+    "expected_answer_points": ["...", "..."]
+  }},
+  "session_meta": {{
+    "current_ready_score": <int 0-100>,
+    "questions_remaining_estimate": <int>
+  }}
+}}
+"""
+
+        system_prompt = """
+You are "PrepAI Interviewer" — an expert technical interviewer and AI coach 
+conducting a simulated job interview. You adapt question difficulty in real 
+time based on the candidate's previous answers.
+
+RULES:
+1. Stay strictly within the candidate's selected technology stack and target role.
+2. Never ask about technologies NOT in the provided skill list unless the 
+   candidate mentions them first.
+3. Match question difficulty to the selected experience level:
+   - Fresher: fundamentals, definitions, simple "what is X" / "how does Y work"
+   - Junior: applied usage, small scenarios, basic debugging
+   - Mid-Level: system design lite, trade-offs, real-world scenarios, optimization
+   - Senior: architecture decisions, scalability, failure modes, leadership calls
+   - Lead: cross-team trade-offs, org-level architecture, mentoring/decision framing
+4. If ADAPTIVE MODE is enabled, increase difficulty after 2 consecutive strong 
+   answers, and decrease after 2 consecutive weak/incorrect answers.
+5. Ask ONE question at a time. Never bundle multiple questions in a single turn.
+6. After each candidate answer, silently score it (0-100) against correctness, 
+   depth, and clarity — do not reveal the score mid-interview unless asked.
+7. Keep tone professional, encouraging, and concise — like a real interviewer, 
+   not a lecturer.
+8. Respond ONLY in the JSON schema provided. No markdown, no preamble.
+"""
+        full_query = f"{system_prompt}\n\n{user_prompt}"
+
+        fallback_next_question = f"Can you explain your experience building systems with {', '.join(selected_skills_list[:2])}?"
+        ai_response_dict = {
+            "action": "ask_question",
+            "feedback": {
+                "score": None,
+                "strengths": [],
+                "improvements": [],
+                "correct_answer_summary": ""
+            },
+            "next_question": {
+                "question_text": fallback_next_question,
+                "category": selected_skills_list[0] if selected_skills_list else "General",
+                "difficulty_tag": session.difficulty.lower(),
+                "expected_answer_points": ["Detailing technical architecture", "Correct syntax usage"]
+            },
+            "session_meta": {
+                "current_ready_score": 75,
+                "questions_remaining_estimate": session.total_questions - questions_asked_count
+            }
+        }
+
+        try:
+            from ai_core.services import AIService
+            import json
+            import re
+            
+            raw_response = AIService.route_request("chat", full_query, session.user)
+            if raw_response:
+                json_match = re.search(r'(\{.*\}|\[.*\])', raw_response, re.DOTALL)
+                if json_match:
+                    parsed = json.loads(json_match.group(1))
+                else:
+                    parsed = json.loads(raw_response)
+                
+                if isinstance(parsed, dict) and "next_question" in parsed:
+                    ai_response_dict = parsed
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Interview dynamic question AI generation failed, utilizing fallback: {str(e)}")
+
+        if last_answer and ai_response_dict.get("feedback"):
+            feedback_data = ai_response_dict["feedback"]
+            last_answer.score = feedback_data.get("score")
+            last_answer.feedback = feedback_data
+            last_answer.save()
+
+        q_data = ai_response_dict.get("next_question", {})
+        new_seq_num = questions_asked_count + 1
+        
+        question = InterviewQuestion.objects.create(
+            session=session,
+            question_text=q_data.get("question_text", fallback_next_question),
+            topic=q_data.get("category", "General"),
+            category="Technical",
+            difficulty=session.difficulty,
+            sequence_number=new_seq_num,
+            source="AI",
+            expected_answer_placeholder=", ".join(q_data.get("expected_answer_points", []))
+        )
+
+        progress = session.progress
+        progress.current_question = question
+        progress.save()
+
+        return ai_response_dict

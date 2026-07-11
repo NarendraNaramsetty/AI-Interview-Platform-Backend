@@ -155,7 +155,7 @@ class LinkedInOAuthCallbackView(APIView):
             except Exception:
                 pass
                 
-        frontend_url = getattr(settings, 'FRONTEND_URL', 'http://localhost:5173')
+        frontend_url = getattr(settings, 'FRONTEND_URL', 'https://app.prepai.com')
         
         # Validate dynamic redirect_origin before using it
         if redirect_origin:

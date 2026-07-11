@@ -6,13 +6,138 @@ from .models import (
     LearningResource,
     UserRoadmap,
     ModuleProgress,
-    LearningReminder
+    LearningReminder,
+    RoadmapPathway,
+    RoadmapMilestone
 )
 from .validators import validate_percentage_range, validate_reminder_time
 
-# ----------------------------------------------------
-# Request Payload Serializers
-# ----------------------------------------------------
+
+class RoadmapMilestoneSerializer(serializers.ModelSerializer):
+    """Serializer for individual roadmap milestones."""
+    
+    class Meta:
+        model = RoadmapMilestone
+        fields = [
+            'id',
+            'uuid',
+            'milestone_number',
+            'title',
+            'difficulty_tag',
+            'description',
+            'why_it_matters',
+            'estimated_hours',
+            'key_topics',
+            'is_completed',
+            'progress_percent',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'uuid', 'created_at', 'updated_at']
+
+
+class RoadmapPathwaySerializer(serializers.ModelSerializer):
+    """Serializer for roadmap pathways with nested milestones."""
+    
+    milestones = RoadmapMilestoneSerializer(many=True, read_only=True)
+    total_hours = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = RoadmapPathway
+        fields = [
+            'id',
+            'uuid',
+            'user_interest_text',
+            'pathway_title',
+            'inferred_starting_level',
+            'inferred_level_reason',
+            'overall_readiness_estimate_percent',
+            'milestones',
+            'total_hours',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = [
+            'id',
+            'uuid',
+            'pathway_title',
+            'inferred_starting_level',
+            'inferred_level_reason',
+            'overall_readiness_estimate_percent',
+            'milestones',
+            'total_hours',
+            'created_at',
+            'updated_at',
+        ]
+    
+    def get_total_hours(self, obj) -> int:
+        """Calculate total estimated hours across all milestones."""
+        return sum(m.estimated_hours for m in obj.milestones.all())
+
+
+class RoadmapGenerateRequestSerializer(serializers.Serializer):
+    """Serializer for roadmap generation request (input)."""
+    
+    interest = serializers.CharField(
+        max_length=1000,
+        help_text="What user wants to become/learn (e.g., 'QA Engineer')"
+    )
+    self_described_experience = serializers.CharField(
+        max_length=1000,
+        required=False,
+        allow_blank=True,
+        help_text="Optional: user's self-described background"
+    )
+    resume_context = serializers.CharField(
+        max_length=2000,
+        required=False,
+        allow_blank=True,
+        help_text="Optional: summary from connected resume"
+    )
+
+
+class MilestoneProgressUpdateSerializer(serializers.Serializer):
+    """Serializer for updating milestone progress."""
+    
+    progress_percent = serializers.IntegerField(
+        min_value=0,
+        max_value=100,
+        required=False,
+        help_text="Update progress percentage"
+    )
+    is_completed = serializers.BooleanField(
+        required=False,
+        help_text="Mark as completed"
+    )
+
+
+class RoadmapPathwayListSerializer(serializers.ModelSerializer):
+    """Lightweight serializer for listing pathways without nested milestones."""
+    
+    milestone_count = serializers.SerializerMethodField()
+    total_hours = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = RoadmapPathway
+        fields = [
+            'id',
+            'uuid',
+            'pathway_title',
+            'inferred_starting_level',
+            'overall_readiness_estimate_percent',
+            'milestone_count',
+            'total_hours',
+            'created_at',
+        ]
+    
+    def get_milestone_count(self, obj) -> int:
+        """Count of milestones."""
+        return obj.milestones.count()
+    
+    def get_total_hours(self, obj) -> int:
+        """Total estimated hours."""
+        return sum(m.estimated_hours for m in obj.milestones.all())
+
 
 class StartRoadmapRequestSerializer(serializers.Serializer):
     roadmap_id = serializers.IntegerField(required=True)
@@ -21,7 +146,8 @@ class StartRoadmapRequestSerializer(serializers.Serializer):
 class UpdateProgressRequestSerializer(serializers.Serializer):
     user_roadmap_id = serializers.IntegerField(required=True)
     module_id = serializers.IntegerField(required=True)
-    is_completed = serializers.BooleanField(required=True)
+    is_completed = serializers.BooleanField(required=False)
+    is_bookmarked = serializers.BooleanField(required=False)
     notes = serializers.CharField(required=False, allow_blank=True, default='')
 
 

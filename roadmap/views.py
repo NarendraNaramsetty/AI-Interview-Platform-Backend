@@ -1,6 +1,7 @@
 from rest_framework import viewsets, permissions, status, generics, filters
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework.exceptions import ValidationError as DRFValidationError
@@ -15,11 +16,13 @@ from .models import (
     LearningResource,
     UserRoadmap,
     ModuleProgress,
-    LearningReminder
+    LearningReminder,
+    RoadmapPathway,
+    RoadmapMilestone
 )
 from .permissions import IsOwnerOrAdmin
 from .filters import RoadmapFilter, LearningResourceFilter
-from .services import RoadmapService
+from .services import RoadmapService, RoadmapAnalyticsService
 from .pagination import PrepAIPagination
 from .serializers import (
     StartRoadmapRequestSerializer,
@@ -30,9 +33,407 @@ from .serializers import (
     RoadmapSerializer,
     RoadmapDetailSerializer,
     UserRoadmapSerializer,
-    LearningReminderSerializer
+    LearningReminderSerializer,
+    RoadmapPathwaySerializer,
+    RoadmapPathwayListSerializer,
+    RoadmapGenerateRequestSerializer,
+    MilestoneProgressUpdateSerializer
 )
 from .constants import STATUS_IN_PROGRESS, STATUS_COMPLETED
+
+
+
+class RoadmapGenerateView(APIView):
+    """
+    Generate a personalized learning roadmap based on user interest.
+    Takes minimal input (just interest text) and uses LLM to infer level and milestones.
+    """
+    
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        serializer = RoadmapGenerateRequestSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        interest_text = serializer.validated_data.get('interest')
+        self_described_exp = serializer.validated_data.get('self_described_experience', '')
+        resume_context = serializer.validated_data.get('resume_context', '')
+        
+        try:
+            pathway = RoadmapService.create_pathway_from_interest(
+                user=request.user,
+                interest_text=interest_text,
+                self_described_experience=self_described_exp or None,
+                resume_context_summary=resume_context or None
+            )
+            
+            pathway_serializer = RoadmapPathwaySerializer(pathway)
+            return Response(
+                {
+                    'status': 'success',
+                    'message': 'Roadmap generated successfully',
+                    'data': pathway_serializer.data
+                },
+                status=status.HTTP_201_CREATED
+            )
+            
+        except ValueError as e:
+            return Response(
+                {
+                    'status': 'error',
+                    'message': str(e)
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            return Response(
+                {
+                    'status': 'error',
+                    'message': f'Error generating roadmap: {str(e)}'
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+class RoadmapPathwayListView(APIView):
+    """List all roadmap pathways for the authenticated user."""
+    
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        pathways = RoadmapService.get_user_pathways(request.user)
+        serializer = RoadmapPathwayListSerializer(pathways, many=True)
+        
+        return Response(
+            {
+                'status': 'success',
+                'count': len(pathways),
+                'data': serializer.data
+            },
+            status=status.HTTP_200_OK
+        )
+
+
+class RoadmapPathwayDetailView(APIView):
+    """Get details of a specific roadmap pathway."""
+    
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, pathway_id):
+        pathway = RoadmapService.get_pathway_with_milestones(pathway_id, request.user)
+        
+        if not pathway:
+            return Response(
+                {
+                    'status': 'error',
+                    'message': 'Pathway not found'
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        serializer = RoadmapPathwaySerializer(pathway)
+        return Response(
+            {
+                'status': 'success',
+                'data': serializer.data
+            },
+            status=status.HTTP_200_OK
+        )
+
+
+class MilestoneCompleteView(APIView):
+    """Update milestone progress (mark complete or update progress %)."""
+    
+    permission_classes = [IsAuthenticated]
+    
+    def patch(self, request, pathway_id, milestone_id):
+        pathway = RoadmapService.get_pathway_with_milestones(pathway_id, request.user)
+        
+        if not pathway:
+            return Response(
+                {
+                    'status': 'error',
+                    'message': 'Pathway not found'
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        milestone = get_object_or_404(
+            RoadmapMilestone,
+            id=milestone_id,
+            pathway=pathway
+        )
+        
+        serializer = MilestoneProgressUpdateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            progress_percent = serializer.validated_data.get('progress_percent')
+            is_completed = serializer.validated_data.get('is_completed')
+            
+            milestone = RoadmapService.update_milestone_progress(
+                milestone,
+                progress_percent=progress_percent,
+                is_completed=is_completed
+            )
+            
+            from .serializers import RoadmapMilestoneSerializer
+            milestone_serializer = RoadmapMilestoneSerializer(milestone)
+            
+            return Response(
+                {
+                    'status': 'success',
+                    'message': 'Milestone updated',
+                    'data': milestone_serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+            
+        except Exception as e:
+            return Response(
+                {
+                    'status': 'error',
+                    'message': str(e)
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class RoadmapDeleteView(APIView):
+    """Delete a roadmap pathway."""
+    
+    permission_classes = [IsAuthenticated]
+    
+    def delete(self, request, pathway_id):
+        pathway = RoadmapService.get_pathway_with_milestones(pathway_id, request.user)
+        
+        if not pathway:
+            return Response(
+                {
+                    'status': 'error',
+                    'message': 'Pathway not found'
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        pathway_title = pathway.pathway_title
+        
+        try:
+            RoadmapService.delete_pathway(pathway)
+            return Response(
+                {
+                    'status': 'success',
+                    'message': f'Pathway "{pathway_title}" deleted'
+                },
+                status=status.HTTP_204_NO_CONTENT
+            )
+        except Exception as e:
+            return Response(
+                {
+                    'status': 'error',
+                    'message': str(e)
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+class RoadmapStatisticsView(APIView):
+    """Get roadmap statistics for the user."""
+    
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        stats = RoadmapAnalyticsService.get_user_roadmap_summary(request.user)
+        difficulty_breakdown = RoadmapAnalyticsService.get_learning_difficulty_breakdown(request.user)
+        avg_readiness = RoadmapAnalyticsService.get_average_readiness_progress(request.user)
+        recent = RoadmapAnalyticsService.get_most_recent_pathways(request.user, limit=5)
+        
+        return Response(
+            {
+                'status': 'success',
+                'data': {
+                    'summary': stats,
+                    'difficulty_breakdown': difficulty_breakdown,
+                    'average_readiness': avg_readiness,
+                    'recent_pathways': recent,
+                }
+            },
+            status=status.HTTP_200_OK
+        )
+
+
+
+class GeneratePersonalizedRoadmapView(APIView):
+    """
+    POST /api/roadmap/generate-ai
+    Generates a personalized learning roadmap using AI and returns the UserRoadmap.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        interest = request.data.get('interest', '')
+        experience_level = request.data.get('experience_level', 'Beginner')
+        target_company = request.data.get('target_company', '')
+        weekly_hours = request.data.get('weekly_hours', '')
+        preferred_learning_style = request.data.get('preferred_learning_style', [])
+
+        if not interest:
+            return Response(
+                {"success": False, "message": "Interest is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        experience_info = f"Experience: {experience_level}. Target: {target_company}. Weekly hours: {weekly_hours}. Styles: {', '.join(preferred_learning_style)}."
+
+        try:
+            from nlp.utils.roadmap_generator import generate_roadmap
+            from django.db import transaction
+            from .models import CareerPath, Roadmap, RoadmapModule, UserRoadmap, ModuleProgress
+            from .constants import STATUS_IN_PROGRESS
+
+            # Generate structured roadmap data using the LLM helper
+            roadmap_data = generate_roadmap(
+                user_interest_text=interest,
+                self_described_experience=experience_info
+            )
+
+            with transaction.atomic():
+                # Find or create a CareerPath
+                career_path_name = f"AI {roadmap_data.get('pathway_title', interest)[:140]}"
+                career_path, _ = CareerPath.objects.get_or_create(
+                    name=career_path_name,
+                    defaults={
+                        "description": f"AI generated path for {interest}",
+                        "difficulty": roadmap_data.get('inferred_starting_level', 'Medium'),
+                        "estimated_duration": "Variable"
+                    }
+                )
+
+                # Create the Roadmap template
+                duration_hours = sum(m.get('estimated_hours', 10) for m in roadmap_data.get('milestones', []))
+                roadmap = Roadmap.objects.create(
+                    title=roadmap_data.get('pathway_title', f"AI - {interest}"),
+                    description=roadmap_data.get('inferred_level_reason', f"Level inferred: {roadmap_data.get('inferred_starting_level', 'Medium')}"),
+                    career_path=career_path,
+                    estimated_duration=f"{duration_hours} hours",
+                    total_modules=len(roadmap_data.get('milestones', [])),
+                    difficulty=roadmap_data.get('inferred_starting_level', 'Medium')
+                )
+
+                # Create RoadmapModules & ModuleProgresses
+                first_module = None
+                modules = []
+                for milestone in roadmap_data.get('milestones', []):
+                    module = RoadmapModule.objects.create(
+                        roadmap=roadmap,
+                        title=milestone.get('title', 'Module'),
+                        description=f"{milestone.get('description', '')}\n\nWhy it matters: {milestone.get('why_it_matters', '')}\n\nKey topics: {', '.join(milestone.get('key_topics', []))}",
+                        module_order=milestone.get('milestone_number', 1),
+                        estimated_hours=milestone.get('estimated_hours', 10),
+                        difficulty=milestone.get('difficulty_tag', 'Medium')
+                    )
+                    modules.append(module)
+                    if not first_module:
+                        first_module = module
+
+                # Create UserRoadmap
+                user_roadmap = UserRoadmap.objects.create(
+                    user=request.user,
+                    roadmap=roadmap,
+                    status=STATUS_IN_PROGRESS,
+                    current_module=first_module,
+                    progress_percentage=0.0,
+                    completed_modules=0
+                )
+
+                # Create initial progress tracker for each module
+                for module in modules:
+                    ModuleProgress.objects.create(
+                        user_roadmap=user_roadmap,
+                        roadmap_module=module,
+                        is_completed=False
+                    )
+
+            from .serializers import UserRoadmapSerializer
+            response_serializer = UserRoadmapSerializer(user_roadmap, context={'request': request})
+            return Response({
+                "success": True,
+                "message": "Curriculum Generated successfully.",
+                "data": response_serializer.data
+            }, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({
+                "success": False,
+                "message": f"AI Generation Failed: {str(e)}"
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class RoadmapMentorView(APIView):
+    """
+    POST /api/roadmap/mentor
+    AI mentoring and career advice for a specific module.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        module_id = request.data.get('module_id')
+        message = request.data.get('message', '')
+
+        if not module_id or not message:
+            return Response(
+                {"success": False, "message": "module_id and message are required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        from .models import RoadmapModule
+        module = get_object_or_404(RoadmapModule, id=module_id)
+
+        mentor_prompt = f"""You are an expert AI Career Coach.
+The user is learning the module \"{module.title}\" (Difficulty: {module.difficulty}) inside their roadmap \"{module.roadmap.title}\".
+User Question: \"{message}\"
+
+Please provide a helpful, clean explanation or solution outline. Use markdown formatting. Keep the output under 15 lines."""
+
+        try:
+            from ai_core.services import AIService
+            res = AIService.route_request("Chat", mentor_prompt, request.user)
+            reply = res.get("response", "AI Mentor response compiled.")
+            
+            # Log the request
+            try:
+                AIService.log_request(
+                    user=request.user,
+                    module_name="roadmap",
+                    request_type="Chat",
+                    provider=res.get("provider", "Gemini"),
+                    model=res.get("model", "default"),
+                    prompt_length=len(mentor_prompt),
+                    response_length=len(reply),
+                    execution_time=1.0,
+                    token_usage=res.get("token_usage", 0),
+                    request_status="Success"
+                )
+            except Exception:
+                pass
+
+            return Response({
+                "reply": reply
+            }, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({
+                "reply": f"Sorry, AI Mentor connection error: {str(e)}"
+            }, status=status.HTTP_200_OK)
+
 
 class CareerPathListView(generics.ListAPIView):
     """
@@ -127,14 +528,16 @@ class UpdateProgressView(APIView):
         
         user_roadmap_id = serializer.validated_data['user_roadmap_id']
         module_id = serializer.validated_data['module_id']
-        is_completed = serializer.validated_data['is_completed']
-        notes = serializer.validated_data['notes']
+        is_completed = serializer.validated_data.get('is_completed')
+        is_bookmarked = serializer.validated_data.get('is_bookmarked')
+        notes = serializer.validated_data.get('notes')
 
         try:
             user_roadmap = RoadmapService.update_module_progress(
                 user_roadmap_id=user_roadmap_id,
                 module_id=module_id,
                 is_completed=is_completed,
+                is_bookmarked=is_bookmarked,
                 notes=notes,
                 user=request.user
             )

@@ -17,7 +17,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-default-fallback-key-
 JWT_SECRET_KEY = config('JWT_SECRET_KEY', default=SECRET_KEY)
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,api.prepai.com', cast=Csv())
 
 # Application definition
 INSTALLED_APPS = [
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'Notifications',
     'Payments',
     'ai_core',
+    'nlp',
 ]
 
 MIDDLEWARE = [
@@ -60,6 +61,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'Admin.middleware.AdminAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -152,7 +154,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-FRONTEND_URL = config("FRONTEND_URL", default="http://localhost:5173")
+FRONTEND_URL = config("FRONTEND_URL", default="https://app.prepai.com")
 
 # CORS Config
 CORS_ALLOW_ALL_ORIGINS = False
@@ -163,6 +165,8 @@ if cors_origins_env:
     CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins_env.split(",") if origin.strip()]
 else:
     CORS_ALLOWED_ORIGINS = [
+        "https://app.prepai.com",
+        "https://prepai.com",
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         FRONTEND_URL

@@ -41,6 +41,9 @@ urlpatterns = [
     # Learning Roadmap Module APIs
     path('api/roadmap/', include('roadmap.urls')),
 
+    # NLP Module APIs
+    path('api/nlp/', include('nlp.urls')),
+
     # AI Chatbot Module APIs
     path('api/chatbot/', include('chatbot.urls')),
 

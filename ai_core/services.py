@@ -202,7 +202,7 @@ class AIService:
                 response_text = res_data['choices'][0]['message']['content']
 
             elif provider_name == 'Ollama':
-                url = f"{base_url or 'http://localhost:11434'}/api/generate"
+                url = f"{base_url or 'https://ollama.prepai.com'}/api/generate"
                 headers = {"Content-Type": "application/json"}
                 payload = {
                     "model": model_name,

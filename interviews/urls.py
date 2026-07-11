@@ -7,6 +7,7 @@ from .views import (
     EndInterviewView,
     SaveAnswerView,
     NextQuestionView,
+    NextQuestionAIView,
     PreviousQuestionView,
     SkipQuestionView,
     InterviewProgressView,
@@ -31,6 +32,7 @@ urlpatterns = [
     
     # Flow navigation pointers
     path('<int:id>/next', NextQuestionView.as_view(), name='interview_next'),
+    path('<int:id>/next-question', NextQuestionAIView.as_view(), name='interview_next_question'),
     path('<int:id>/previous', PreviousQuestionView.as_view(), name='interview_previous'),
     path('<int:id>/skip', SkipQuestionView.as_view(), name='interview_skip'),
     

@@ -1,8 +1,8 @@
 from decouple import config
 
 # Default endpoints configurations
-OLLAMA_BASE_URL = config('OLLAMA_BASE_URL', default='http://localhost:11434')
-QDRANT_HOST = config('QDRANT_HOST', default='localhost')
+OLLAMA_BASE_URL = config('OLLAMA_BASE_URL', default='https://ollama.prepai.com')
+QDRANT_HOST = config('QDRANT_HOST', default='qdrant.prepai.com')
 QDRANT_PORT = config('QDRANT_PORT', cast=int, default=6333)
 
 # Provider credentials settings

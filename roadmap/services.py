@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.db import transaction
 from django.db.models import Sum, Count, Avg
 from django.contrib.auth import get_user_model
+from typing import Optional, Dict, Any, List
 
 from .models import (
     CareerPath,
@@ -11,7 +12,9 @@ from .models import (
     LearningResource,
     UserRoadmap,
     ModuleProgress,
-    LearningReminder
+    LearningReminder,
+    RoadmapPathway,
+    RoadmapMilestone
 )
 from .constants import (
     STATUS_IN_PROGRESS,
@@ -19,18 +22,163 @@ from .constants import (
     STATUS_PAUSED,
     STATUS_NOT_STARTED
 )
+from nlp.utils.roadmap_generator import generate_roadmap, calculate_total_hours
 
 User = get_user_model()
 
-class RoadmapService:
-    """
-    Service layer containing future Ollama/Gemini, Qdrant/RAG, and skill gap analysis placeholders.
-    Implements roadmap initiation, progress recalculation, streaks calculation, and pause/resume logic.
-    """
 
-    # ----------------------------------------------------
-    # Future AI recommendation placeholders
-    # ----------------------------------------------------
+class RoadmapService:
+    """Service layer for roadmap operations."""
+
+    @staticmethod
+    @transaction.atomic
+    def create_pathway_from_interest(
+        user,
+        interest_text: str,
+        self_described_experience: Optional[str] = None,
+        resume_context_summary: Optional[str] = None
+    ) -> RoadmapPathway:
+        """
+        Generate and create a new roadmap pathway for a user.
+        
+        Args:
+            user: The user creating the pathway
+            interest_text: What user wants to learn/become
+            self_described_experience: Optional background info
+            resume_context_summary: Optional resume context
+            
+        Returns:
+            RoadmapPathway instance with milestones
+            
+        Raises:
+            ValueError: If LLM generation fails or schema validation fails
+        """
+        
+        # Generate roadmap via LLM
+        roadmap_data = generate_roadmap(
+            user_interest_text=interest_text,
+            self_described_experience=self_described_experience,
+            resume_context_summary=resume_context_summary
+        )
+        
+        # Create pathway
+        pathway = RoadmapPathway.objects.create(
+            user=user,
+            user_interest_text=interest_text,
+            pathway_title=roadmap_data['pathway_title'],
+            inferred_starting_level=roadmap_data['inferred_starting_level'],
+            inferred_level_reason=roadmap_data['inferred_level_reason'],
+            overall_readiness_estimate_percent=roadmap_data['overall_readiness_estimate_percent'],
+        )
+        
+        # Create milestones
+        milestones = []
+        for milestone_data in roadmap_data['milestones']:
+            milestone = RoadmapMilestone.objects.create(
+                pathway=pathway,
+                milestone_number=milestone_data['milestone_number'],
+                title=milestone_data['title'],
+                difficulty_tag=milestone_data['difficulty_tag'],
+                description=milestone_data['description'],
+                why_it_matters=milestone_data['why_it_matters'],
+                estimated_hours=milestone_data['estimated_hours'],
+                key_topics=milestone_data['key_topics'],
+            )
+            milestones.append(milestone)
+        
+        return pathway
+    
+    @staticmethod
+    def get_user_pathways(user, limit: Optional[int] = None) -> List[RoadmapPathway]:
+        """Get all pathways for a user, optionally limited."""
+        query = RoadmapPathway.objects.filter(user=user).order_by('-created_at')
+        if limit:
+            return list(query[:limit])
+        return list(query)
+    
+    @staticmethod
+    def get_pathway_with_milestones(pathway_id: int, user) -> Optional[RoadmapPathway]:
+        """Get a specific pathway with all milestones (checks authorization)."""
+        try:
+            return RoadmapPathway.objects.get(id=pathway_id, user=user)
+        except RoadmapPathway.DoesNotExist:
+            return None
+    
+    @staticmethod
+    def update_milestone_progress(
+        milestone: RoadmapMilestone,
+        progress_percent: Optional[int] = None,
+        is_completed: Optional[bool] = None
+    ) -> RoadmapMilestone:
+        """
+        Update milestone progress.
+        
+        Args:
+            milestone: The milestone to update
+            progress_percent: New progress (0-100)
+            is_completed: Mark as completed
+            
+        Returns:
+            Updated milestone
+        """
+        
+        if progress_percent is not None:
+            if not (0 <= progress_percent <= 100):
+                raise ValidationError("Progress must be between 0 and 100")
+            milestone.progress_percent = progress_percent
+        
+        if is_completed is not None:
+            milestone.is_completed = is_completed
+            if is_completed:
+                milestone.progress_percent = 100
+        
+        milestone.save()
+        return milestone
+    
+    @staticmethod
+    def get_pathway_statistics(pathway: RoadmapPathway) -> Dict[str, Any]:
+        """Get progress statistics for a pathway."""
+        milestones = pathway.milestones.all()
+        
+        if not milestones.exists():
+            return {
+                'total_milestones': 0,
+                'completed_milestones': 0,
+                'overall_progress_percent': 0,
+                'total_hours': 0,
+                'average_milestone_progress': 0
+            }
+        
+        completed_count = milestones.filter(is_completed=True).count()
+        total_count = milestones.count()
+        total_hours = sum(m.estimated_hours for m in milestones)
+        avg_progress = sum(m.progress_percent for m in milestones) / total_count if total_count > 0 else 0
+        
+        return {
+            'total_milestones': total_count,
+            'completed_milestones': completed_count,
+            'overall_progress_percent': round((completed_count / total_count * 100) if total_count > 0 else 0),
+            'total_hours': total_hours,
+            'average_milestone_progress': round(avg_progress)
+        }
+    
+    @staticmethod
+    def delete_pathway(pathway: RoadmapPathway) -> bool:
+        """
+        Delete a pathway and cascade delete milestones.
+        
+        Returns:
+            True if deleted successfully
+        """
+        try:
+            pathway_id = pathway.id
+            pathway.delete()
+            return True
+        except Exception as e:
+            raise ValueError(f"Failed to delete pathway: {str(e)}")
+
+
+
 
     @staticmethod
     def generate_personalized_roadmap(user_profile_data: dict, career_path_id: int) -> dict:
@@ -121,7 +269,7 @@ class RoadmapService:
         return user_roadmap
 
     @classmethod
-    def update_module_progress(cls, user_roadmap_id: int, module_id: int, is_completed: bool, notes: str, user) -> UserRoadmap:
+    def update_module_progress(cls, user_roadmap_id: int, module_id: int, is_completed: Optional[bool] = None, notes: Optional[str] = None, is_bookmarked: Optional[bool] = None, user=None) -> UserRoadmap:
         """
         Action: Update module completion details and recalculate roadmap percentages.
         """
@@ -141,12 +289,16 @@ class RoadmapService:
                 user_roadmap=user_roadmap,
                 roadmap_module=module
             )
-            progress.is_completed = is_completed
-            progress.notes = notes
-            if is_completed:
-                progress.completion_date = timezone.now()
-            else:
-                progress.completion_date = None
+            if is_completed is not None:
+                progress.is_completed = is_completed
+                if is_completed:
+                    progress.completion_date = timezone.now()
+                else:
+                    progress.completion_date = None
+            if is_bookmarked is not None:
+                progress.is_bookmarked = is_bookmarked
+            if notes is not None:
+                progress.notes = notes
             progress.save()
 
             # Recalculate UserRoadmap metrics
@@ -289,3 +441,76 @@ class RoadmapService:
                 break
 
         return streak
+
+
+class RoadmapAnalyticsService:
+    """Analytics for roadmap data."""
+    
+    @staticmethod
+    def get_user_roadmap_summary(user) -> Dict[str, Any]:
+        """Get summary stats for all user's roadmaps."""
+        pathways = RoadmapPathway.objects.filter(user=user)
+        
+        total_pathways = pathways.count()
+        total_milestones = sum(p.milestones.count() for p in pathways)
+        total_hours = sum(
+            sum(m.estimated_hours for m in p.milestones.all())
+            for p in pathways
+        )
+        
+        completed_pathways = sum(
+            1 for p in pathways 
+            if p.milestones.filter(is_completed=True).count() == p.milestones.count()
+        )
+        
+        in_progress_pathways = total_pathways - completed_pathways
+        
+        return {
+            'total_pathways': total_pathways,
+            'in_progress_pathways': in_progress_pathways,
+            'completed_pathways': completed_pathways,
+            'total_milestones': total_milestones,
+            'total_hours': total_hours,
+        }
+    
+    @staticmethod
+    def get_learning_difficulty_breakdown(user) -> Dict[str, int]:
+        """Count pathways/milestones by difficulty level."""
+        pathways = RoadmapPathway.objects.filter(user=user)
+        
+        breakdown = {
+            'beginner': pathways.filter(inferred_starting_level='Beginner').count(),
+            'intermediate': pathways.filter(inferred_starting_level='Intermediate').count(),
+            'advanced': pathways.filter(inferred_starting_level='Advanced').count(),
+        }
+        
+        return breakdown
+    
+    @staticmethod
+    def get_average_readiness_progress(user) -> float:
+        """Get average readiness percentage across all pathways."""
+        pathways = RoadmapPathway.objects.filter(user=user)
+        
+        if not pathways.exists():
+            return 0.0
+        
+        total_readiness = sum(p.overall_readiness_estimate_percent for p in pathways)
+        return total_readiness / pathways.count()
+    
+    @staticmethod
+    def get_most_recent_pathways(user, limit: int = 5) -> List[Dict[str, Any]]:
+        """Get most recently created pathways."""
+        pathways = RoadmapPathway.objects.filter(user=user).order_by('-created_at')[:limit]
+        
+        return [
+            {
+                'id': p.id,
+                'title': p.pathway_title,
+                'interest': p.user_interest_text,
+                'level': p.inferred_starting_level,
+                'readiness': p.overall_readiness_estimate_percent,
+                'milestone_count': p.milestones.count(),
+                'created_at': p.created_at.isoformat(),
+            }
+            for p in pathways
+        ]

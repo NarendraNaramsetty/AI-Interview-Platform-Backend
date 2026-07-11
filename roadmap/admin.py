@@ -6,7 +6,9 @@ from .models import (
     LearningResource,
     UserRoadmap,
     ModuleProgress,
-    LearningReminder
+    LearningReminder,
+    RoadmapPathway,
+    RoadmapMilestone
 )
 
 class RoadmapModuleInline(admin.TabularInline):
@@ -26,6 +28,13 @@ class ModuleProgressInline(admin.TabularInline):
     extra = 0
     can_delete = False
     readonly_fields = ['roadmap_module', 'is_completed', 'completion_date', 'notes']
+
+
+class RoadmapMilestoneInline(admin.TabularInline):
+    model = RoadmapMilestone
+    extra = 0
+    fields = ['milestone_number', 'title', 'difficulty_tag', 'estimated_hours', 'is_completed', 'progress_percent']
+    readonly_fields = ['milestone_number', 'title', 'difficulty_tag', 'estimated_hours']
 
 
 class RoadmapAdmin(admin.ModelAdmin):
@@ -52,6 +61,27 @@ class UserRoadmapAdmin(admin.ModelAdmin):
     ordering = ['-started_at']
 
 
+class RoadmapPathwayAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'pathway_title', 'inferred_starting_level', 'overall_readiness_estimate_percent', 'created_at']
+    list_filter = ['inferred_starting_level', 'created_at']
+    search_fields = ['user__email', 'pathway_title', 'user_interest_text']
+    inlines = [RoadmapMilestoneInline]
+    readonly_fields = ['pathway_title', 'inferred_starting_level', 'inferred_level_reason', 'overall_readiness_estimate_percent', 'created_at', 'updated_at']
+    ordering = ['-created_at']
+    
+    def has_add_permission(self, request):
+        # Pathways are generated via API, not manually created in admin
+        return False
+
+
+class RoadmapMilestoneAdmin(admin.ModelAdmin):
+    list_display = ['id', 'pathway', 'milestone_number', 'title', 'difficulty_tag', 'estimated_hours', 'is_completed', 'progress_percent']
+    list_filter = ['pathway__inferred_starting_level', 'difficulty_tag', 'is_completed']
+    search_fields = ['title', 'description', 'pathway__pathway_title']
+    readonly_fields = ['milestone_number', 'title', 'difficulty_tag', 'description', 'why_it_matters', 'estimated_hours', 'key_topics', 'created_at', 'updated_at']
+    ordering = ['pathway', 'milestone_number']
+
+
 admin.site.register(CareerPath)
 admin.site.register(Roadmap, RoadmapAdmin)
 admin.site.register(RoadmapModule, RoadmapModuleAdmin)
@@ -59,3 +89,5 @@ admin.site.register(LearningResource)
 admin.site.register(UserRoadmap, UserRoadmapAdmin)
 admin.site.register(ModuleProgress)
 admin.site.register(LearningReminder)
+admin.site.register(RoadmapPathway, RoadmapPathwayAdmin)
+admin.site.register(RoadmapMilestone, RoadmapMilestoneAdmin)

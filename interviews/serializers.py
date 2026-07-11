@@ -61,7 +61,8 @@ class InterviewSessionSerializer(serializers.ModelSerializer):
             'id', 'uuid', 'title', 'target_role', 'target_company', 'interview_type',
             'difficulty', 'interview_mode', 'language', 'total_questions', 'answered_questions',
             'current_question_index', 'duration_minutes', 'elapsed_time_seconds', 'status',
-            'started_at', 'completed_at', 'result', 'created_at', 'updated_at'
+            'started_at', 'completed_at', 'result', 'created_at', 'updated_at',
+            'tech_stack', 'adaptive_mode'
         ]
         read_only_fields = fields
 
@@ -76,6 +77,8 @@ class StartInterviewSerializer(serializers.Serializer):
     language = serializers.CharField(max_length=100, default='English')
     total_questions = serializers.IntegerField(validators=[validate_question_count], default=5)
     duration_minutes = serializers.IntegerField(validators=[validate_duration_range], default=30)
+    tech_stack = serializers.ListField(child=serializers.CharField(), required=False, default=list)
+    adaptive_mode = serializers.BooleanField(required=False, default=True)
 
     def validate_resume_id(self, value):
         if value:

@@ -66,7 +66,9 @@ class StartInterviewView(APIView):
                 language=serializer.validated_data['language'],
                 total_questions=serializer.validated_data['total_questions'],
                 duration_minutes=serializer.validated_data['duration_minutes'],
-                resume=resume
+                resume=resume,
+                tech_stack=serializer.validated_data.get('tech_stack', []),
+                adaptive_mode=serializer.validated_data.get('adaptive_mode', True)
             )
             return Response({
                 "success": True,
@@ -304,6 +306,33 @@ class NextQuestionView(APIView):
             "message": "Moved to next question.",
             "data": InterviewQuestionSerializer(curr_q).data
         }, status=status.HTTP_200_OK)
+
+
+class NextQuestionAIView(APIView):
+    """
+    POST /api/interviews/{id}/next-question
+    Invokes adaptive AI prompt to evaluate last answer and yield the next question.
+    """
+    permission_classes = [permissions.IsAuthenticated, IsInterviewOwnerOrAdmin]
+
+    def post(self, request, id):
+        session = get_object_or_404(InterviewSession, pk=id)
+        self.check_object_permissions(request, session)
+
+        try:
+            # Query adaptive AI question pipeline
+            ai_data = InterviewService.get_next_question_ai(session)
+            
+            return Response({
+                "success": True,
+                "message": "AI Next Question generated successfully.",
+                "data": ai_data
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({
+                "success": False,
+                "message": f"AI evaluation failed: {str(e)}"
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class PreviousQuestionView(APIView):

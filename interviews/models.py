@@ -64,6 +64,8 @@ class InterviewSession(models.Model):
     
     duration_minutes = models.IntegerField(validators=[validate_duration_range])
     elapsed_time_seconds = models.IntegerField(default=0)
+    tech_stack = models.JSONField(default=list, blank=True)
+    adaptive_mode = models.BooleanField(default=True)
     
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default=STATUS_SCHEDULED)
     
@@ -141,6 +143,8 @@ class InterviewAnswer(models.Model):
         validators=[validate_audio_file_size]
     )
     answer_duration = models.IntegerField(default=0)  # Duration in seconds
+    score = models.IntegerField(null=True, blank=True)
+    feedback = models.JSONField(default=dict, blank=True)
     submitted_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
