@@ -35,9 +35,18 @@ class DashboardService:
         resumes = Resume.objects.filter(user=user)
         resumes_count = resumes.count()
         last_resume = resumes.order_by('-created_at').first()
+        
+        ats_score = 0
+        if last_resume:
+            try:
+                if hasattr(last_resume, 'analysis') and last_resume.analysis:
+                    ats_score = last_resume.analysis.ats_score
+            except Exception:
+                pass
+
         resumes_data = {
             "total_resumes": resumes_count,
-            "last_resume_score": last_resume.score if last_resume else 0.0,
+            "last_resume_score": ats_score,
             "last_resume_id": last_resume.id if last_resume else None
         }
 
