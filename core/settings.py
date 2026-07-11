@@ -156,11 +156,23 @@ FRONTEND_URL = config("FRONTEND_URL", default="http://localhost:5173")
 
 # CORS Config
 CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    FRONTEND_URL
+
+# Support a comma-separated list of origins in .env
+cors_origins_env = config("CORS_ALLOWED_ORIGINS", default="")
+if cors_origins_env:
+    CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins_env.split(",") if origin.strip()]
+else:
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        FRONTEND_URL
+    ]
+
+# Dynamic matching for Vercel preview and production environments
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https:\/\/.*\.vercel\.app$",
 ]
+
 CORS_ALLOW_CREDENTIALS = True
 
 # Django REST Framework Settings

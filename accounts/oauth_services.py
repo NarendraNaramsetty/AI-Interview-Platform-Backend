@@ -42,7 +42,7 @@ class OAuthService:
             raise ValueError(f"Invalid Google credentials: {str(e)}")
 
     @staticmethod
-    def get_linkedin_login_url(request) -> str:
+    def get_linkedin_login_url(request, redirect_origin=None) -> str:
         """
         Constructs the authorization URL to redirect users to LinkedIn login.
         """
@@ -54,7 +54,13 @@ class OAuthService:
         
         # OpenID connect params
         scope = "openid profile email"
-        state = "linkedin_oauth_state"
+        
+        import json
+        import urllib.parse
+        state_data = {"state": "linkedin_oauth_state"}
+        if redirect_origin:
+            state_data["redirect_origin"] = redirect_origin
+        state = urllib.parse.quote(json.dumps(state_data))
         
         url = (
             f"https://www.linkedin.com/oauth/v2/authorization?"

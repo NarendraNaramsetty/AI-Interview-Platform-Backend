@@ -111,7 +111,8 @@ class LinkedInOAuthLoginView(APIView):
     )
     def get(self, request):
         try:
-            auth_url = OAuthService.get_linkedin_login_url(request)
+            redirect_origin = request.GET.get('redirect_origin')
+            auth_url = OAuthService.get_linkedin_login_url(request, redirect_origin=redirect_origin)
             return redirect(auth_url)
         except ValueError as e:
             return Response({
@@ -140,8 +141,40 @@ class LinkedInOAuthCallbackView(APIView):
     def get(self, request):
         code = request.GET.get('code')
         error = request.GET.get('error')
+        state = request.GET.get('state')
         
+        # Parse dynamic redirect origin from state
+        redirect_origin = None
+        if state:
+            try:
+                import json
+                import urllib.parse
+                parsed_state = json.loads(urllib.parse.unquote(state))
+                if isinstance(parsed_state, dict):
+                    redirect_origin = parsed_state.get('redirect_origin')
+            except Exception:
+                pass
+                
         frontend_url = getattr(settings, 'FRONTEND_URL', 'http://localhost:5173')
+        
+        # Validate dynamic redirect_origin before using it
+        if redirect_origin:
+            import urllib.parse
+            is_valid = False
+            parsed_origin = urllib.parse.urlparse(redirect_origin)
+            origin_domain = parsed_origin.netloc.lower()
+            
+            # Allow configured CORS origins, local development, and Vercel domains
+            if redirect_origin in getattr(settings, 'CORS_ALLOWED_ORIGINS', []):
+                is_valid = True
+            elif origin_domain == 'localhost' or origin_domain.startswith('localhost:') or origin_domain == '127.0.0.1' or origin_domain.startswith('127.0.0.1:'):
+                is_valid = True
+            elif origin_domain.endswith('.vercel.app'):
+                is_valid = True
+                
+            if is_valid:
+                frontend_url = redirect_origin
+                
         # Ensure url does not end with slash to prevent routing bugs
         if frontend_url.endswith('/'):
             frontend_url = frontend_url[:-1]
