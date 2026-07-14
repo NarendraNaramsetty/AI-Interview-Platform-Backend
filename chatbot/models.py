@@ -1,79 +1,97 @@
 import uuid
 from django.db import models
 from django.conf import settings
-from .constants import (
-    CONVERSATION_TYPE_CHOICES,
-    CONV_GENERAL,
-    SESSION_STATUS_CHOICES,
-    STATUS_ACTIVE,
-    SENDER_CHOICES,
-    SENDER_USER,
-    MESSAGE_TYPE_CHOICES,
-    MSG_TEXT
-)
 from .validators import validate_rating, validate_message_length
+
+class Category(models.Model):
+    """
+    Categorization details for knowledge base questions.
+    """
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['name']
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+
+    def __str__(self):
+        return self.name
+
 
 class ChatSession(models.Model):
     """
-    Groups conversational message streams. Supports archiving and soft deletions.
+    Groups conversational message streams.
     """
     id = models.BigAutoField(primary_key=True)
-    uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='chat_sessions'
     )
-    title = models.CharField(max_length=255)
-    conversation_type = models.CharField(
-        max_length=50,
-        choices=CONVERSATION_TYPE_CHOICES,
-        default=CONV_GENERAL
-    )
-    status = models.CharField(
-        max_length=50,
-        choices=SESSION_STATUS_CHOICES,
-        default=STATUS_ACTIVE
-    )
-    total_messages = models.IntegerField(default=0)
-    started_at = models.DateTimeField(auto_now_add=True)
-    last_activity = models.DateTimeField(auto_now=True)
+    session_title = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-last_activity']
+        ordering = ['-updated_at']
         verbose_name = "Chat Session"
         verbose_name_plural = "Chat Sessions"
 
+    @property
+    def title(self):
+        return self.session_title
+
+    @title.setter
+    def title(self, value):
+        self.session_title = value
+
+    @property
+    def status(self):
+        return "Active" if self.is_active else "Deleted"
+
     def __str__(self):
-        return f"{self.title} ({self.conversation_type}) - Status: {self.status}"
+        return f"{self.session_title} - Active: {self.is_active}"
 
 
 class ChatMessage(models.Model):
     """
-    Individual conversational message bubbles sent either by standard candidates or mock AI bots.
+    Individual conversational message bubbles.
     """
+    SENDER_CHOICES = [
+        ('USER', 'USER'),
+        ('BOT', 'BOT'),
+    ]
+
+    SOURCE_CHOICES = [
+        ('LOCAL', 'LOCAL'),
+        ('GEMINI', 'GEMINI'),
+        ('GROK', 'GROK'),
+        ('OLLAMA', 'OLLAMA'),
+    ]
+
     id = models.BigAutoField(primary_key=True)
-    uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     session = models.ForeignKey(
         ChatSession,
         on_delete=models.CASCADE,
         related_name='messages'
     )
     sender = models.CharField(
-        max_length=50,
+        max_length=10,
         choices=SENDER_CHOICES,
-        default=SENDER_USER
+        default='USER'
     )
     message = models.TextField(validators=[validate_message_length])
-    message_type = models.CharField(
-        max_length=50,
-        choices=MESSAGE_TYPE_CHOICES,
-        default=MSG_TEXT
+    response_source = models.CharField(
+        max_length=10,
+        choices=SOURCE_CHOICES,
+        null=True,
+        blank=True
     )
-    token_count = models.IntegerField(default=0)
-    processing_time = models.FloatField(default=0.0)  # in seconds
+    confidence_score = models.FloatField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -85,36 +103,51 @@ class ChatMessage(models.Model):
         return f"Msg {self.id} by {self.sender} in Session {self.session_id}"
 
 
-class PromptTemplate(models.Model):
+class KnowledgeBase(models.Model):
     """
-    Pre-configured prompts injected inside LLM systems to establish agent behaviors.
+    Local knowledge base entries containing Q&A pairs.
     """
     id = models.BigAutoField(primary_key=True)
-    uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
-    name = models.CharField(max_length=150, unique=True)
-    category = models.CharField(max_length=100)
-    description = models.TextField(blank=True)
-    system_prompt = models.TextField()
+    title = models.CharField(max_length=255)
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.CASCADE,
+        related_name='knowledge_entries'
+    )
+    question = models.TextField()
+    answer = models.TextField()
+    keywords = models.TextField(help_text="Comma-separated keywords")
+    synonyms = models.TextField(help_text="Comma-separated synonyms", blank=True)
+    priority = models.IntegerField(default=0)
+    difficulty = models.CharField(max_length=50, default="Medium")
+    tags = models.CharField(max_length=255, blank=True)
     is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['name']
-        verbose_name = "Prompt Template"
-        verbose_name_plural = "Prompt Templates"
+        ordering = ['-priority', '-created_at']
+        verbose_name = "Knowledge Base Entry"
+        verbose_name_plural = "Knowledge Base Entries"
 
     def __str__(self):
-        return self.name
+        return f"{self.title} ({self.category.name})"
 
 
-class ChatFeedback(models.Model):
+class Feedback(models.Model):
     """
     Quality control user feedback containing ratings and comments.
     """
     id = models.BigAutoField(primary_key=True)
-    chat_message = models.OneToOneField(
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='chat_feedbacks'
+    )
+    message = models.ForeignKey(
         ChatMessage,
         on_delete=models.CASCADE,
-        related_name='feedback'
+        related_name='feedbacks'
     )
     rating = models.IntegerField(validators=[validate_rating])
     comment = models.TextField(blank=True)
@@ -126,55 +159,31 @@ class ChatFeedback(models.Model):
         verbose_name_plural = "Chat Feedbacks"
 
     def __str__(self):
-        return f"Feedback: Msg {self.chat_message_id} -> Rating: {self.rating}"
+        return f"Feedback: Msg {self.message_id} -> Rating: {self.rating}"
 
 
-class ChatBookmark(models.Model):
+class AdminAnalytics(models.Model):
     """
-    Enables user bookmarks.
+    Database analytics logs for failed queries, AI fallbacks, and overall usage tracking.
     """
     id = models.BigAutoField(primary_key=True)
-    uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='chat_bookmarks'
+    query = models.TextField()
+    matched_knowledge = models.ForeignKey(
+        KnowledgeBase,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='analytics_hits'
     )
-    chat_message = models.ForeignKey(
-        ChatMessage,
-        on_delete=models.CASCADE,
-        related_name='bookmarks'
-    )
+    was_matched = models.BooleanField(default=False)
+    confidence_score = models.FloatField(default=0.0)
+    response_source = models.CharField(max_length=15, default='GEMINI')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'chat_message')
         ordering = ['-created_at']
-        verbose_name = "Chat Bookmark"
-        verbose_name_plural = "Chat Bookmarks"
+        verbose_name = "Admin Analytics Record"
+        verbose_name_plural = "Admin Analytics Records"
 
     def __str__(self):
-        return f"Bookmark: {self.user.email} -> Msg {self.chat_message_id}"
-
-
-class ChatHistory(models.Model):
-    """
-    Timeline events logging session updates (Conversation Started, Message Sent, Conversation Archived).
-    """
-    id = models.BigAutoField(primary_key=True)
-    session = models.ForeignKey(
-        ChatSession,
-        on_delete=models.CASCADE,
-        related_name='history_logs'
-    )
-    action = models.CharField(max_length=150)
-    description = models.TextField(blank=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['-timestamp']
-        verbose_name = "Chat History"
-        verbose_name_plural = "Chat Histories"
-
-    def __str__(self):
-        return f"{self.action} in Session {self.session_id} at {self.timestamp}"
+        return f"Query: '{self.query[:30]}' Matched: {self.was_matched} Source: {self.response_source}"

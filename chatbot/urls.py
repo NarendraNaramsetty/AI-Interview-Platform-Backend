@@ -1,31 +1,40 @@
-from django.urls import path, re_path, include
-from rest_framework.routers import DefaultRouter
+from django.urls import path, include
+from rest_framework.routers import SimpleRouter
 from .views import (
-    StartChatSessionView,
-    CurrentChatSessionView,
-    ChatSessionViewSet,
     SendMessageView,
-    ChatMessagesListView,
-    PromptTemplateViewSet,
+    ChatHistoryListView,
+    ChatSessionListView,
+    CreateSessionView,
+    DeleteSessionView,
     ChatFeedbackView,
-    ChatBookmarkViewSet,
-    ChatHistoryListView
+    CategoryListView,
+    KnowledgeBaseViewSet,
+    AdminCategoryViewSet,
+    ChatbotAdminAnalyticsView
 )
 
-router = DefaultRouter(trailing_slash=False)
-router.register('prompts', PromptTemplateViewSet, basename='chatbot-prompt')
-router.register('bookmarks', ChatBookmarkViewSet, basename='chatbot-bookmark')
-router.register('session', ChatSessionViewSet, basename='chatbot-session')
+# Use SimpleRouter for clean Admin REST paths
+router = SimpleRouter(trailing_slash=False)
+router.register('knowledge', KnowledgeBaseViewSet, basename='chatbot-knowledge')
+router.register('admin/categories', AdminCategoryViewSet, basename='chatbot-admin-categories')
 
 urlpatterns = [
-    re_path(r'^session/start/?$', StartChatSessionView.as_view(), name='chatbot_start_session'),
-    re_path(r'^session/current/?$', CurrentChatSessionView.as_view(), name='chatbot_current_session'),
-    re_path(r'^sessions/?$', ChatSessionViewSet.as_view({'get': 'list'}), name='chatbot_sessions_list'),
-    re_path(r'^message/?$', SendMessageView.as_view(), name='chatbot_send_message'),
-    re_path(r'^messages/(?P<session_id>\d+)/?$', ChatMessagesListView.as_view(), name='chatbot_messages_list'),
-    re_path(r'^feedback/?$', ChatFeedbackView.as_view(), name='chatbot_feedback'),
-    re_path(r'^history/(?P<session_id>\d+)/?$', ChatHistoryListView.as_view(), name='chatbot_history_list'),
+    # User Chat Operations
+    path('', SendMessageView.as_view(), name='chat_send_message'),
+    path('history/', ChatHistoryListView.as_view(), name='chat_history'),
+    path('sessions/', ChatSessionListView.as_view(), name='chat_sessions'),
     
-    # Router configurations
+    # User Session Management
+    path('session/', CreateSessionView.as_view(), name='chat_session_create'),
+    path('session/<int:id>/', DeleteSessionView.as_view(), name='chat_session_delete'),
+    
+    # User Feedback & Info
+    path('feedback/', ChatFeedbackView.as_view(), name='chat_feedback'),
+    path('categories/', CategoryListView.as_view(), name='chat_categories'),
+    
+    # Admin Analytics Dashboard API
+    path('analytics/', ChatbotAdminAnalyticsView.as_view(), name='chat_admin_analytics'),
+    
+    # Router Mount (Admin Knowledge & Categories REST CRUD)
     path('', include(router.urls)),
 ]

@@ -2,38 +2,26 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 
-from .models import (
-    ChatSession,
-    ChatMessage,
-    PromptTemplate,
-    ChatFeedback,
-    ChatBookmark,
-    ChatHistory
-)
-from .constants import STATUS_ACTIVE, STATUS_ARCHIVED, STATUS_DELETED
+from .models import Category, ChatSession, ChatMessage, KnowledgeBase, Feedback, AdminAnalytics
+from .services import normalize_text, find_best_match, find_local_answer, ChatbotService
 
 User = get_user_model()
 
-class ChatbotModuleTests(APITestCase):
+class ChatbotSystemTests(APITestCase):
     """
-    Unit test suite covering conversational chat sessions lifecycle, soft deletions,
-    message sending, feedbacks ratings, bookmarks, and security boundaries checks.
+    Comprehensive test suite validating text matching logic, local DB lookups, 
+    AI fallback triggers, REST API routing, and security controls.
     """
 
     def setUp(self):
         # Create users
-        self.candidate = User.objects.create_user(
+        self.user = User.objects.create_user(
             email='candidate@prepai.dev',
             password='SecurePassword123!',
             first_name='Alice',
             last_name='Candidate'
-        )
-        self.other_candidate = User.objects.create_user(
-            email='other@prepai.dev',
-            password='SecurePassword123!',
-            first_name='Charlie',
-            last_name='Other'
         )
         self.admin = User.objects.create_user(
             email='admin@prepai.dev',
@@ -44,159 +32,131 @@ class ChatbotModuleTests(APITestCase):
             is_superuser=True
         )
 
-        # Create pre-seeded prompts templates
-        self.prompt = PromptTemplate.objects.create(
-            name='Coding Mentor',
-            category='Coding',
-            system_prompt='You are an expert coding coach.',
-            is_active=True
+        # Create Category
+        self.category = Category.objects.create(
+            name="General",
+            description="General career queries"
         )
 
-        # URL paths
-        self.start_url = reverse('chatbot_start_session')
-        self.current_url = reverse('chatbot_current_session')
-        self.sessions_list_url = reverse('chatbot_sessions_list')
-        self.send_msg_url = reverse('chatbot_send_message')
-        self.feedback_url = reverse('chatbot_feedback')
-        self.bookmarks_url = reverse('chatbot-bookmark-list')
-        self.prompts_list_url = reverse('chatbot-prompt-list')
+        # Create KnowledgeBase entries
+        self.kb_entry = KnowledgeBase.objects.create(
+            title="HR Interview Prep",
+            category=self.category,
+            question="How do I prepare for HR interview?",
+            answer="Focus on standard behavioral questions, salary benchmarks, and STAR methodology.",
+            keywords="hr, interview, behavioral",
+            synonyms="hr round, human resources",
+            priority=5,
+            difficulty="Easy",
+            tags="hr, career, softskills"
+        )
 
-    def test_session_creation_list_and_current(self):
-        self.client.force_authenticate(user=self.candidate)
+        # REST API URLs
+        self.send_msg_url = reverse('chat_send_message')
+        self.history_url = reverse('chat_history')
+        self.sessions_url = reverse('chat_sessions')
+        self.session_create_url = reverse('chat_session_create')
+        self.feedback_url = reverse('chat_feedback')
+        self.categories_url = reverse('chat_categories')
 
-        # Start Chat Session
-        response = self.client.post(self.start_url, {'conversation_type': 'Coding'}, format='json')
+    def test_text_normalization_helpers(self):
+        text = "How do I prepare for HR interview???"
+        normalized = normalize_text(text)
+        self.assertEqual(normalized, "how do i prepare for hr interview")
+
+    def test_similarity_matching_exact_and_synonym(self):
+        # 1. Exact match query
+        entry, score = find_best_match("prepare for HR interview")
+        self.assertEqual(entry.id, self.kb_entry.id)
+        self.assertTrue(score >= 0.5)
+
+        # 2. Synonym match query
+        entry_syn, score_syn = find_best_match("tell me about the HR round")
+        self.assertEqual(entry_syn.id, self.kb_entry.id)
+        self.assertTrue(score_syn >= 0.5)
+
+    def test_local_vs_ai_fallback_answering(self):
+        # Local lookup hit
+        ans, priority, score, source, entry = find_local_answer("How do I prepare for HR interview?")
+        self.assertIsNotNone(ans)
+        self.assertEqual(source, 'LOCAL')
+
+        # Local lookup miss (no match above threshold)
+        ans_miss, priority_miss, score_miss, source_miss, entry_miss = find_local_answer("What is cellular biology?")
+        self.assertNull = ans_miss
+        self.assertIsNone(ans_miss)
+
+    def test_sessions_rest_api_lifecycle(self):
+        self.client.force_authenticate(user=self.user)
+
+        # 1. Create session
+        response = self.client.post(self.session_create_url, {"session_title": "My Test Session"}, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(response.data['success'])
-        
-        session_id = response.data['data']['id']
-        session = ChatSession.objects.get(pk=session_id)
-        self.assertEqual(session.conversation_type, 'Coding')
-        self.assertEqual(session.status, STATUS_ACTIVE)
-
-        # Get Current Session
-        response = self.client.get(self.current_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['data']['id'], session_id)
-
-        # List Sessions
-        response = self.client.get(self.sessions_list_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['data']['results']), 1)
-
-    def test_session_rename_archive_and_soft_delete(self):
-        self.client.force_authenticate(user=self.candidate)
-        
-        # Start session
-        response = self.client.post(self.start_url, {'conversation_type': 'Coding'}, format='json')
-        session_id = response.data['data']['id']
-
-        detail_url = reverse('chatbot-session-detail', args=[session_id])
-        archive_url = reverse('chatbot-session-archive', args=[session_id])
-
-        # Rename Session
-        response = self.client.put(detail_url, {'title': 'Updated Chat Title'}, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(ChatSession.objects.get(pk=session_id).title, 'Updated Chat Title')
-
-        # Archive Session
-        response = self.client.post(archive_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(ChatSession.objects.get(pk=session_id).status, STATUS_ARCHIVED)
-
-        # Delete Session (Soft delete)
-        response = self.client.delete(detail_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(ChatSession.objects.get(pk=session_id).status, STATUS_DELETED)
-
-        # Exclude deleted sessions from candidate lists
-        response = self.client.get(self.sessions_list_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['data']['results']), 0)
-
-    def test_message_sending_and_timeline_retrieval(self):
-        self.client.force_authenticate(user=self.candidate)
-
-        # Start session
-        response = self.client.post(self.start_url, {'conversation_type': 'Coding'}, format='json')
+        self.assertEqual(response.data['data']['session_title'], "My Test Session")
         session_id = response.data['data']['id']
 
-        # Send Message (Stores user message and mock AI response)
-        response = self.client.post(self.send_msg_url, {
-            'session_id': session_id,
-            'message': 'How does recursion work?'
-        }, format='json')
-
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(response.data['success'])
-        ai_msg_id = response.data['data']['id']
-
-        # Check total messages count updated
-        session = ChatSession.objects.get(pk=session_id)
-        self.assertEqual(session.total_messages, 2)
-
-        # Get Messages list
-        messages_url = reverse('chatbot_messages_list', args=[session_id])
-        response = self.client.get(messages_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['data']), 2)
-
-        # Verify history timeline logged
-        history_url = reverse('chatbot_history_list', args=[session_id])
-        response = self.client.get(history_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(any(item['action'] == 'Message Sent' for item in response.data['data']))
-
-    def test_rating_feedback_and_bookmarks(self):
-        self.client.force_authenticate(user=self.candidate)
-
-        # Start session
-        response = self.client.post(self.start_url, {'conversation_type': 'Coding'}, format='json')
-        session_id = response.data['data']['id']
-
-        # Send Message
-        response = self.client.post(self.send_msg_url, {
-            'session_id': session_id,
-            'message': 'Tell me about pointers.'
-        }, format='json')
-        ai_msg_id = response.data['data']['id']
-
-        # 1. Feedback rating
-        response = self.client.post(self.feedback_url, {
-            'chat_message': ai_msg_id,
-            'rating': 5,
-            'comment': 'Stellar explanation!'
-        }, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(ChatFeedback.objects.filter(chat_message_id=ai_msg_id, rating=5).exists())
-
-        # Rating boundary check (e.g. > 5 should fail)
-        response = self.client.post(self.feedback_url, {
-            'chat_message': ai_msg_id,
-            'rating': 10
-        }, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-        # 2. Bookmarks
-        response = self.client.post(self.bookmarks_url, {'chat_message': ai_msg_id}, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(ChatBookmark.objects.filter(user=self.candidate, chat_message_id=ai_msg_id).exists())
-
-        # List Bookmarks
-        response = self.client.get(self.bookmarks_url)
+        # 2. List sessions
+        response = self.client.get(self.sessions_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['data']), 1)
 
-    def test_security_access_controls(self):
-        self.client.force_authenticate(user=self.candidate)
-
-        # Start session
-        response = self.client.post(self.start_url, {'conversation_type': 'Coding'}, format='json')
-        session_id = response.data['data']['id']
-
-        # Other candidate attempts to update it (should be 404)
-        self.client.force_authenticate(user=self.other_candidate)
-        detail_url = reverse('chatbot-session-detail', args=[session_id])
+        # 3. Soft delete session
+        delete_url = reverse('chat_session_delete', args=[session_id])
+        response = self.client.delete(delete_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         
-        response = self.client.put(detail_url, {'title': 'Hack attempt'}, format='json')
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        # Verify soft deleted sessions are excluded
+        response = self.client.get(self.sessions_url)
+        self.assertEqual(len(response.data['data']), 0)
+
+    def test_send_message_local_lookup(self):
+        self.client.force_authenticate(user=self.user)
+        
+        # Create session
+        sess = ChatSession.objects.create(user=self.user, session_title="Test")
+
+        # Send query matching local answer
+        response = self.client.post(self.send_msg_url, {
+            "session_id": sess.id,
+            "message": "prepare for HR interview"
+        }, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['data']['response_source'], 'LOCAL')
+        self.assertTrue("Focus on standard behavioral questions" in response.data['data']['message'])
+
+        # Verify query hit logged in AdminAnalytics
+        self.assertTrue(AdminAnalytics.objects.filter(was_matched=True, response_source='LOCAL').exists())
+
+    def test_feedback_submission(self):
+        self.client.force_authenticate(user=self.user)
+        sess = ChatSession.objects.create(user=self.user, session_title="Test")
+        
+        msg = ChatMessage.objects.create(
+            session=sess,
+            sender='BOT',
+            message="Test Answer",
+            response_source='LOCAL'
+        )
+
+        response = self.client.post(self.feedback_url, {
+            "message_id": msg.id,
+            "rating": 5,
+            "comment": "Very helpful!"
+        }, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(Feedback.objects.filter(message=msg, rating=5).exists())
+
+    def test_admin_crud_knowledge_authorization(self):
+        self.client.force_authenticate(user=self.user)
+        knowledge_list_url = reverse('chatbot-knowledge-list')
+
+        # Regular candidates should be denied access to knowledge configuration APIs
+        response = self.client.get(knowledge_list_url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        # Admin user should be allowed access
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.get(knowledge_list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

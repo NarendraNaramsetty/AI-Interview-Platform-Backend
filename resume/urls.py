@@ -7,12 +7,14 @@ from .views import (
     ResumeSetDefaultView,
     ResumeTextView,
     ResumeVersionsView,
-    ResumeActivityView
+    ResumeActivityView,
+    ResumeAnalysisView
 )
 
 urlpatterns = [
     path('', ResumeListView.as_view(), name='resume_list'),
     path('upload', ResumeUploadView.as_view(), name='resume_upload'),
+    path('analysis', ResumeAnalysisView.as_view(), name='resume_analysis'),
     path('<int:id>', ResumeDetailView.as_view(), name='resume_detail'),
     
     # Custom operations paths

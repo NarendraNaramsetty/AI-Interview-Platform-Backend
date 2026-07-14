@@ -215,43 +215,108 @@ class InterviewService:
         company = session.target_company
         difficulty = session.difficulty
 
-        # Set default generic tech/HR mock prompts
-        mock_prompts = [
-            f"Introduce yourself and highlight your experience as a {role}.",
-            f"What do you know about the engineering culture at {company} and why do you want to join?",
-            f"How do you handle debugging complex production issues? Explain your process.",
-            f"Describe a situation where you had a technical disagreement with a team member. How did you resolve it?",
-            f"What is your approach to learning new programming concepts or technical stacks?"
-        ]
+        # Try to load matching questions from the main InterviewQuestion bank
+        try:
+            from questions.models import InterviewQuestion as BankQuestion
+            from django.db.models import Q
+            
+            # Start query set
+            qs = BankQuestion.objects.filter(is_active=True)
+            
+            # If candidate selected specific tech stack tags/topics, filter by them!
+            if session.tech_stack:
+                tech_filter = Q()
+                for tech in session.tech_stack:
+                    tech_filter |= Q(topic__name__icontains=tech) | Q(category__name__icontains=tech) | Q(question__icontains=tech)
+                tech_qs = qs.filter(tech_filter)
+                if tech_qs.exists():
+                    qs = tech_qs
+            
+            # Filter by matching target role name or category
+            role_qs = qs.filter(role__title__icontains=role)
+            if not role_qs.exists() and "frontend" in role.lower():
+                role_qs = qs.filter(category__name__icontains="frontend")
+            elif not role_qs.exists() and "backend" in role.lower():
+                role_qs = qs.filter(category__name__icontains="backend")
+                
+            if not role_qs.exists():
+                role_qs = qs  # fallback to all active questions
+                
+            # Retrieve requested number of questions
+            bank_qs = list(role_qs.order_by('?')[:session.total_questions])
+        except Exception as err:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Failed to query from Question Bank: {err}")
+            bank_qs = []
 
         questions_list = []
-        for idx, text in enumerate(mock_prompts[:session.total_questions]):
-            q = InterviewQuestion.objects.create(
-                session=session,
-                question_text=text,
-                topic="Introduction" if idx < 2 else "Technical Problem Solving",
-                category="Behavioral" if idx in [0, 3] else "Technical",
-                difficulty=difficulty,
-                sequence_number=idx + 1,
-                source=SOURCE_DATABASE,
-                expected_answer_placeholder="Candidate should demonstrate professional communication and structuring."
-            )
-            questions_list.append(q)
-            
-        # In case total_questions requested exceeds default list, generate fillers
-        if session.total_questions > len(mock_prompts):
-            for idx in range(len(mock_prompts), session.total_questions):
+
+        if bank_qs:
+            for idx, bq in enumerate(bank_qs):
                 q = InterviewQuestion.objects.create(
                     session=session,
-                    question_text=f"Filler Question {idx + 1}: Explain web standards and REST principles.",
-                    topic="Web Engineering",
-                    category="Technical",
+                    question_text=bq.question,
+                    topic=bq.topic.name if bq.topic else "General",
+                    category=bq.category.name if bq.category else "Technical",
+                    difficulty=bq.difficulty,
+                    sequence_number=idx + 1,
+                    source=SOURCE_DATABASE,
+                    expected_answer_placeholder=bq.expected_answer or "Candidate should demonstrate standard technical layout."
+                )
+                questions_list.append(q)
+            
+            # If we need more questions than matched, generate fillers
+            if len(questions_list) < session.total_questions:
+                for idx in range(len(questions_list), session.total_questions):
+                    q = InterviewQuestion.objects.create(
+                        session=session,
+                        question_text=f"Filler Question {idx + 1}: Explain web standards, architecture, and REST principles.",
+                        topic="Web Engineering",
+                        category="Technical",
+                        difficulty=difficulty,
+                        sequence_number=idx + 1,
+                        source=SOURCE_DATABASE,
+                        expected_answer_placeholder="Explain HTTP methods and routing."
+                    )
+                    questions_list.append(q)
+        else:
+            # Set default generic tech/HR mock prompts
+            mock_prompts = [
+                f"Introduce yourself and highlight your experience as a {role}.",
+                f"What do you know about the engineering culture at {company} and why do you want to join?",
+                f"How do you handle debugging complex production issues? Explain your process.",
+                f"Describe a situation where you had a technical disagreement with a team member. How did you resolve it?",
+                f"What is your approach to learning new programming concepts or technical stacks?"
+            ]
+
+            for idx, text in enumerate(mock_prompts[:session.total_questions]):
+                q = InterviewQuestion.objects.create(
+                    session=session,
+                    question_text=text,
+                    topic="Introduction" if idx < 2 else "Technical Problem Solving",
+                    category="Behavioral" if idx in [0, 3] else "Technical",
                     difficulty=difficulty,
                     sequence_number=idx + 1,
                     source=SOURCE_DATABASE,
-                    expected_answer_placeholder="Explain HTTP methods and routing."
+                    expected_answer_placeholder="Candidate should demonstrate professional communication and structuring."
                 )
                 questions_list.append(q)
+                
+            # In case total_questions requested exceeds default list, generate fillers
+            if session.total_questions > len(mock_prompts):
+                for idx in range(len(mock_prompts), session.total_questions):
+                    q = InterviewQuestion.objects.create(
+                        session=session,
+                        question_text=f"Filler Question {idx + 1}: Explain web standards and REST principles.",
+                        topic="Web Engineering",
+                        category="Technical",
+                        difficulty=difficulty,
+                        sequence_number=idx + 1,
+                        source=SOURCE_DATABASE,
+                        expected_answer_placeholder="Explain HTTP methods and routing."
+                    )
+                    questions_list.append(q)
 
         return questions_list
 

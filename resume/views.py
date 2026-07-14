@@ -9,7 +9,7 @@ from django.http import FileResponse
 from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiParameter
 from django.core.exceptions import ValidationError
 
-from .models import Resume, ResumeActivity
+from .models import Resume, ResumeActivity, ResumeAnalysis
 from .permissions import IsResumeOwnerOrAdmin
 from .services import ResumeService
 from .filters import ResumeFilter
@@ -18,7 +18,8 @@ from .serializers import (
     ResumeDetailSerializer,
     ResumeUploadSerializer,
     ResumeUpdateSerializer,
-    ResumeActivitySerializer
+    ResumeActivitySerializer,
+    ResumeAnalysisSerializer
 )
 
 class ResumeListView(generics.ListAPIView):
@@ -311,3 +312,35 @@ class ResumeActivityView(APIView):
             "message": "Resume activity logs retrieved successfully.",
             "data": serializer.data
         }, status=status.HTTP_200_OK)
+
+
+class ResumeAnalysisView(APIView):
+    """
+    GET /api/resume/analysis
+    Returns the AI analysis of the user's default (or latest) resume.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        summary="Get Resume AI Analysis",
+        description="Returns the AI analysis of the user's default (or latest) resume.",
+        responses={200: ResumeAnalysisSerializer}
+    )
+    def get(self, request):
+        # 1. Try default resume
+        resume = Resume.objects.filter(user=request.user, is_default=True).first()
+        if not resume:
+            # 2. Fallback to latest uploaded resume
+            resume = Resume.objects.filter(user=request.user).order_by('-created_at').first()
+            
+        if not resume:
+            return Response(
+                {"detail": "No resume uploaded yet."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+            
+        # Get or create placeholder analysis
+        analysis, _ = ResumeAnalysis.objects.get_or_create(resume=resume)
+        
+        serializer = ResumeAnalysisSerializer(analysis)
+        return Response(serializer.data, status=status.HTTP_200_OK)

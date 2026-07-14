@@ -45,7 +45,7 @@ urlpatterns = [
     path('api/nlp/', include('nlp.urls')),
 
     # AI Chatbot Module APIs
-    path('api/chatbot/', include('chatbot.urls')),
+    path('api/chat/', include('chatbot.urls')),
 
     # Admin Module APIs
     path('api/admin/', include('Admin.urls')),
