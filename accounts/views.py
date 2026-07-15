@@ -3,6 +3,7 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
@@ -46,6 +47,8 @@ class RegisterView(APIView):
     Registers a new CustomUser and triggers a verification email code.
     """
     permission_classes = [permissions.AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'auth_login'
 
     @extend_schema(
         summary="Register New Account",
@@ -84,6 +87,8 @@ class LoginView(APIView):
     Authenticates a user via email and password, returning tokens and profile.
     """
     permission_classes = [permissions.AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'auth_login'
 
     @extend_schema(
         summary="User Login",
@@ -246,6 +251,8 @@ class ForgotPasswordView(APIView):
     Triggers code generators and emails OTP security codes.
     """
     permission_classes = [permissions.AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'auth_login'
 
     @extend_schema(
         summary="Forgot Password OTP Trigger",
@@ -276,6 +283,8 @@ class VerifyOTPView(APIView):
     Checks if email-OTP credentials match and are active.
     """
     permission_classes = [permissions.AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'auth_login'
 
     @extend_schema(
         summary="Verify Recovery OTP",
@@ -323,6 +332,8 @@ class ResetPasswordView(APIView):
     Resets account password using OTP validation tokens.
     """
     permission_classes = [permissions.AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'auth_login'
 
     @extend_schema(
         summary="Reset Security Password",
@@ -355,6 +366,8 @@ class VerifyEmailView(APIView):
     Flags is_verified status to True when correct codes match.
     """
     permission_classes = [permissions.AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'auth_login'
 
     @extend_schema(
         summary="Verify Email Address",
@@ -394,6 +407,8 @@ class ResendVerificationView(APIView):
     Regenerates and dispatches new validation link alerts.
     """
     permission_classes = [permissions.AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'auth_login'
 
     @extend_schema(
         summary="Resend Verification OTP",

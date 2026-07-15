@@ -47,30 +47,13 @@ class AdminLoginView(APIView):
     permission_classes = []  # Public access
 
     def post(self, request):
-        email = request.data.get('email')
+        email = request.data.get('email', '').strip().lower()
         password = request.data.get('password')
         
-        # Developer credentials fallback check
-        dev_email = "narebhaai@gmail.com"
-        dev_password = "1725915478@Nare20051725915478"
+        from django.contrib.auth import authenticate
+        user = authenticate(username=email, password=password)
         
-        if email == dev_email and password == dev_password:
-            # Fetch or create the admin user
-            user, created = User.objects.get_or_create(email=email)
-            if created or not user.is_staff or not user.is_superuser:
-                user.set_password(password)
-                user.is_staff = True
-                user.is_superuser = True
-                user.is_verified = True
-                user.first_name = "Narendra"
-                user.last_name = "Naramsetty"
-                user.save()
-            
-            # Verify password validity
-            if not user.check_password(password):
-                user.set_password(password)
-                user.save()
-            
+        if user is not None and (user.is_staff or user.is_superuser):
             # Issue access & refresh token with custom admin claim
             refresh = RefreshToken.for_user(user)
             refresh['is_admin_token'] = True

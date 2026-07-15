@@ -53,7 +53,8 @@ class StartInterviewView(APIView):
         resume_id = serializer.validated_data.get('resume_id')
         resume = None
         if resume_id:
-            resume = Resume.objects.get(id=resume_id)
+            from django.shortcuts import get_object_or_404
+            resume = get_object_or_404(Resume, id=resume_id, user=request.user)
 
         try:
             session = InterviewService.start_interview(

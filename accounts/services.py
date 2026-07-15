@@ -1,4 +1,5 @@
-import random
+# pyrefly: ignore [missing-import]
+import secrets
 from django.utils import timezone
 from datetime import timedelta
 from django.core.mail import send_mail
@@ -16,7 +17,7 @@ class AuthService:
         """
         Generates a secure 6-digit numeric OTP string.
         """
-        return f"{random.randint(100000, 999999)}"
+        return f"{secrets.SystemRandom().randint(100000, 999999)}"
 
     @classmethod
     def set_user_otp(cls, user: CustomUser) -> str:

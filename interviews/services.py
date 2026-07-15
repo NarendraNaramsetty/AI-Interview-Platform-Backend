@@ -492,7 +492,8 @@ RULES:
             import json
             import re
             
-            raw_response = AIService.route_request("chat", full_query, session.user)
+            res_dict = AIService.route_request("chat", full_query, session.user)
+            raw_response = res_dict.get("response") if res_dict else None
             if raw_response:
                 json_match = re.search(r'(\{.*\}|\[.*\])', raw_response, re.DOTALL)
                 if json_match:

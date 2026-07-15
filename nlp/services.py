@@ -172,7 +172,8 @@ Respond strictly in this JSON schema:
         }
 
         try:
-            raw_response = AIService.route_request("chat", eval_prompt, question_result.session.user)
+            res_dict = AIService.route_request("chat", eval_prompt, question_result.session.user)
+            raw_response = res_dict.get("response") if res_dict else None
             if raw_response:
                 json_match = re.search(r'(\{.*\}|\[.*\])', raw_response, re.DOTALL)
                 if json_match:
@@ -211,7 +212,8 @@ Respond strictly in this JSON schema:
         }
         
         try:
-            raw_response = AIService.route_request("chat", full_query, user)
+            res_dict = AIService.route_request("chat", full_query, user)
+            raw_response = res_dict.get("response") if res_dict else None
             if raw_response:
                 json_match = re.search(r'(\{.*\}|\[.*\])', raw_response, re.DOTALL)
                 if json_match:
@@ -258,7 +260,8 @@ Respond strictly in this JSON schema:
             import json
             import re
             
-            raw_response = AIService.route_request("chat", f"{system_prompt}\n\n{user_prompt}", user)
+            res_dict = AIService.route_request("chat", f"{system_prompt}\n\n{user_prompt}", user)
+            raw_response = res_dict.get("response") if res_dict else None
             if raw_response:
                 json_match = re.search(r'(\{.*\}|\[.*\])', raw_response, re.DOTALL)
                 if json_match:
@@ -342,7 +345,8 @@ Respond strictly in this JSON schema:
             import json
             import re
             
-            raw_response = AIService.route_request("chat", f"{system_prompt}\n\n{user_prompt}", user)
+            res_dict = AIService.route_request("chat", f"{system_prompt}\n\n{user_prompt}", user)
+            raw_response = res_dict.get("response") if res_dict else None
             if raw_response:
                 json_match = re.search(r'(\{.*\}|\[.*\])', raw_response, re.DOTALL)
                 if json_match:

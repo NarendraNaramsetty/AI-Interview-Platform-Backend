@@ -174,7 +174,7 @@ else:
 
 # Dynamic matching for Vercel preview and production environments
 CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https:\/\/.*\.vercel\.app$",
+    r"^https:\/\/ai-interview-platform-2026-[a-zA-Z0-9-]+\.vercel\.app$",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
