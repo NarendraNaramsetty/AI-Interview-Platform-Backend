@@ -279,7 +279,7 @@ class GeneratePersonalizedRoadmapView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        interest = request.data.get('interest', '')
+        interest = request.data.get('interest') or request.data.get('career_track') or ''
         experience_level = request.data.get('experience_level', 'Beginner')
         target_company = request.data.get('target_company', '')
         weekly_hours = request.data.get('weekly_hours', '')
