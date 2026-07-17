@@ -1,0 +1,694 @@
+"""
+Student-Focused Interview Questions - Part 2: Core CS Subjects
+Operating Systems, DBMS, OOP, Networking - 40 questions total
+"""
+import os
+import django
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
+django.setup()
+
+from questions.models import QuestionCategory, Topic, InterviewQuestion
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+admin_user = User.objects.filter(is_superuser=True).first() or User.objects.first()
+
+# Get existing categories
+os_cat = QuestionCategory.objects.get(name='OS')
+dbms_cat = QuestionCategory.objects.get(name='DBMS')
+oop_cat = QuestionCategory.objects.get(name='OOP')
+networking_cat = QuestionCategory.objects.get(name='Networking')
+
+# Get existing topics
+topics_map = {}
+for topic in Topic.objects.all():
+    topics_map[topic.name] = topic
+
+# ============================================================================
+# OPERATING SYSTEMS QUESTIONS (10 Questions)
+# ============================================================================
+
+os_questions = [
+    {
+        'question': 'What is the difference between a process and a thread? Give real-world examples.',
+        'short_description': 'Process vs Thread difference',
+        'category': os_cat,
+        'topic': topics_map.get('Process Management'),
+        'difficulty': 'Easy',
+        'expected_duration': 3,
+        'answer_type': 'Text',
+        'tags': ['Process', 'Thread', 'Fundamentals', 'Concurrency'],
+        'hints': ['Process has separate memory space', 'Threads share memory within a process', 'Think of browser tabs vs JavaScript execution'],
+        'expected_answer': 'Process: Independent program in execution with separate memory space, resources, and PCB. Example: Each browser window. Thread: Lightweight execution unit within a process, shares memory and resources. Example: Multiple tabs in one browser window. Threads enable parallelism within a process while processes provide isolation.',
+        'explanation': 'Fundamental OS concept essential for understanding multitasking and concurrency in modern applications.'
+    },
+    {
+        'question': 'Explain the different CPU scheduling algorithms: FCFS, SJF, and Round Robin. When would you use each?',
+        'short_description': 'CPU scheduling algorithms comparison',
+        'category': os_cat,
+        'topic': topics_map.get('Process Management'),
+        'difficulty': 'Medium',
+        'expected_duration': 5,
+        'answer_type': 'Text',
+        'tags': ['Scheduling', 'CPU', 'Algorithms', 'Performance'],
+        'hints': ['FCFS is first-come-first-served', 'SJF picks shortest job first', 'Round Robin uses time slices'],
+        'expected_answer': 'FCFS: Processes execute in arrival order. Simple but can cause convoy effect. Use for batch systems. SJF: Shortest job first, minimizes average waiting time but may cause starvation. Use when job times are predictable. Round Robin: Each process gets fixed time quantum, then switches. Fair sharing, use for interactive systems. Prevents starvation.',
+        'explanation': 'Shows understanding of how OS manages CPU resources and tradeoffs between different scheduling policies.'
+    },
+    {
+        'question': 'What are the four conditions necessary for deadlock to occur? How can deadlock be prevented?',
+        'short_description': 'Deadlock conditions and prevention',
+        'category': os_cat,
+        'topic': topics_map.get('Deadlock'),
+        'difficulty': 'Medium',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Deadlock', 'Synchronization', 'Prevention'],
+        'hints': ['Four conditions: Mutual exclusion, Hold and wait, No preemption, Circular wait', 'Prevention breaks one of these conditions'],
+        'expected_answer': 'Four conditions: 1) Mutual Exclusion (resource can\'t be shared), 2) Hold and Wait (process holds resources while waiting), 3) No Preemption (resources can\'t be forcibly taken), 4) Circular Wait (circular chain of waiting processes). Prevention: Break any condition - use resource sharing, require all resources upfront, allow preemption, or impose ordering on resource acquisition.',
+        'explanation': 'Critical concept for building concurrent systems and avoiding system hangs.'
+    },
+    {
+        'question': 'What is virtual memory? Explain the concept of paging and its benefits.',
+        'short_description': 'Virtual memory and paging',
+        'category': os_cat,
+        'topic': topics_map.get('Memory Management'),
+        'difficulty': 'Medium',
+        'expected_duration': 5,
+        'answer_type': 'Text',
+        'tags': ['Virtual Memory', 'Paging', 'Memory Management'],
+        'hints': ['Virtual memory allows programs larger than RAM', 'Paging divides memory into fixed-size blocks', 'Pages can be swapped to disk'],
+        'expected_answer': 'Virtual Memory: Abstraction that gives each process illusion of having large, private address space. Uses disk as extension of RAM. Paging: Divides virtual memory into fixed-size pages (typically 4KB) and physical memory into frames. Benefits: Enables multiprogramming, memory protection, sharing, and running programs larger than physical RAM through demand paging.',
+        'explanation': 'Essential for understanding how modern OS manages memory efficiently and securely.'
+    },
+    {
+        'question': 'What is thrashing in operating systems? What causes it and how can it be resolved?',
+        'short_description': 'Thrashing in OS',
+        'category': os_cat,
+        'topic': topics_map.get('Memory Management'),
+        'difficulty': 'Medium',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Thrashing', 'Memory Management', 'Performance'],
+        'hints': ['Thrashing occurs when system spends more time paging than executing', 'Caused by too many processes competing for memory', 'Solution involves reducing multiprogramming level'],
+        'expected_answer': 'Thrashing: System spends most time swapping pages in/out of memory instead of executing processes. Caused by: Too many processes in memory, each getting insufficient frames, leading to frequent page faults. Resolution: Reduce degree of multiprogramming, increase RAM, implement working set model, or use page fault frequency algorithm to control memory allocation.',
+        'explanation': 'Important performance concept - shows understanding of memory management tradeoffs.'
+    },
+    {
+        'question': 'Explain the critical section problem. What is a semaphore and how does it solve synchronization issues?',
+        'short_description': 'Critical section and semaphores',
+        'category': os_cat,
+        'topic': topics_map.get('Process Management'),
+        'difficulty': 'Medium',
+        'expected_duration': 5,
+        'answer_type': 'Text',
+        'tags': ['Critical Section', 'Semaphore', 'Synchronization'],
+        'hints': ['Critical section is code accessing shared resources', 'Semaphore is synchronization primitive with counter', 'Binary semaphore acts like mutex'],
+        'expected_answer': 'Critical Section: Code segment where processes access shared resources. Must ensure mutual exclusion. Semaphore: Synchronization primitive with integer counter. wait() decrements, signal() increments. If counter becomes negative, process blocks. Binary semaphore (0/1) provides mutex. Counting semaphore manages multiple identical resources. Solves race conditions and coordinates access.',
+        'explanation': 'Fundamental synchronization concept crucial for concurrent programming and thread safety.'
+    },
+    {
+        'question': 'What is the difference between semaphore and mutex? When would you use each?',
+        'short_description': 'Semaphore vs Mutex',
+        'category': os_cat,
+        'topic': topics_map.get('Process Management'),
+        'difficulty': 'Easy',
+        'expected_duration': 3,
+        'answer_type': 'Text',
+        'tags': ['Semaphore', 'Mutex', 'Synchronization', 'Comparison'],
+        'hints': ['Mutex is binary (locked/unlocked)', 'Semaphore can count multiple resources', 'Mutex has ownership concept'],
+        'expected_answer': 'Mutex: Binary lock with ownership - only thread that locks can unlock. Provides mutual exclusion for single resource. Semaphore: Counter-based, can manage multiple identical resources. No ownership - any thread can signal. Use Mutex for protecting critical sections (single resource). Use Semaphore for resource pools (multiple identical resources like database connections).',
+        'explanation': 'Important distinction for choosing appropriate synchronization mechanism in concurrent systems.'
+    },
+    {
+        'question': 'What happens during context switching? Why is it expensive?',
+        'short_description': 'Context switching overhead',
+        'category': os_cat,
+        'topic': topics_map.get('Process Management'),
+        'difficulty': 'Medium',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Context Switch', 'Process Management', 'Performance'],
+        'hints': ['Context switch saves/restores process state', 'Involves CPU registers, memory mappings', 'Cache becomes invalid'],
+        'expected_answer': 'Context Switch: OS saves current process state (CPU registers, program counter, memory mappings) and loads another process state. Expensive because: 1) Save/restore operations take time, 2) CPU cache becomes invalid (cache miss penalty), 3) TLB (Translation Lookaside Buffer) flush, 4) Memory access patterns change. Overhead increases with context switch frequency.',
+        'explanation': 'Understanding context switch cost helps in designing efficient concurrent applications.'
+    },
+    {
+        'question': 'Explain different memory allocation techniques: contiguous vs non-contiguous allocation.',
+        'short_description': 'Memory allocation techniques',
+        'category': os_cat,
+        'topic': topics_map.get('Memory Management'),
+        'difficulty': 'Easy',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Memory Allocation', 'Contiguous', 'Non-contiguous'],
+        'hints': ['Contiguous allocates consecutive blocks', 'Non-contiguous can scatter across memory', 'Paging and segmentation are non-contiguous'],
+        'expected_answer': 'Contiguous Allocation: Process gets consecutive memory blocks. Simple but causes external fragmentation and limits process size. Examples: Fixed/dynamic partitioning. Non-Contiguous: Process memory scattered across physical memory. Eliminates external fragmentation, allows processes larger than any single free block. Examples: Paging (fixed-size blocks) and Segmentation (variable-size logical units). Modern systems use non-contiguous for flexibility.',
+        'explanation': 'Basic memory management concept showing evolution from simple to sophisticated allocation schemes.'
+    },
+    {
+        'question': 'What are the different states of a process? Draw the process state transition diagram.',
+        'short_description': 'Process states and transitions',
+        'category': os_cat,
+        'topic': topics_map.get('Process Management'),
+        'difficulty': 'Easy',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Process States', 'State Diagram', 'OS Fundamentals'],
+        'hints': ['Five basic states: New, Ready, Running, Waiting, Terminated', 'Transitions occur due to scheduling or I/O events'],
+        'expected_answer': 'Process States: 1) New: Process being created, 2) Ready: Process waiting for CPU, 3) Running: Process executing on CPU, 4) Waiting/Blocked: Process waiting for I/O or event, 5) Terminated: Process finished execution. Transitions: New→Ready (admitted), Ready→Running (scheduled), Running→Ready (time expired), Running→Waiting (I/O request), Waiting→Ready (I/O complete), Running→Terminated (exit).',
+        'explanation': 'Fundamental process lifecycle understanding essential for OS and system programming concepts.'
+    }
+]
+
+print("=" * 80)
+print("SEEDING PART 2A: OPERATING SYSTEMS - 10 Questions")
+print("=" * 80)
+
+created_count = 0
+for q_dict in os_questions:
+    q, created = InterviewQuestion.objects.get_or_create(
+        question=q_dict['question'],
+        category=q_dict['category'],
+        defaults={
+            'short_description': q_dict['short_description'],
+            'topic': q_dict['topic'],
+            'difficulty': q_dict['difficulty'],
+            'expected_duration': q_dict['expected_duration'],
+            'answer_type': q_dict['answer_type'],
+            'tags': q_dict['tags'],
+            'hints': q_dict['hints'],
+            'expected_answer': q_dict['expected_answer'],
+            'explanation': q_dict['explanation'],
+            'created_by': admin_user,
+            'source': 'Manual'
+        }
+    )
+    if created:
+        created_count += 1
+        print(f"✓ Created: {q_dict['short_description']}")
+
+print(f"\nSuccessfully created {created_count} OS questions!")
+
+# ============================================================================
+# DATABASE MANAGEMENT SYSTEMS (DBMS) QUESTIONS (10 Questions)
+# ============================================================================
+
+dbms_questions = [
+    {
+        'question': 'Explain the ACID properties of database transactions with examples for each property.',
+        'short_description': 'ACID properties detailed explanation',
+        'category': dbms_cat,
+        'topic': topics_map.get('Transactions'),
+        'difficulty': 'Easy',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['ACID', 'Transactions', 'Database', 'Fundamentals'],
+        'hints': ['Atomicity: All or nothing', 'Consistency: Valid state', 'Isolation: Concurrent transactions', 'Durability: Permanent changes'],
+        'expected_answer': 'ACID Properties: Atomicity - Transaction is all-or-nothing (bank transfer: both debit and credit succeed or both fail). Consistency - Database remains in valid state (referential integrity maintained). Isolation - Concurrent transactions don\'t interfere (two users booking same seat see consistent results). Durability - Committed changes persist even after system failure (confirmed orders survive power outage).',
+        'explanation': 'Fundamental database concept essential for understanding transaction management and data integrity.'
+    },
+    {
+        'question': 'What is database normalization? Explain 1NF, 2NF, and 3NF with examples.',
+        'short_description': 'Database normalization (1NF, 2NF, 3NF)',
+        'category': dbms_cat,
+        'topic': topics_map.get('Normalization'),
+        'difficulty': 'Medium',
+        'expected_duration': 6,
+        'answer_type': 'Text',
+        'tags': ['Normalization', 'Database Design', '1NF', '2NF', '3NF'],
+        'hints': ['1NF: Atomic values, no repeating groups', '2NF: No partial dependencies', '3NF: No transitive dependencies'],
+        'expected_answer': 'Normalization eliminates data redundancy. 1NF: Each cell contains atomic values, no repeating groups (separate phone numbers into different rows). 2NF: 1NF + no partial dependencies on composite primary key (student courses table: student name depends only on student_id, not on student_id+course_id). 3NF: 2NF + no transitive dependencies (remove department name from employee table if it depends on department_id).',
+        'explanation': 'Critical database design skill for eliminating anomalies and ensuring data integrity.'
+    },
+    {
+        'question': 'Explain the different types of SQL JOINs: INNER, LEFT, RIGHT, and FULL OUTER JOIN with examples.',
+        'short_description': 'SQL JOIN types explained',
+        'category': dbms_cat,
+        'topic': topics_map.get('SQL Basics'),
+        'difficulty': 'Easy',
+        'expected_duration': 5,
+        'answer_type': 'Text',
+        'tags': ['SQL', 'JOIN', 'Database Queries'],
+        'hints': ['INNER: matching rows only', 'LEFT: all left table rows', 'RIGHT: all right table rows', 'FULL: all rows from both tables'],
+        'expected_answer': 'SQL JOINs: INNER JOIN - Returns only matching rows from both tables (employees with departments). LEFT JOIN - All rows from left table + matching from right (all employees, even without departments). RIGHT JOIN - All rows from right table + matching from left (all departments, even without employees). FULL OUTER JOIN - All rows from both tables (all employees and departments, with NULLs for non-matches).',
+        'explanation': 'Essential SQL skill for combining data from multiple tables effectively.'
+    },
+    {
+        'question': 'What is the difference between Primary Key and Foreign Key? Can a table have multiple primary keys?',
+        'short_description': 'Primary Key vs Foreign Key',
+        'category': dbms_cat,
+        'topic': topics_map.get('SQL Basics'),
+        'difficulty': 'Easy',
+        'expected_duration': 3,
+        'answer_type': 'Text',
+        'tags': ['Primary Key', 'Foreign Key', 'Database Constraints'],
+        'hints': ['Primary key uniquely identifies rows', 'Foreign key references another table', 'Composite primary key uses multiple columns'],
+        'expected_answer': 'Primary Key: Uniquely identifies each row, cannot be NULL, enforces entity integrity. Only ONE primary key per table (but can be composite using multiple columns). Foreign Key: References primary key of another table, enforces referential integrity, can be NULL, can have multiple foreign keys per table. Example: Student table has student_id (PK), course_enrollment has student_id (FK) referencing student table.',
+        'explanation': 'Fundamental database constraint concepts crucial for maintaining data integrity and relationships.'
+    },
+    {
+        'question': 'Explain database indexing. What are the benefits and drawbacks of using indexes?',
+        'short_description': 'Database indexing benefits and drawbacks',
+        'category': dbms_cat,
+        'topic': topics_map.get('Indexing'),
+        'difficulty': 'Medium',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Indexing', 'Database Performance', 'B-Tree'],
+        'hints': ['Indexes speed up SELECT queries', 'Indexes slow down INSERT/UPDATE/DELETE', 'B-tree structure for fast lookups'],
+        'expected_answer': 'Database Index: Data structure (usually B-tree) that improves query performance by creating shortcuts to data rows. Benefits: Faster SELECT queries, faster WHERE clauses, faster JOINs and ORDER BY. Drawbacks: Slower INSERT/UPDATE/DELETE (must maintain index), additional storage space, maintenance overhead. Use indexes on frequently queried columns but avoid over-indexing write-heavy tables.',
+        'explanation': 'Critical performance tuning concept - understanding when and where to use indexes effectively.'
+    },
+    {
+        'question': 'What are the different transaction isolation levels? Explain each level and associated problems.',
+        'short_description': 'Transaction isolation levels',
+        'category': dbms_cat,
+        'topic': topics_map.get('Transactions'),
+        'difficulty': 'Hard',
+        'expected_duration': 6,
+        'answer_type': 'Text',
+        'tags': ['Isolation Levels', 'Concurrency', 'Transactions'],
+        'hints': ['Four levels: Read Uncommitted, Read Committed, Repeatable Read, Serializable', 'Problems: Dirty read, non-repeatable read, phantom read'],
+        'expected_answer': 'Isolation Levels: 1) Read Uncommitted - Can read uncommitted changes (dirty reads). 2) Read Committed - Only reads committed data, but values can change between reads (non-repeatable reads). 3) Repeatable Read - Same values on re-read, but new rows can appear (phantom reads). 4) Serializable - Highest isolation, no anomalies but lowest concurrency. Trade-off between consistency and performance.',
+        'explanation': 'Advanced concurrency concept important for designing scalable database applications.'
+    },
+    {
+        'question': 'Explain the difference between SQL GROUP BY and HAVING clauses. When do you use each?',
+        'short_description': 'GROUP BY vs HAVING in SQL',
+        'category': dbms_cat,
+        'topic': topics_map.get('SQL Basics'),
+        'difficulty': 'Easy',
+        'expected_duration': 3,
+        'answer_type': 'Text',
+        'tags': ['SQL', 'GROUP BY', 'HAVING', 'Aggregation'],
+        'hints': ['GROUP BY groups rows for aggregation', 'HAVING filters grouped results', 'WHERE filters before grouping'],
+        'expected_answer': 'GROUP BY: Groups rows with same values for aggregation functions (COUNT, SUM, AVG). Creates one row per group. HAVING: Filters grouped results after aggregation (like WHERE for groups). Use GROUP BY when you need summary statistics per category. Use HAVING to filter those summaries. Example: SELECT department, COUNT(*) FROM employees GROUP BY department HAVING COUNT(*) > 5.',
+        'explanation': 'Essential SQL aggregation concept for generating summary reports and analytics.'
+    },
+    {
+        'question': 'When should you use a subquery vs a JOIN? What are the performance implications?',
+        'short_description': 'Subquery vs JOIN performance',
+        'category': dbms_cat,
+        'topic': topics_map.get('SQL Basics'),
+        'difficulty': 'Medium',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Subquery', 'JOIN', 'SQL Performance', 'Query Optimization'],
+        'hints': ['JOINs often faster for large datasets', 'Subqueries better for existence checks', 'Correlated subqueries can be slow'],
+        'expected_answer': 'JOINs generally faster for large datasets as they\'re optimized by query planner. Use JOINs when you need columns from multiple tables. Subqueries better for: existence checks (EXISTS), single-value lookups, complex filtering logic. Correlated subqueries (referencing outer query) can be slow. Uncorrelated subqueries may be optimized to JOINs by database engine. Modern optimizers often convert between them automatically.',
+        'explanation': 'Important performance consideration for writing efficient SQL queries in production systems.'
+    },
+    {
+        'question': 'What are database triggers and stored procedures? Give examples of when to use each.',
+        'short_description': 'Triggers vs Stored Procedures',
+        'category': dbms_cat,
+        'topic': topics_map.get('SQL Basics'),
+        'difficulty': 'Medium',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Triggers', 'Stored Procedures', 'Database Programming'],
+        'hints': ['Triggers execute automatically on events', 'Stored procedures are called explicitly', 'Both contain reusable SQL logic'],
+        'expected_answer': 'Triggers: Automatically execute in response to database events (INSERT, UPDATE, DELETE). Use for: auditing changes, enforcing complex business rules, maintaining derived data. Example: Log all salary changes. Stored Procedures: Named SQL code blocks called explicitly. Use for: complex business logic, batch operations, security (parameterized queries). Example: Monthly report generation. Triggers are automatic; procedures are manual.',
+        'explanation': 'Database programming concepts for implementing business logic and maintaining data consistency.'
+    },
+    {
+        'question': 'What is the difference between SQL and NoSQL databases? When would you choose NoSQL over SQL?',
+        'short_description': 'SQL vs NoSQL databases',
+        'category': dbms_cat,
+        'topic': topics_map.get('SQL Basics'),
+        'difficulty': 'Medium',
+        'expected_duration': 5,
+        'answer_type': 'Text',
+        'tags': ['SQL', 'NoSQL', 'Database Types', 'Scalability'],
+        'hints': ['SQL uses structured tables and ACID', 'NoSQL uses flexible schemas and scales horizontally', 'Choose based on consistency vs scalability needs'],
+        'expected_answer': 'SQL Databases: Structured tables, fixed schema, ACID properties, vertical scaling. Examples: MySQL, PostgreSQL. Use for: financial systems, applications needing consistency, complex relationships. NoSQL: Flexible schema, horizontal scaling, eventual consistency. Types: Document (MongoDB), Key-Value (Redis), Column (Cassandra), Graph (Neo4j). Use for: big data, rapid development, high traffic applications, unstructured data.',
+        'explanation': 'Modern database architecture decision - understanding when to choose relational vs non-relational solutions.'
+    }
+]
+
+print("\n" + "=" * 80)
+print("SEEDING PART 2B: DATABASE MANAGEMENT SYSTEMS - 10 Questions")
+print("=" * 80)
+
+for q_dict in dbms_questions:
+    q, created = InterviewQuestion.objects.get_or_create(
+        question=q_dict['question'],
+        category=q_dict['category'],
+        defaults={
+            'short_description': q_dict['short_description'],
+            'topic': q_dict['topic'],
+            'difficulty': q_dict['difficulty'],
+            'expected_duration': q_dict['expected_duration'],
+            'answer_type': q_dict['answer_type'],
+            'tags': q_dict['tags'],
+            'hints': q_dict['hints'],
+            'expected_answer': q_dict['expected_answer'],
+            'explanation': q_dict['explanation'],
+            'created_by': admin_user,
+            'source': 'Manual'
+        }
+    )
+    if created:
+        created_count += 1
+        print(f"✓ Created: {q_dict['short_description']}")
+
+print(f"\nDBMS Questions: {len(dbms_questions)} added")
+# ============================================================================
+# OBJECT-ORIENTED PROGRAMMING (OOP) QUESTIONS (10 Questions)
+# ============================================================================
+
+oop_questions = [
+    {
+        'question': 'Explain the four pillars of Object-Oriented Programming with real-world examples for each.',
+        'short_description': 'Four pillars of OOP explained',
+        'category': oop_cat,
+        'topic': topics_map.get('OOP Principles'),
+        'difficulty': 'Easy',
+        'expected_duration': 5,
+        'answer_type': 'Text',
+        'tags': ['OOP', 'Encapsulation', 'Inheritance', 'Polymorphism', 'Abstraction'],
+        'hints': ['Encapsulation: data hiding', 'Inheritance: is-a relationship', 'Polymorphism: same interface, different implementations', 'Abstraction: hiding complexity'],
+        'expected_answer': 'Four Pillars: 1) Encapsulation - Bundling data and methods together, hiding internal details (Car class hides engine complexity, exposes start() method). 2) Inheritance - Child class inherits from parent (SportsCar extends Car). 3) Polymorphism - Same method name, different behaviors (draw() method for Circle, Rectangle classes). 4) Abstraction - Hide implementation details, show only essential features (ATM interface hides banking complexity).',
+        'explanation': 'Fundamental OOP concepts that form the foundation of object-oriented design and programming.'
+    },
+    {
+        'question': 'What is the difference between abstraction and encapsulation? Provide examples.',
+        'short_description': 'Abstraction vs Encapsulation',
+        'category': oop_cat,
+        'topic': topics_map.get('OOP Principles'),
+        'difficulty': 'Medium',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Abstraction', 'Encapsulation', 'OOP Concepts'],
+        'hints': ['Abstraction focuses on what an object does', 'Encapsulation focuses on how to achieve it', 'Abstraction hides complexity, encapsulation hides data'],
+        'expected_answer': 'Abstraction: Hiding complexity, showing only essential features. Focuses on WHAT an object does. Example: Car interface (start, stop, accelerate) without exposing engine mechanics. Encapsulation: Bundling data and methods together, controlling access. Focuses on HOW to achieve functionality. Example: BankAccount class with private balance field, public deposit/withdraw methods. Abstraction is design-level; encapsulation is implementation-level.',
+        'explanation': 'Important distinction between two fundamental OOP principles that are often confused.'
+    },
+    {
+        'question': 'Explain method overloading vs method overriding. Provide examples in any programming language.',
+        'short_description': 'Method overloading vs overriding',
+        'category': oop_cat,
+        'topic': topics_map.get('Polymorphism'),
+        'difficulty': 'Easy',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Method Overloading', 'Method Overriding', 'Polymorphism'],
+        'hints': ['Overloading: same method name, different parameters', 'Overriding: child class changes parent method behavior', 'Overloading is compile-time, overriding is runtime'],
+        'expected_answer': 'Method Overloading: Same method name with different parameters (compile-time polymorphism). Example: print(int), print(string), print(int, int). Method Overriding: Child class provides specific implementation of parent class method (runtime polymorphism). Example: Animal.makeSound() overridden in Dog.makeSound() to return "Woof". Overloading adds functionality; overriding changes functionality.',
+        'explanation': 'Key polymorphism concepts showing different ways methods can have multiple behaviors.'
+    },
+    {
+        'question': 'What are constructors and destructors? Explain different types of constructors.',
+        'short_description': 'Constructors and destructors types',
+        'category': oop_cat,
+        'topic': topics_map.get('Classes & Objects'),
+        'difficulty': 'Easy',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Constructor', 'Destructor', 'Object Lifecycle'],
+        'hints': ['Constructor initializes objects', 'Destructor cleans up resources', 'Types: default, parameterized, copy constructor'],
+        'expected_answer': 'Constructor: Special method that initializes objects when created. Types: 1) Default - No parameters, 2) Parameterized - Takes arguments for initialization, 3) Copy - Creates object from another object of same class. Destructor: Cleans up resources when object is destroyed (automatic in garbage-collected languages, explicit in C++). Constructor called at object creation; destructor called at object destruction.',
+        'explanation': 'Object lifecycle management - essential for proper resource allocation and cleanup.'
+    },
+    {
+        'question': 'Explain the different types of inheritance: single, multiple, multilevel, and hierarchical.',
+        'short_description': 'Types of inheritance',
+        'category': oop_cat,
+        'topic': topics_map.get('Inheritance'),
+        'difficulty': 'Easy',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Inheritance', 'Single', 'Multiple', 'Multilevel', 'Hierarchical'],
+        'hints': ['Single: one parent', 'Multiple: multiple parents', 'Multilevel: chain of inheritance', 'Hierarchical: one parent, multiple children'],
+        'expected_answer': 'Inheritance Types: 1) Single - One child inherits from one parent (Car → SportsCar). 2) Multiple - One child inherits from multiple parents (FlyingCar inherits from Car and Aircraft). 3) Multilevel - Chain of inheritance (Vehicle → Car → SportsCar). 4) Hierarchical - One parent, multiple children (Animal → Dog, Cat, Bird). Note: Some languages (Java) don\'t support multiple inheritance of classes but allow multiple interface implementation.',
+        'explanation': 'Different inheritance patterns used in object-oriented design for code reuse and organization.'
+    },
+    {
+        'question': 'What is the difference between interface and abstract class? When would you use each?',
+        'short_description': 'Interface vs Abstract class',
+        'category': oop_cat,
+        'topic': topics_map.get('OOP Principles'),
+        'difficulty': 'Medium',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Interface', 'Abstract Class', 'Design Patterns'],
+        'hints': ['Interface defines contract', 'Abstract class provides partial implementation', 'Interface supports multiple inheritance'],
+        'expected_answer': 'Interface: Contract defining method signatures without implementation. Pure abstraction, supports multiple inheritance. Use for: defining capabilities (Drawable, Serializable), unrelated classes with common behavior. Abstract Class: Partially implemented class with abstract methods. Can have constructors, fields, concrete methods. Use for: shared code among related classes, default implementations. Interface = "can do", Abstract class = "is a type of".',
+        'explanation': 'Important design choice for creating flexible, maintainable object hierarchies.'
+    },
+    {
+        'question': 'Explain static vs instance variables and methods. Provide examples of when to use static members.',
+        'short_description': 'Static vs Instance variables/methods',
+        'category': oop_cat,
+        'topic': topics_map.get('Classes & Objects'),
+        'difficulty': 'Easy',
+        'expected_duration': 3,
+        'answer_type': 'Text',
+        'tags': ['Static', 'Instance', 'Class Members'],
+        'hints': ['Static belongs to class', 'Instance belongs to object', 'Static shared among all instances'],
+        'expected_answer': 'Static Members: Belong to class, shared among all instances, accessed via class name. Memory allocated once when class loads. Example: Student.totalCount. Instance Members: Belong to specific object, each instance has its own copy. Example: student.name. Use Static for: utility methods (Math.sqrt()), constants, counters, factory methods. Use Instance for: object-specific data and behavior.',
+        'explanation': 'Memory management and design concept - understanding when data/behavior belongs to class vs object.'
+    },
+    {
+        'question': 'What is the "this" keyword in OOP? Provide examples of its usage.',
+        'short_description': 'this keyword usage',
+        'category': oop_cat,
+        'topic': topics_map.get('Classes & Objects'),
+        'difficulty': 'Easy',
+        'expected_duration': 3,
+        'answer_type': 'Text',
+        'tags': ['this keyword', 'Object Reference', 'Self Reference'],
+        'hints': ['this refers to current object', 'Used to resolve naming conflicts', 'Required for constructor chaining'],
+        'expected_answer': '"this" keyword: Reference to current object instance. Uses: 1) Resolve naming conflicts (this.name = name when parameter and field have same name). 2) Pass current object as argument (return this for method chaining). 3) Call another constructor (this() in constructor chaining). 4) Explicit reference to current object\'s members. Makes code clearer and resolves ambiguity.',
+        'explanation': 'Self-reference mechanism essential for object method implementation and constructor design.'
+    },
+    {
+        'question': 'Explain destructor and garbage collection. How do they relate to memory management?',
+        'short_description': 'Destructor and garbage collection',
+        'category': oop_cat,
+        'topic': topics_map.get('Classes & Objects'),
+        'difficulty': 'Medium',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Destructor', 'Garbage Collection', 'Memory Management'],
+        'hints': ['Destructor cleans up resources', 'Garbage collection is automatic memory management', 'Manual vs automatic memory management'],
+        'expected_answer': 'Destructor: Method called when object is destroyed, used to clean up resources (close files, release memory). Manual in C++, automatic in Java/C#. Garbage Collection: Automatic memory management that reclaims memory of unreferenced objects. Languages with GC (Java, C#, Python) don\'t need explicit destructors for memory, but may need them for other resources (files, network connections). GC prevents memory leaks but adds runtime overhead.',
+        'explanation': 'Memory management concepts crucial for building efficient, leak-free applications.'
+    },
+    {
+        'question': 'What is composition vs inheritance? When should you prefer composition over inheritance?',
+        'short_description': 'Composition vs Inheritance',
+        'category': oop_cat,
+        'topic': topics_map.get('OOP Principles'),
+        'difficulty': 'Medium',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Composition', 'Inheritance', 'Design Principles'],
+        'hints': ['Inheritance is "is-a" relationship', 'Composition is "has-a" relationship', 'Composition provides flexibility'],
+        'expected_answer': 'Inheritance: "is-a" relationship, child class extends parent (Dog is-a Animal). Tight coupling, single inheritance limit. Composition: "has-a" relationship, class contains other objects (Car has-a Engine). Loose coupling, multiple compositions possible. Prefer Composition when: need multiple behaviors, want flexibility, avoid deep inheritance hierarchies. "Favor composition over inheritance" - enables better testing, flexibility, and avoids inheritance problems.',
+        'explanation': 'Fundamental design principle for creating maintainable, flexible object-oriented systems.'
+    }
+]
+
+print("\n" + "=" * 80)
+print("SEEDING PART 2C: OBJECT-ORIENTED PROGRAMMING - 10 Questions")
+print("=" * 80)
+
+for q_dict in oop_questions:
+    q, created = InterviewQuestion.objects.get_or_create(
+        question=q_dict['question'],
+        category=q_dict['category'],
+        defaults={
+            'short_description': q_dict['short_description'],
+            'topic': q_dict['topic'],
+            'difficulty': q_dict['difficulty'],
+            'expected_duration': q_dict['expected_duration'],
+            'answer_type': q_dict['answer_type'],
+            'tags': q_dict['tags'],
+            'hints': q_dict['hints'],
+            'expected_answer': q_dict['expected_answer'],
+            'explanation': q_dict['explanation'],
+            'created_by': admin_user,
+            'source': 'Manual'
+        }
+    )
+    if created:
+        created_count += 1
+        print(f"✓ Created: {q_dict['short_description']}")
+
+print(f"\nOOP Questions: {len(oop_questions)} added")
+# ============================================================================
+# NETWORKING QUESTIONS (10 Questions)
+# ============================================================================
+
+networking_questions = [
+    {
+        'question': 'Explain the OSI model and its 7 layers. What happens at each layer?',
+        'short_description': 'OSI model 7 layers explanation',
+        'category': networking_cat,
+        'topic': topics_map.get('OSI Model'),
+        'difficulty': 'Easy',
+        'expected_duration': 5,
+        'answer_type': 'Text',
+        'tags': ['OSI Model', 'Network Layers', 'Networking Fundamentals'],
+        'hints': ['7 layers: Physical, Data Link, Network, Transport, Session, Presentation, Application', 'Each layer has specific responsibilities', 'Remember: Please Do Not Throw Sausage Pizza Away'],
+        'expected_answer': 'OSI 7 Layers: 1) Physical - Electrical signals, cables (bits). 2) Data Link - Frame formatting, MAC addresses, error detection (Ethernet). 3) Network - Routing, IP addresses (IP, routers). 4) Transport - Reliable delivery, flow control (TCP/UDP). 5) Session - Establishing/managing connections (SQL sessions). 6) Presentation - Encryption, compression, data formatting (SSL/TLS). 7) Application - User interfaces, network services (HTTP, FTP, email).',
+        'explanation': 'Fundamental networking model that provides framework for understanding how network communication works.'
+    },
+    {
+        'question': 'What is the difference between TCP and UDP? When would you use each protocol?',
+        'short_description': 'TCP vs UDP differences',
+        'category': networking_cat,
+        'topic': topics_map.get('TCP/IP'),
+        'difficulty': 'Easy',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['TCP', 'UDP', 'Transport Protocol', 'Reliability'],
+        'hints': ['TCP is reliable, UDP is fast', 'TCP has overhead, UDP is lightweight', 'TCP for accuracy, UDP for speed'],
+        'expected_answer': 'TCP (Transmission Control Protocol): Reliable, connection-oriented, error checking, flow control, ordering. Overhead due to acknowledgments. Use for: web browsing (HTTP), file transfer (FTP), email. UDP (User Datagram Protocol): Unreliable, connectionless, no error recovery, faster. Low overhead. Use for: live streaming, online gaming, DNS queries, real-time applications where speed matters more than reliability.',
+        'explanation': 'Core transport protocols - understanding when to prioritize reliability vs performance.'
+    },
+    {
+        'question': 'Explain how the TCP three-way handshake works. What is its purpose?',
+        'short_description': 'TCP three-way handshake process',
+        'category': networking_cat,
+        'topic': topics_map.get('TCP/IP'),
+        'difficulty': 'Medium',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['TCP', 'Three-way Handshake', 'Connection Establishment'],
+        'hints': ['Three steps: SYN, SYN-ACK, ACK', 'Client initiates connection', 'Establishes sequence numbers'],
+        'expected_answer': 'TCP Three-way Handshake: 1) Client sends SYN packet with initial sequence number. 2) Server responds with SYN-ACK packet (acknowledges client SYN, sends its own SYN). 3) Client sends ACK packet acknowledging server SYN. Purpose: Establish reliable connection, synchronize sequence numbers for ordering, confirm both sides can send/receive data. After handshake, data transfer begins.',
+        'explanation': 'Connection establishment mechanism crucial for reliable TCP communication.'
+    },
+    {
+        'question': 'What is the difference between HTTP and HTTPS? How does HTTPS ensure security?',
+        'short_description': 'HTTP vs HTTPS security',
+        'category': networking_cat,
+        'topic': topics_map.get('HTTP Basics'),
+        'difficulty': 'Easy',
+        'expected_duration': 3,
+        'answer_type': 'Text',
+        'tags': ['HTTP', 'HTTPS', 'Security', 'Encryption', 'SSL/TLS'],
+        'hints': ['HTTP is unencrypted', 'HTTPS uses SSL/TLS encryption', 'HTTPS protects data in transit'],
+        'expected_answer': 'HTTP (HyperText Transfer Protocol): Unencrypted communication, data sent in plain text, vulnerable to eavesdropping. Port 80. HTTPS (HTTP Secure): HTTP over SSL/TLS encryption. Provides: 1) Encryption - Data encrypted in transit, 2) Authentication - Verifies server identity via certificates, 3) Integrity - Prevents data tampering. Port 443. HTTPS essential for sensitive data (login, payments, personal info).',
+        'explanation': 'Web security fundamentals - understanding how secure communication works on the internet.'
+    },
+    {
+        'question': 'Explain the different HTTP methods (GET, POST, PUT, DELETE) and when to use each.',
+        'short_description': 'HTTP methods (GET, POST, PUT, DELETE)',
+        'category': networking_cat,
+        'topic': topics_map.get('HTTP Basics'),
+        'difficulty': 'Easy',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['HTTP Methods', 'REST API', 'Web Development'],
+        'hints': ['GET retrieves data', 'POST creates/submits data', 'PUT updates data', 'DELETE removes data'],
+        'expected_answer': 'HTTP Methods: GET - Retrieve data, idempotent, parameters in URL, cacheable (fetch user profile). POST - Submit/create data, not idempotent, data in request body (create new user). PUT - Update/replace resource, idempotent (update user profile). DELETE - Remove resource, idempotent (delete user account). Use appropriate method for RESTful API design and semantic clarity.',
+        'explanation': 'RESTful API design principles - proper HTTP method usage for web services.'
+    },
+    {
+        'question': 'How does DNS (Domain Name System) work? What happens when you type www.google.com in browser?',
+        'short_description': 'DNS working principle',
+        'category': networking_cat,
+        'topic': topics_map.get('OSI Model'),
+        'difficulty': 'Medium',
+        'expected_duration': 5,
+        'answer_type': 'Text',
+        'tags': ['DNS', 'Domain Name Resolution', 'Networking'],
+        'hints': ['DNS translates domain names to IP addresses', 'Hierarchical system with multiple servers', 'Process: Local cache → ISP DNS → Root servers → TLD servers'],
+        'expected_answer': 'DNS Resolution Process: 1) Check local browser cache. 2) Check OS DNS cache. 3) Query ISP DNS server (recursive resolver). 4) If not cached, query root DNS servers. 5) Root directs to TLD servers (.com). 6) TLD directs to authoritative name servers for google.com. 7) Authoritative server returns IP address. 8) Response cached at each level. Browser then connects to IP address.',
+        'explanation': 'Internet infrastructure understanding - how human-readable names become computer-readable addresses.'
+    },
+    {
+        'question': 'What are the differences between IPv4 and IPv6? Why do we need IPv6?',
+        'short_description': 'IPv4 vs IPv6 comparison',
+        'category': networking_cat,
+        'topic': topics_map.get('TCP/IP'),
+        'difficulty': 'Easy',
+        'expected_duration': 3,
+        'answer_type': 'Text',
+        'tags': ['IPv4', 'IPv6', 'IP Addressing', 'Internet Protocol'],
+        'hints': ['IPv4 has address exhaustion problem', 'IPv6 has much larger address space', 'IPv6 has built-in security features'],
+        'expected_answer': 'IPv4 vs IPv6: IPv4 - 32-bit addresses (4.3 billion addresses), dotted decimal notation (192.168.1.1), address exhaustion problem. IPv6 - 128-bit addresses (340 undecillion addresses), hexadecimal notation (2001:db8::1), built-in IPSec security, simplified header, no NAT needed. IPv6 needed due to: IoT device explosion, mobile device growth, address exhaustion, better security, and improved routing efficiency.',
+        'explanation': 'Internet evolution - understanding the transition from IPv4 to IPv6 addressing.'
+    },
+    {
+        'question': 'Explain what a subnet mask is and how it works. Give an example of subnetting.',
+        'short_description': 'Subnet mask explanation',
+        'category': networking_cat,
+        'topic': topics_map.get('TCP/IP'),
+        'difficulty': 'Medium',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Subnet Mask', 'Subnetting', 'Network Address', 'CIDR'],
+        'hints': ['Subnet mask separates network and host portions', 'Helps determine if destination is local or remote', 'CIDR notation like /24 indicates subnet mask'],
+        'expected_answer': 'Subnet Mask: Defines which portion of IP address is network vs host. Example: IP 192.168.1.100 with mask 255.255.255.0 (/24) means first 24 bits are network (192.168.1), last 8 bits are host (100). Subnetting: Dividing network into smaller subnets. Example: 192.168.1.0/24 can be split into 192.168.1.0/25 (hosts 1-126) and 192.168.1.128/25 (hosts 129-254). Benefits: Better organization, security, reduced broadcast domains.',
+        'explanation': 'Network design fundamentals - how IP networks are organized and subdivided.'
+    },
+    {
+        'question': 'What is the difference between a router, switch, and hub? How do they operate at different network layers?',
+        'short_description': 'Router vs Switch vs Hub',
+        'category': networking_cat,
+        'topic': topics_map.get('OSI Model'),
+        'difficulty': 'Easy',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Router', 'Switch', 'Hub', 'Network Devices'],
+        'hints': ['Hub works at Physical layer', 'Switch works at Data Link layer', 'Router works at Network layer'],
+        'expected_answer': 'Network Devices: Hub (Physical Layer) - Repeats signals to all ports, single collision domain, half-duplex, largely obsolete. Switch (Data Link Layer) - Forwards frames based on MAC addresses, separate collision domains per port, full-duplex, learns MAC addresses. Router (Network Layer) - Routes packets based on IP addresses, connects different networks, separate broadcast domains, makes forwarding decisions. Modern networks use switches and routers; hubs are deprecated.',
+        'explanation': 'Network infrastructure components - understanding how different devices forward traffic.'
+    },
+    {
+        'question': 'What is a firewall and how does it work? Explain different types of firewalls.',
+        'short_description': 'Firewall types and operation',
+        'category': networking_cat,
+        'topic': topics_map.get('Network Security'),
+        'difficulty': 'Easy',
+        'expected_duration': 4,
+        'answer_type': 'Text',
+        'tags': ['Firewall', 'Network Security', 'Packet Filtering'],
+        'hints': ['Firewall controls network traffic', 'Types: packet filtering, stateful, application layer', 'Works based on rules and policies'],
+        'expected_answer': 'Firewall: Network security device that monitors and controls traffic based on predetermined rules. Types: 1) Packet Filtering - Examines headers (IP, port), fast but limited. 2) Stateful - Tracks connection state, remembers outbound requests. 3) Application Layer - Deep packet inspection, understands application protocols. 4) Next-Gen - Combines multiple techniques plus intrusion detection. Firewalls block unauthorized access while allowing legitimate traffic.',
+        'explanation': 'Network security fundamentals - first line of defense against network-based attacks.'
+    }
+]
+
+print("\n" + "=" * 80)
+print("SEEDING PART 2D: NETWORKING - 10 Questions")
+print("=" * 80)
+
+for q_dict in networking_questions:
+    q, created = InterviewQuestion.objects.get_or_create(
+        question=q_dict['question'],
+        category=q_dict['category'],
+        defaults={
+            'short_description': q_dict['short_description'],
+            'topic': q_dict['topic'],
+            'difficulty': q_dict['difficulty'],
+            'expected_duration': q_dict['expected_duration'],
+            'answer_type': q_dict['answer_type'],
+            'tags': q_dict['tags'],
+            'hints': q_dict['hints'],
+            'expected_answer': q_dict['expected_answer'],
+            'explanation': q_dict['explanation'],
+            'created_by': admin_user,
+            'source': 'Manual'
+        }
+    )
+    if created:
+        created_count += 1
+        print(f"✓ Created: {q_dict['short_description']}")
+
+print(f"\nNetworking Questions: {len(networking_questions)} added")
+
+print("\n" + "=" * 80)
+print(f"PART 2 COMPLETE! Total Questions Created: {created_count}")
+print("Breakdown:")
+print(f"  • Operating Systems: 10 questions")
+print(f"  • Database Management: 10 questions") 
+print(f"  • Object-Oriented Programming: 10 questions")
+print(f"  • Networking: 10 questions")
+print("=" * 80)
