@@ -56,7 +56,16 @@ def find_best_match(query: str) -> tuple:
     if not query_tokens:
         return None, 0.0
 
-    active_kb = KnowledgeBase.objects.filter(is_active=True).select_related('category')
+    from django.db.models import Q
+    filter_q = Q()
+    for token in query_keywords:
+        if len(token) > 2:
+            filter_q |= Q(keywords__icontains=token) | Q(synonyms__icontains=token) | Q(tags__icontains=token) | Q(question__icontains=token) | Q(title__icontains=token)
+
+    if filter_q:
+        active_kb = KnowledgeBase.objects.filter(is_active=True).filter(filter_q).select_related('category')
+    else:
+        active_kb = KnowledgeBase.objects.filter(is_active=True).select_related('category')
     best_entry = None
     max_score = 0.0
 

@@ -43,7 +43,7 @@ class InterviewEvaluation(models.Model):
         choices=EVALUATION_STATUS_CHOICES,
         default=STATUS_PENDING
     )
-    evaluated_at = models.DateTimeField(null=True, blank=True)
+    evaluated_at = models.DateTimeField(null=True, blank=True, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

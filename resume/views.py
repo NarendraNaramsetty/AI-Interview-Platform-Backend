@@ -21,6 +21,7 @@ from .serializers import (
     ResumeActivitySerializer,
     ResumeAnalysisSerializer
 )
+from .pagination import ResumePagination
 
 class ResumeListView(generics.ListAPIView):
     """
@@ -33,6 +34,8 @@ class ResumeListView(generics.ListAPIView):
     filterset_class = ResumeFilter
     ordering_fields = ['created_at', 'title', 'file_size', 'resume_version']
     ordering = ['-created_at']
+
+    pagination_class = ResumePagination
 
     def get_queryset(self):
         if self.request.user.is_staff:
@@ -49,11 +52,17 @@ class ResumeListView(generics.ListAPIView):
         ]
     )
     def list(self, request, *args, **kwargs):
-        response = super().list(request, *args, **kwargs)
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
         return Response({
             "success": True,
             "message": "Resumes retrieved successfully.",
-            "data": response.data
+            "data": serializer.data
         }, status=status.HTTP_200_OK)
 
 

@@ -104,9 +104,6 @@ class LoginView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         
-        # Simple login signal trigger
-        login(request, user)
-        
         tokens = get_tokens_for_user(user)
         user_data = UserSerializer(user).data
 

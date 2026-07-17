@@ -87,7 +87,7 @@ class Topic(models.Model):
         on_delete=models.CASCADE,
         related_name='topics'
     )
-    name = models.CharField(max_length=150)
+    name = models.CharField(max_length=150, db_index=True)
     description = models.TextField(blank=True)
 
     class Meta:
@@ -165,7 +165,7 @@ class InterviewQuestion(models.Model):
     explanation = models.TextField(blank=True, help_text="Conceptual walkthrough detailing solution steps")
     
     source = models.CharField(max_length=50, choices=SOURCE_CHOICES, default='Manual')
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True, db_index=True)
     
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,

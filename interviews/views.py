@@ -458,8 +458,8 @@ class InterviewHistoryView(generics.ListAPIView):
 
     def get_queryset(self):
         if self.request.user.is_staff:
-            return InterviewSession.objects.all()
-        return InterviewSession.objects.filter(user=self.request.user)
+            return InterviewSession.objects.all().select_related('result')
+        return InterviewSession.objects.filter(user=self.request.user).select_related('result')
 
     @extend_schema(
         summary="List Interview History",
@@ -488,7 +488,8 @@ class InterviewDetailView(APIView):
     permission_classes = [permissions.IsAuthenticated, IsInterviewOwnerOrAdmin]
 
     def get_object(self, pk):
-        session = get_object_or_404(InterviewSession, pk=pk)
+        queryset = InterviewSession.objects.select_related('result', 'resume').prefetch_related('questions', 'answers', 'timeline_events')
+        session = get_object_or_404(queryset, pk=pk)
         self.check_object_permissions(self.request, session)
         return session
 
