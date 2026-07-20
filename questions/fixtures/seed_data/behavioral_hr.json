@@ -1,0 +1,267 @@
+{
+  "categories": [
+    {
+      "name": "Behavioral",
+      "icon": "UserCheck",
+      "display_order": 10
+    },
+    {
+      "name": "HR",
+      "icon": "Users",
+      "display_order": 11
+    }
+  ],
+  "topics": [
+    {
+      "name": "Adaptability",
+      "category": "Behavioral",
+      "description": "Handling change, learning new tech stacks quickly"
+    },
+    {
+      "name": "Behavioral Core",
+      "category": "Behavioral",
+      "description": "STAR method situational storytelling and self-awareness"
+    },
+    {
+      "name": "Teamwork",
+      "category": "Behavioral",
+      "description": "Cross-functional collaboration, peer code reviews, supporting team goals"
+    },
+    {
+      "name": "Conflict Resolution",
+      "category": "Behavioral",
+      "description": "Handling technical disagreements or communication friction constructively"
+    },
+    {
+      "name": "Leadership",
+      "category": "Behavioral",
+      "description": "Taking ownership of tasks, guiding junior peers, driving initiatives"
+    },
+    {
+      "name": "Time Management",
+      "category": "Behavioral",
+      "description": "Prioritizing tasks, meeting project deadlines, managing scope"
+    },
+    {
+      "name": "Failure & Learning",
+      "category": "Behavioral",
+      "description": "Overcoming project setbacks, post-mortem reflections, personal growth"
+    },
+    {
+      "name": "Campus Specific",
+      "category": "HR",
+      "description": "Academic projects, internships, extracurricular achievements"
+    },
+    {
+      "name": "Tell Me About Yourself",
+      "category": "HR",
+      "description": "Elevator pitch covering education, projects, skills, career aspiration"
+    },
+    {
+      "name": "Strengths & Weaknesses",
+      "category": "HR",
+      "description": "Self-awareness, key engineering strengths, areas of improvement"
+    },
+    {
+      "name": "Why This Company",
+      "category": "HR",
+      "description": "Company research, alignment with product mission and engineering culture"
+    },
+    {
+      "name": "Salary Expectations",
+      "category": "HR",
+      "description": "Professional discussion regarding entry-level compensation standards"
+    },
+    {
+      "name": "Career Goals",
+      "category": "HR",
+      "description": "Short-term and 3-5 year professional development vision"
+    },
+    {
+      "name": "Handling Rejection",
+      "category": "HR",
+      "description": "Resilience, seeking feedback, persistent skill development"
+    }
+  ],
+  "questions": [
+    {
+      "question": "Tell me about a time when you had to learn a new technology or framework quickly for a project. How did you approach it?",
+      "short_description": "Learning new technology under pressure",
+      "category": "Behavioral",
+      "topic": "Adaptability",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Voice",
+      "tags": [
+        "Behavioral",
+        "Adaptability",
+        "STAR Method"
+      ],
+      "hints": [
+        "Use STAR method (Situation, Task, Action, Result)",
+        "Mention specific documentation and build steps"
+      ],
+      "expected_answer": "S: Project required technology X. T: Master basics in 1 week. A: Read official docs, built demo mini-project, sought mentor code review. R: Delivered feature on schedule with 90%+ test coverage.",
+      "explanation": "Evaluates learning agility and self-directed problem solving."
+    },
+    {
+      "question": "Describe a situation where you had a technical disagreement with a teammate. How did you resolve it?",
+      "short_description": "Resolving technical disagreement with peer",
+      "category": "Behavioral",
+      "topic": "Conflict Resolution",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Voice",
+      "tags": [
+        "Behavioral",
+        "Conflict Resolution",
+        "Teamwork"
+      ],
+      "hints": [
+        "Focus on objective data and benchmark comparison",
+        "Show active listening and compromise"
+      ],
+      "expected_answer": "S: Differing opinions on database design. T: Reach consensus without delaying sprint. A: Created quick benchmark POCs, discussed pros/cons objectively. R: Selected optimal hybrid approach, maintained positive relationship.",
+      "explanation": "Tests collaboration skills and emotional intelligence in team environments."
+    },
+    {
+      "question": "Tell me about a project that failed or missed its deadline. What went wrong and what did you learn?",
+      "short_description": "Handling project failure & retrospective learning",
+      "category": "Behavioral",
+      "topic": "Failure & Learning",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Voice",
+      "tags": [
+        "Behavioral",
+        "Failure",
+        "Retrospective"
+      ],
+      "hints": [
+        "Take accountability without blaming others",
+        "Emphasize concrete steps taken to prevent reoccurrence"
+      ],
+      "expected_answer": "S: Campus team project missed deployment deadline. T: Deliver core functionality. A: Underestimated integration complexity, conducted retrospective, added automated integration tests. R: Learned proper milestone breakdown and buffer estimation.",
+      "explanation": "Measures accountability, resilience, and maturity."
+    },
+    {
+      "question": "Describe a scenario where you took the initiative to improve a process or codebase beyond your assigned tasks.",
+      "short_description": "Demonstrating engineering initiative & ownership",
+      "category": "Behavioral",
+      "topic": "Leadership",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Voice",
+      "tags": [
+        "Behavioral",
+        "Leadership",
+        "Initiative"
+      ],
+      "hints": [
+        "Highlight proactive problem identification",
+        "Show positive impact on team workflow"
+      ],
+      "expected_answer": "Noticed manual build steps were taking 20 mins. Set up local Docker scripts and automated test runner, saving team 15 mins per deployment.",
+      "explanation": "Evaluates proactiveness and engineering ownership."
+    },
+    {
+      "question": "How do you prioritize your tasks when managing multiple deadlines during exam week or project sprints?",
+      "short_description": "Time management under competing priorities",
+      "category": "Behavioral",
+      "topic": "Time Management",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Voice",
+      "tags": [
+        "Behavioral",
+        "Time Management",
+        "Prioritization"
+      ],
+      "hints": [
+        "Use prioritization framework (Eisenhower matrix, Urgent vs Important)",
+        "Communicate early if scope adjustment is needed"
+      ],
+      "expected_answer": "Assess urgency and impact, break projects into daily milestones, focus on high-yield tasks first, and communicate proactively with stakeholders if delays arise.",
+      "explanation": "Assesses organization and stress management."
+    },
+    {
+      "question": "Tell me about yourself. Walk me through your academic background, projects, and key technical interests.",
+      "short_description": "Self-introduction & background pitch",
+      "category": "HR",
+      "topic": "Tell Me About Yourself",
+      "difficulty": "Easy",
+      "expected_duration": 3,
+      "answer_type": "Voice",
+      "tags": [
+        "HR",
+        "Introduction",
+        "Campus"
+      ],
+      "hints": [
+        "Keep it concise (60-90 seconds)",
+        "Follow Present -> Past -> Future structure"
+      ],
+      "expected_answer": "Briefly state current degree/major, highlight 1-2 major technical projects or internships, summarize core skill stack, and end with passion for this specific software engineering role.",
+      "explanation": "Standard opening HR question to evaluate communication clarity."
+    },
+    {
+      "question": "Why do you want to join our company as a fresher software engineer?",
+      "short_description": "Motivation for target company & role fit",
+      "category": "HR",
+      "topic": "Why This Company",
+      "difficulty": "Easy",
+      "expected_duration": 3,
+      "answer_type": "Voice",
+      "tags": [
+        "HR",
+        "Company Research",
+        "Motivation"
+      ],
+      "hints": [
+        "Reference specific products, tech blog posts, or company values",
+        "Connect your career growth to company mission"
+      ],
+      "expected_answer": "Express genuine enthusiasm based on company's technology stack, product scale, impact, and strong mentorship culture for fresh graduates.",
+      "explanation": "Tests genuine interest and company research."
+    },
+    {
+      "question": "What are your top technical strengths and what is one area you are working to improve?",
+      "short_description": "Strengths & Weaknesses self-awareness",
+      "category": "HR",
+      "topic": "Strengths & Weaknesses",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Voice",
+      "tags": [
+        "HR",
+        "Strengths",
+        "Weaknesses"
+      ],
+      "hints": [
+        "Strengths: backing with specific project achievements",
+        "Weakness: authentic area + active steps taken to improve"
+      ],
+      "expected_answer": "Strength: Strong problem-solving and rapid debugging skills. Weakness: Tended to dive into coding too fast without detailed diagramming, now practicing upfront architecture sketching.",
+      "explanation": "Evaluates self-awareness and continuous self-improvement."
+    },
+    {
+      "question": "Where do you see yourself professionally in the next 3 to 5 years?",
+      "short_description": "3 to 5 year career vision",
+      "category": "HR",
+      "topic": "Career Goals",
+      "difficulty": "Easy",
+      "expected_duration": 3,
+      "answer_type": "Voice",
+      "tags": [
+        "HR",
+        "Career Goals",
+        "Growth"
+      ],
+      "hints": [
+        "Focus on mastering software engineering craftsmanship, taking module ownership, and mentoring"
+      ],
+      "expected_answer": "Aim to become a solid Mid/Senior Full-Stack Developer, taking complete ownership of key backend/frontend modules, writing clean resilient code, and mentoring junior engineers.",
+      "explanation": "Checks commitment to long-term professional technical growth."
+    }
+  ]
+}

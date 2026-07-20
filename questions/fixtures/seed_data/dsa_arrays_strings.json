@@ -1,0 +1,647 @@
+{
+  "categories": [
+    {
+      "name": "DSA",
+      "icon": "Code",
+      "display_order": 1
+    }
+  ],
+  "topics": [
+    {
+      "name": "Arrays & Strings",
+      "category": "DSA",
+      "description": "Basic array operations, string manipulation, two-pointer techniques, sliding window, and 2D matrices"
+    }
+  ],
+  "questions": [
+    {
+      "question": "How do you find the largest element in an array of integers? Explain your algorithm approach and state the time and space complexity.",
+      "short_description": "Find largest element in array",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 3,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Traversal",
+        "Basics"
+      ],
+      "hints": [
+        "Initialize max_val with the first element arr[0]",
+        "Iterate through the array starting from index 1",
+        "Update max_val whenever arr[i] > max_val"
+      ],
+      "expected_answer": "Initialize `max_val = arr[0]`. Traverse elements from index 1 to N-1. If `arr[i] > max_val`, set `max_val = arr[i]`. After traversal, return `max_val`. Time Complexity: O(N), Space Complexity: O(1).",
+      "explanation": "Tests fundamental array traversal logic and tracking state using a running maximum variable."
+    },
+    {
+      "question": "Explain how to reverse an array of characters (or string) in-place without using extra memory allocations or built-in helper methods.",
+      "short_description": "Reverse string in-place",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 3,
+      "answer_type": "Text",
+      "tags": [
+        "Strings",
+        "Two-Pointers",
+        "In-place"
+      ],
+      "hints": [
+        "Use two pointers: left starting at 0 and right at N-1",
+        "Swap characters at left and right indices",
+        "Increment left and decrement right until left >= right"
+      ],
+      "expected_answer": "Initialize `left = 0` and `right = N - 1`. While `left < right`, swap `s[left]` and `s[right]`, then increment `left` and decrement `right`. Time Complexity: O(N), Space Complexity: O(1).",
+      "explanation": "Demonstrates the classic two-pointer technique for modifying linear data structures in-place."
+    },
+    {
+      "question": "Given a sorted array of integers and a target sum, describe an optimal algorithm to find if there exists a pair of numbers whose sum equals the target.",
+      "short_description": "Two-pointer pair target sum in sorted array",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Two-Pointers",
+        "Sorted"
+      ],
+      "hints": [
+        "Place left pointer at start and right pointer at end",
+        "Calculate sum = arr[left] + arr[right]",
+        "If sum < target move left rightward; if sum > target move right leftward"
+      ],
+      "expected_answer": "Set `left = 0` and `right = N - 1`. While `left < right`: calculate `curr_sum = arr[left] + arr[right]`. If `curr_sum == target`, return pair `(arr[left], arr[right])`. If `curr_sum < target`, increment `left`. Else decrement `right`. Time: O(N), Space: O(1).",
+      "explanation": "Leverages the sorted property of arrays to eliminate nested loops and achieve linear O(N) execution."
+    },
+    {
+      "question": "How do you check whether a given string is a valid palindrome, ignoring spaces and case sensitivity?",
+      "short_description": "Valid palindrome check",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 3,
+      "answer_type": "Text",
+      "tags": [
+        "Strings",
+        "Two-Pointers",
+        "Validation"
+      ],
+      "hints": [
+        "Filter out non-alphanumeric characters and convert to lowercase",
+        "Compare characters starting from left and right boundaries moving inwards",
+        "If characters at left and right mismatch, it is not a palindrome"
+      ],
+      "expected_answer": "Convert string to lowercase and filter alphanumeric characters. Place `left = 0` and `right = N - 1`. Compare `str[left]` with `str[right]`. If unequal, return False; otherwise `left++` and `right--`. Return True if loop finishes. Time: O(N), Space: O(1) extra space.",
+      "explanation": "Common string processing question assessing boundary checking and string sanitization."
+    },
+    {
+      "question": "Given an array containing N-1 distinct numbers taken from the range 1 to N, find the single missing number.",
+      "short_description": "Find missing number in array 1 to N",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 3,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Math",
+        "Bitwise"
+      ],
+      "hints": [
+        "Calculate expected sum using Gauss formula N*(N+1)/2",
+        "Subtract array sum from expected sum to find the missing number",
+        "Alternatively XOR numbers 1..N and all elements in the array"
+      ],
+      "expected_answer": "Method 1 (Sum): Compute `expected_sum = N * (N + 1) // 2`. Compute `actual_sum = sum(arr)`. The missing number is `expected_sum - actual_sum`. Method 2 (XOR): XOR all indices from 1 to N and XOR all elements in array; result is missing number. Time: O(N), Space: O(1).",
+      "explanation": "Evaluates mathematical property usage and XOR arithmetic to avoid extra memory allocation."
+    },
+    {
+      "question": "Write an algorithm to move all zeroes present in an integer array to the end while maintaining the relative order of non-zero elements.",
+      "short_description": "Move zeroes to end of array",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Two-Pointers",
+        "In-place"
+      ],
+      "hints": [
+        "Use a read pointer and write pointer",
+        "Whenever read pointer sees non-zero, write to write pointer index and increment write pointer",
+        "Fill remaining slots with zeroes"
+      ],
+      "expected_answer": "Maintain `insert_pos = 0`. Iterate through array: if `arr[i] != 0`, set `arr[insert_pos] = arr[i]` and `insert_pos++`. After loop, fill indices from `insert_pos` to N-1 with 0. Time: O(N), Space: O(1).",
+      "explanation": "Tests two-pointer in-place array compaction without creating secondary auxiliary arrays."
+    },
+    {
+      "question": "Given an array of integers containing N+1 integers where each integer is between 1 and N inclusive, find the duplicate number.",
+      "short_description": "Find duplicate number in array",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Floyd Cycle",
+        "HashSet"
+      ],
+      "hints": [
+        "Can use a HashSet to track seen numbers in O(N) time and O(N) space",
+        "For O(1) space, treat array values as pointers to indices (Floyd's Tortoise and Hare)"
+      ],
+      "expected_answer": "HashSet approach: Maintain a set `seen`. Iterate through array; if element is in `seen`, return it; else add to `seen`. Time: O(N), Space: O(N). Floyd's Cycle approach achieves O(1) auxiliary space by treating array values as node pointers.",
+      "explanation": "Good benchmark question assessing basic set tracking vs advanced cyclic pointer solutions."
+    },
+    {
+      "question": "How do you rotate an integer array to the right by K steps, where K is non-negative?",
+      "short_description": "Rotate array right by K steps",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Reversal",
+        "In-place"
+      ],
+      "hints": [
+        "First normalize K using K = K % N",
+        "Reverse the whole array",
+        "Reverse first K elements, then reverse remaining N-K elements"
+      ],
+      "expected_answer": "1. `K = K % N`. 2. Reverse entire array `arr[0..N-1]`. 3. Reverse first `K` elements `arr[0..K-1]`. 4. Reverse remaining `N-K` elements `arr[K..N-1]`. Time: O(N), Space: O(1).",
+      "explanation": "Clean 3-step array reversal technique for array rotation without extra array allocation."
+    },
+    {
+      "question": "Given a sorted array, remove the duplicates in-place such that each unique element appears only once, returning the new length.",
+      "short_description": "Remove duplicates from sorted array",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 3,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Two-Pointers",
+        "Sorted"
+      ],
+      "hints": [
+        "Maintain unique_idx pointer starting at 0",
+        "Iterate i from 1 to N-1",
+        "If arr[i] != arr[unique_idx], increment unique_idx and copy arr[i]"
+      ],
+      "expected_answer": "If array empty, return 0. Set `unique_idx = 0`. Loop `i` from 1 to N-1: if `arr[i] != arr[unique_idx]`, increment `unique_idx` and set `arr[unique_idx] = arr[i]`. Return `unique_idx + 1`. Time: O(N), Space: O(1).",
+      "explanation": "Standard array duplicate removal utilizing sorted order and slow/fast pointers."
+    },
+    {
+      "question": "Given two strings s and t, write an algorithm to determine if t is an anagram of s.",
+      "short_description": "Valid anagram check",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 3,
+      "answer_type": "Text",
+      "tags": [
+        "Strings",
+        "Hashing",
+        "Frequency Count"
+      ],
+      "hints": [
+        "If lengths differ, return False",
+        "Count character frequencies using fixed size array (size 26) or HashMap",
+        "Ensure all counts balance out to zero"
+      ],
+      "expected_answer": "Check if `len(s) != len(t)`. Create frequency array of size 26 for lowercase English letters. Increment count for chars in `s` and decrement for chars in `t`. If all counts in array are 0, return True. Time: O(N), Space: O(1).",
+      "explanation": "Fundamental frequency counting technique for string comparison."
+    },
+    {
+      "question": "Write an algorithm to compute the intersection of two integer arrays, returning only unique elements.",
+      "short_description": "Intersection of two arrays",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 3,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "HashSet",
+        "Set Operations"
+      ],
+      "hints": [
+        "Convert first array into a HashSet for O(1) lookups",
+        "Iterate second array and add elements present in the HashSet to result set"
+      ],
+      "expected_answer": "Convert `arr1` into set `set1`. Iterate through `arr2`: if element exists in `set1`, add to `result_set`. Convert `result_set` to list. Time: O(N + M), Space: O(N + M).",
+      "explanation": "Demonstrates set membership queries for array intersection."
+    },
+    {
+      "question": "Given a non-empty array of integers where every element appears twice except for one, find that single element.",
+      "short_description": "Single non-repeating number using XOR",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 3,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Bitwise",
+        "XOR"
+      ],
+      "hints": [
+        "XOR of a number with itself is 0 (A ^ A = 0)",
+        "XOR of a number with 0 is the number itself (A ^ 0 = A)",
+        "XOR all elements together; duplicates cancel out"
+      ],
+      "expected_answer": "Initialize `res = 0`. Iterate through all numbers in array and compute `res = res ^ num`. Because `A ^ A = 0` and XOR is commutative, all paired numbers cancel out, leaving the single element. Time: O(N), Space: O(1).",
+      "explanation": "Classic bitwise XOR property problem providing linear time and constant space solution."
+    },
+    {
+      "question": "Write a function to find the longest common prefix string amongst an array of strings.",
+      "short_description": "Longest common prefix in array of strings",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Strings",
+        "Horizontal Scanning",
+        "Prefix"
+      ],
+      "hints": [
+        "Start with prefix as the first string",
+        "Compare prefix with each subsequent string, shortening prefix until string starts with it"
+      ],
+      "expected_answer": "Set `prefix = strs[0]`. Iterate `i` from 1 to N-1: while `strs[i]` does not start with `prefix`, truncate `prefix` by 1 character. If `prefix` becomes empty, return \"\". Return `prefix`. Time: O(S) where S is sum of all characters, Space: O(1).",
+      "explanation": "Tests horizontal/vertical string prefix scanning methods."
+    },
+    {
+      "question": "Write an algorithm to count the number of vowels and consonants in a given string.",
+      "short_description": "Count vowels and consonants",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 3,
+      "answer_type": "Text",
+      "tags": [
+        "Strings",
+        "Traversal",
+        "Basics"
+      ],
+      "hints": [
+        "Define a set of vowels 'aeiouAEIOU'",
+        "Check if each character is alphabetic",
+        "Increment respective counters"
+      ],
+      "expected_answer": "Initialize `vowels_count = 0` and `consonants_count = 0`. Loop through each character `c` in string. If `c.isalpha()`: if `c` in `'aeiouAEIOU'`, increment `vowels_count`; else increment `consonants_count`. Time: O(N), Space: O(1).",
+      "explanation": "Basic string character classification problem."
+    },
+    {
+      "question": "Given an integer array nums, return true if any value appears at least twice in the array, and false if every element is distinct.",
+      "short_description": "Contains duplicate in array",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 3,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "HashSet",
+        "Lookup"
+      ],
+      "hints": [
+        "Store elements in a HashSet while iterating",
+        "If current element is already in set, duplicate exists"
+      ],
+      "expected_answer": "Create an empty set `seen`. Iterate over `nums`: if `num in seen`, return True; else add `num` to `seen`. If loop completes, return False. Time: O(N), Space: O(N).",
+      "explanation": "Basic lookup problem demonstrating Hash Set usage."
+    },
+    {
+      "question": "Given an array of integers and a positive integer K, find the maximum sum of any contiguous subarray of size K using the Sliding Window technique.",
+      "short_description": "Maximum sum subarray of size K",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Medium",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Sliding Window",
+        "Optimization"
+      ],
+      "hints": [
+        "Calculate sum of first K elements as current_sum",
+        "Slide window right by adding arr[i] and subtracting arr[i-K]",
+        "Track max_sum across all windows"
+      ],
+      "expected_answer": "Compute `curr_sum = sum(arr[0..K-1])` and set `max_sum = curr_sum`. Loop `i` from K to N-1: `curr_sum += arr[i] - arr[i-K]`, `max_sum = max(max_sum, curr_sum)`. Return `max_sum`. Time: O(N), Space: O(1).",
+      "explanation": "Fixed-size sliding window pattern converting O(N*K) to linear O(N)."
+    },
+    {
+      "question": "Given a string s, find the length of the longest substring without repeating characters.",
+      "short_description": "Longest substring without repeating characters",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Strings",
+        "Sliding Window",
+        "HashSet",
+        "Two-Pointers"
+      ],
+      "hints": [
+        "Use variable sliding window with left and right pointers",
+        "Use HashMap/Set to store last seen position or presence of characters",
+        "Shrink left pointer when duplicate is encountered"
+      ],
+      "expected_answer": "Use `left = 0` and HashMap `last_seen`. Iterate `right` from 0 to N-1: if `s[right]` in `last_seen` and `last_seen[s[right]] >= left`, update `left = last_seen[s[right]] + 1`. Store `last_seen[s[right]] = right`, `max_len = max(max_len, right - left + 1)`. Return `max_len`. Time: O(N), Space: O(min(N, AlphabetSize)).",
+      "explanation": "Variable-size sliding window pattern essential for string interview problems."
+    },
+    {
+      "question": "Given n non-negative integers representing an elevation map where width of each bar is 1, compute how much water it can trap after raining using Two Pointers.",
+      "short_description": "Container with most water",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Two-Pointers",
+        "Greedy"
+      ],
+      "hints": [
+        "Set left at 0 and right at N-1",
+        "Area = min(height[left], height[right]) * (right - left)",
+        "Move the pointer with smaller height inwards to potentially find taller bar"
+      ],
+      "expected_answer": "Place `left = 0` and `right = N-1`. Compute `max_area = 0`. While `left < right`: `h = min(height[left], height[right])`, `area = h * (right - left)`, `max_area = max(max_area, area)`. If `height[left] < height[right]`, `left++`; else `right--`. Return `max_area`. Time: O(N), Space: O(1).",
+      "explanation": "Greedy two-pointer approach to maximize area bounded by two lines."
+    },
+    {
+      "question": "Given an integer array nums, return all unique triplets [nums[i], nums[j], nums[k]] such that nums[i] + nums[j] + nums[k] == 0.",
+      "short_description": "3Sum problem solution",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Medium",
+      "expected_duration": 6,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Sorting",
+        "Two-Pointers",
+        "3Sum"
+      ],
+      "hints": [
+        "Sort the input array first",
+        "Fix first element nums[i] using a loop",
+        "Use two pointers (left=i+1, right=N-1) for remaining 2Sum target -nums[i]",
+        "Skip duplicate numbers"
+      ],
+      "expected_answer": "Sort `nums`. Loop `i` from 0 to N-3: if `i > 0` and `nums[i] == nums[i-1]`, continue. Set `left = i + 1`, `right = N - 1`, `target = -nums[i]`. Use two pointers: if `nums[left] + nums[right] == target`, save triplet, increment `left`, decrement `right`, and skip duplicates. Adjust pointers if sum < target or > target. Time: O(N^2), Space: O(1) auxiliary.",
+      "explanation": "Multi-pointer search on sorted arrays avoiding duplicate triplets."
+    },
+    {
+      "question": "Given an integer array nums, return an array answer such that answer[i] is equal to the product of all elements of nums except nums[i], without using division.",
+      "short_description": "Product of array except self without division",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Prefix Product",
+        "Suffix Product"
+      ],
+      "hints": [
+        "Construct prefix products array from left to right",
+        "Multiply with suffix products accumulated from right to left",
+        "Achieve O(N) time without using division operation"
+      ],
+      "expected_answer": "Create output array `res` of size N. Pass 1 (Prefix): `res[0] = 1`; for `i` from 1 to N-1, `res[i] = res[i-1] * nums[i-1]`. Pass 2 (Suffix): Maintain `curr_suffix = 1`; for `i` from N-1 down to 0, `res[i] *= curr_suffix`, then `curr_suffix *= nums[i]`. Return `res`. Time: O(N), Space: O(1) auxiliary.",
+      "explanation": "Prefix and suffix decomposition pattern avoiding division operators."
+    },
+    {
+      "question": "Given an array of strings strs, group the anagrams together. You can return the answer in any order.",
+      "short_description": "Group anagrams together",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Strings",
+        "Hashing",
+        "Sorting"
+      ],
+      "hints": [
+        "Categorize strings by their character count tuple or sorted string representation",
+        "Use HashMap where key is sorted string or char count tuple, value is list of original strings"
+      ],
+      "expected_answer": "Create HashMap `groups = {}`. For each string `s` in `strs`: sort characters of `s` to get `key_str = ''.join(sorted(s))`. Append `s` to `groups[key_str]`. Return values of `groups`. Time: O(N * M log M) where M is max string length, Space: O(N * M).",
+      "explanation": "Hash table grouping technique based on structural string invariants."
+    },
+    {
+      "question": "Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.",
+      "short_description": "Subarray sum equals K",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Prefix Sum",
+        "HashMap"
+      ],
+      "hints": [
+        "Subarray sum(i, j) = prefix_sum[j] - prefix_sum[i-1]",
+        "Check if (curr_prefix_sum - K) exists in HashMap of prefix sum frequencies",
+        "Store {prefix_sum: frequency} with initial {0: 1}"
+      ],
+      "expected_answer": "Initialize `prefix_map = {0: 1}`, `curr_sum = 0`, `count = 0`. For each `num` in `nums`: `curr_sum += num`. If `(curr_sum - k)` in `prefix_map`, `count += prefix_map[curr_sum - k]`. Increment `prefix_map[curr_sum]`. Return `count`. Time: O(N), Space: O(N).",
+      "explanation": "Prefix sum + hash map combination pattern for subsegment sum counting."
+    },
+    {
+      "question": "Given an array of positive integers nums and a positive integer target, return the minimal length of a contiguous subarray of which the sum is greater than or equal to target.",
+      "short_description": "Minimum size subarray sum greater than or equal to target",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Sliding Window",
+        "Two-Pointers"
+      ],
+      "hints": [
+        "Use sliding window left and right pointers",
+        "Expand right pointer by adding elements to window sum",
+        "When sum >= target, update min length and contract left pointer until sum < target"
+      ],
+      "expected_answer": "Initialize `left = 0`, `curr_sum = 0`, `min_len = infinity`. Loop `right` from 0 to N-1: `curr_sum += nums[right]`. While `curr_sum >= target`: `min_len = min(min_len, right - left + 1)`, `curr_sum -= nums[left]`, `left++`. Return `min_len` if modified, else 0. Time: O(N), Space: O(1).",
+      "explanation": "Variable-size sliding window contraction pattern."
+    },
+    {
+      "question": "Given an array of characters chars, compress it in-place using the relative character counts (e.g. ['a','a','b','b','c','c','c'] -> ['a','2','b','2','c','3']).",
+      "short_description": "String compression in-place",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Strings",
+        "Two-Pointers",
+        "In-place"
+      ],
+      "hints": [
+        "Use write pointer for updating array and read pointer for scanning consecutive identical chars",
+        "Count run length of identical characters",
+        "Write char and string representation of count if count > 1"
+      ],
+      "expected_answer": "Initialize `write = 0` and `read = 0`. While `read < N`: set `start = read`. While `read < N` and `chars[read] == chars[start]`, `read++`. Write `chars[write] = chars[start]`, `write++`. If `count = read - start > 1`, convert `count` to chars and write each digit to array. Return `write`. Time: O(N), Space: O(1).",
+      "explanation": "In-place run-length encoding traversal."
+    },
+    {
+      "question": "Given two strings s and p, return an array of all the start indices of p's anagrams in s.",
+      "short_description": "Find all anagrams in a string",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Strings",
+        "Sliding Window",
+        "HashMap"
+      ],
+      "hints": [
+        "Window size is fixed to len(p)",
+        "Maintain character frequency array of p and frequency array of current window in s",
+        "Slide window right and compare frequency counts"
+      ],
+      "expected_answer": "Build frequency count array `p_count` for `p` (size 26). Maintain window frequency `s_count` of size `len(p)`. Loop `i` from 0 to `len(s) - len(p)`: if `s_count == p_count`, record `i`. Slide window by subtracting `s[i]` and adding `s[i + len(p)]`. Return indices list. Time: O(N), Space: O(1).",
+      "explanation": "Fixed sliding window with hash/frequency map matching."
+    },
+    {
+      "question": "Given an m x n matrix, return all elements of the matrix in spiral order.",
+      "short_description": "Spiral matrix traversal",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Matrix",
+        "Traversal"
+      ],
+      "hints": [
+        "Maintain 4 boundary variables: top, bottom, left, right",
+        "Traverse left->right along top, top->bottom along right, right->left along bottom, bottom->top along left",
+        "Shrink boundaries after completing each side"
+      ],
+      "expected_answer": "Define `top=0, bottom=m-1, left=0, right=n-1`. While `top <= bottom` and `left <= right`: 1. Traverse `left` to `right` on `top`, `top++`. 2. Traverse `top` to `bottom` on `right`, `right--`. 3. If `top <= bottom`, traverse `right` to `left` on `bottom`, `bottom--`. 4. If `left <= right`, traverse `bottom` to `top` on `left`, `left++`. Return result array. Time: O(M*N), Space: O(1) auxiliary.",
+      "explanation": "Boundary-based matrix traversal simulation."
+    },
+    {
+      "question": "Given an n x n 2D matrix representing an image, rotate the image by 90 degrees clockwise in-place.",
+      "short_description": "Rotate image matrix 90 degrees clockwise",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Matrix",
+        "In-place"
+      ],
+      "hints": [
+        "Rotation by 90 deg clockwise is equivalent to Transpose + Reverse each row",
+        "Step 1: Transpose matrix (swap matrix[i][j] with matrix[j][i])",
+        "Step 2: Reverse each row"
+      ],
+      "expected_answer": "1. Transpose matrix: Loop `i` from 0 to N-1, `j` from `i+1` to N-1: swap `matrix[i][j]` with `matrix[j][i]`. 2. Reverse rows: For each row `i`, reverse `matrix[i]`. Time: O(N^2), Space: O(1).",
+      "explanation": "Matrix mathematical transformation (Transpose + Row Reversal)."
+    },
+    {
+      "question": "Given two strings s and t of lengths m and n, return the minimum window substring of s such that every character in t (including duplicates) is included in the window.",
+      "short_description": "Minimum window substring containing all characters",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Hard",
+      "expected_duration": 8,
+      "answer_type": "Text",
+      "tags": [
+        "Strings",
+        "Sliding Window",
+        "Two-Pointers",
+        "HashMap"
+      ],
+      "hints": [
+        "Use sliding window with expandable right pointer and contractible left pointer",
+        "Use frequency map target_map for t and window_map for window",
+        "Maintain 'formed' counter tracking how many distinct characters meet target frequency"
+      ],
+      "expected_answer": "Build target frequency map `target_counts`. Expand `right` pointer to include characters until `formed == required_unique_chars`. Once valid, contract `left` pointer to minimize window while maintaining valid `formed` count. Track smallest window `(min_len, min_left, min_right)`. Time: O(N + M), Space: O(N + M).",
+      "explanation": "Advanced sliding window with stateful frequency matching."
+    },
+    {
+      "question": "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining using Two Pointers.",
+      "short_description": "Trapping rain water elevation map",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Hard",
+      "expected_duration": 8,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Two-Pointers",
+        "Dynamic Programming"
+      ],
+      "hints": [
+        "Water trapped above bar i = min(max_left, max_right) - height[i]",
+        "Maintain left_max and right_max variables using two pointers",
+        "If height[left] < height[right], process left and update left_max"
+      ],
+      "expected_answer": "Initialize `left = 0, right = N-1, left_max = 0, right_max = 0, total_water = 0`. While `left < right`: if `height[left] < height[right]`: if `height[left] >= left_max` set `left_max = height[left]`, else `total_water += left_max - height[left]`; `left++`. Else: if `height[right] >= right_max` set `right_max = height[right]`, else `total_water += right_max - height[right]`; `right--`. Return `total_water`. Time: O(N), Space: O(1).",
+      "explanation": "Optimal two-pointer solution eliminating auxiliary space for precomputed prefix max arrays."
+    },
+    {
+      "question": "Given a string s, return the longest palindromic substring in s using the Expand Around Center technique.",
+      "short_description": "Longest palindromic substring expand around center",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Hard",
+      "expected_duration": 7,
+      "answer_type": "Text",
+      "tags": [
+        "Strings",
+        "Two-Pointers",
+        "Palindrome"
+      ],
+      "hints": [
+        "A palindrome can expand outward from its center",
+        "There are 2N - 1 possible centers (N odd-length centers at chars, N-1 even-length centers between chars)",
+        "For each center, expand left and right as long as characters match"
+      ],
+      "expected_answer": "Iterate `i` from 0 to N-1: 1. Expand around odd center `(i, i)`. 2. Expand around even center `(i, i+1)`. Helper function `expand(L, R)` expands outwards while `L >= 0` and `R < N` and `s[L] == s[R]`. Track max length and start index. Time: O(N^2), Space: O(1).",
+      "explanation": "Expand around center technique for palindrome optimization without extra O(N^2) DP table storage."
+    }
+  ]
+}

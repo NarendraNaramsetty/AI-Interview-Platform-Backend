@@ -1,0 +1,954 @@
+{
+  "categories": [
+    {
+      "name": "DSA",
+      "icon": "Code",
+      "display_order": 1
+    },
+    {
+      "name": "DBMS",
+      "icon": "Database",
+      "display_order": 2
+    },
+    {
+      "name": "OOP",
+      "icon": "Box",
+      "display_order": 3
+    },
+    {
+      "name": "OS",
+      "icon": "Cpu",
+      "display_order": 4
+    },
+    {
+      "name": "Networking",
+      "icon": "Globe",
+      "display_order": 5
+    }
+  ],
+  "topics": [
+    {
+      "name": "Python Fundamentals",
+      "category": "OOP",
+      "description": "Python data structures, decorators, list comprehensions, generators"
+    },
+    {
+      "name": "Arrays & Strings",
+      "category": "DSA",
+      "description": "Basic array operations, string manipulation, two-pointer techniques"
+    },
+    {
+      "name": "Linked Lists",
+      "category": "DSA",
+      "description": "Singly, doubly linked lists, insertion, deletion, reversal"
+    },
+    {
+      "name": "Stacks & Queues",
+      "category": "DSA",
+      "description": "LIFO, FIFO operations, implementation, applications"
+    },
+    {
+      "name": "Trees & BST",
+      "category": "DSA",
+      "description": "Binary trees, BST operations, traversals, height, depth"
+    },
+    {
+      "name": "Hashing",
+      "category": "DSA",
+      "description": "Hash tables, collision handling, applications"
+    },
+    {
+      "name": "Sorting & Searching",
+      "category": "DSA",
+      "description": "Bubble, insertion, merge, quick sort, binary search"
+    },
+    {
+      "name": "Recursion",
+      "category": "DSA",
+      "description": "Base case, recursive case, backtracking basics"
+    },
+    {
+      "name": "Time Complexity",
+      "category": "DSA",
+      "description": "Big O notation, space complexity analysis"
+    },
+    {
+      "name": "Graphs",
+      "category": "DSA",
+      "description": "Graph representations, BFS and DFS traversals"
+    },
+    {
+      "name": "Dynamic Programming",
+      "category": "DSA",
+      "description": "Memoization, tabulation, overlapping subproblems"
+    },
+    {
+      "name": "ACID Properties",
+      "category": "DBMS",
+      "description": "Atomicity, Consistency, Isolation, Durability"
+    },
+    {
+      "name": "Normalization",
+      "category": "DBMS",
+      "description": "1NF, 2NF, 3NF, BCNF rules and database normalization"
+    },
+    {
+      "name": "Indexing",
+      "category": "DBMS",
+      "description": "Primary, secondary, clustered, non-clustered B-tree indexes"
+    },
+    {
+      "name": "Transactions & Concurrency",
+      "category": "DBMS",
+      "description": "Transaction states, locks, isolation levels, concurrency control"
+    },
+    {
+      "name": "ER Modeling",
+      "category": "DBMS",
+      "description": "Entities, attributes, relationships, keys, ER diagrams"
+    },
+    {
+      "name": "SQL vs NoSQL",
+      "category": "DBMS",
+      "description": "Relational vs non-relational databases, document, key-value stores"
+    },
+    {
+      "name": "Classes & Objects",
+      "category": "OOP",
+      "description": "Constructor, destructor, instance vs class variables"
+    },
+    {
+      "name": "Inheritance",
+      "category": "OOP",
+      "description": "Single, multiple, multilevel, hierarchical inheritance"
+    },
+    {
+      "name": "Polymorphism",
+      "category": "OOP",
+      "description": "Compile-time vs runtime polymorphism, overloading and overriding"
+    },
+    {
+      "name": "Encapsulation & Abstraction",
+      "category": "OOP",
+      "description": "Data hiding, access modifiers, abstract classes"
+    },
+    {
+      "name": "Interfaces vs Abstract Classes",
+      "category": "OOP",
+      "description": "Multiple inheritance via interfaces, contract-based design"
+    },
+    {
+      "name": "Design Principles",
+      "category": "OOP",
+      "description": "SOLID design principles basics for clean object-oriented code"
+    },
+    {
+      "name": "Process Management",
+      "category": "OS",
+      "description": "Process states, PCB, CPU scheduling algorithms"
+    },
+    {
+      "name": "Threads",
+      "category": "OS",
+      "description": "Multithreading, thread safety, process vs thread"
+    },
+    {
+      "name": "Memory Management",
+      "category": "OS",
+      "description": "Paging, segmentation, virtual memory, page replacement"
+    },
+    {
+      "name": "Deadlock",
+      "category": "OS",
+      "description": "Deadlock conditions, prevention, avoidance, Banker's algorithm"
+    },
+    {
+      "name": "OSI Model",
+      "category": "Networking",
+      "description": "7 layers of OSI model, functions and protocols"
+    },
+    {
+      "name": "TCP/IP",
+      "category": "Networking",
+      "description": "TCP vs UDP, 3-way handshake, flow control"
+    },
+    {
+      "name": "HTTP Basics",
+      "category": "Networking",
+      "description": "HTTP methods, status codes, request/response headers"
+    },
+    {
+      "name": "Network Security",
+      "category": "Networking",
+      "description": "Encryption, SSL/TLS, HTTPS, firewalls, CORS"
+    }
+  ],
+  "questions": [
+    {
+      "question": "How do you find the largest element in an array? Write the approach and explain the time complexity.",
+      "short_description": "Find largest element in array",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 3,
+      "answer_type": "Text",
+      "tags": [
+        "Arrays",
+        "Traversal",
+        "Basics"
+      ],
+      "hints": [
+        "Iterate through array once",
+        "Track running max value",
+        "Time complexity is O(n)"
+      ],
+      "expected_answer": "Initialize max with first element. Traverse array and update max whenever a larger value is found. Time: O(n), Space: O(1).",
+      "explanation": "Fundamental array iteration problem testing loop control and variable tracking."
+    },
+    {
+      "question": "Explain how to reverse a string in-place without using built-in helper functions.",
+      "short_description": "Reverse string in-place",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Strings",
+        "Two-Pointers",
+        "In-place"
+      ],
+      "hints": [
+        "Use two pointers at start and end",
+        "Swap characters until pointers meet",
+        "Time: O(n), Space: O(1)"
+      ],
+      "expected_answer": "Set left=0 and right=len-1. Swap chars at left and right, increment left and decrement right until left >= right.",
+      "explanation": "Demonstrates two-pointer technique for in-place string modification."
+    },
+    {
+      "question": "What is the two-pointer technique? Explain with an example of finding a pair with a given sum in a sorted array.",
+      "short_description": "Two-pointer technique for target sum",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Two-Pointers",
+        "Arrays",
+        "Sorted"
+      ],
+      "hints": [
+        "Start left at 0 and right at n-1",
+        "Adjust pointers based on sum comparison",
+        "O(n) time vs O(n^2) nested loops"
+      ],
+      "expected_answer": "If arr[left] + arr[right] == target, return pair. If sum < target, left++. If sum > target, right--. Requires sorted array.",
+      "explanation": "Efficient O(n) approach for pair searching on sorted collections."
+    },
+    {
+      "question": "How do you check if a string is a palindrome?",
+      "short_description": "Palindrome string check",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Easy",
+      "expected_duration": 3,
+      "answer_type": "Text",
+      "tags": [
+        "Strings",
+        "Two-Pointers",
+        "Validation"
+      ],
+      "hints": [
+        "Compare characters from outer ends inward",
+        "Stop when mismatch is found or center reached"
+      ],
+      "expected_answer": "Compare char at index i with char at index n-1-i. If all match, it is a palindrome. Time: O(n), Space: O(1).",
+      "explanation": "Standard string checking problem frequently asked in campus interviews."
+    },
+    {
+      "question": "What is the sliding window technique? Give a practical example.",
+      "short_description": "Sliding window technique concept",
+      "category": "DSA",
+      "topic": "Arrays & Strings",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Sliding Window",
+        "Arrays",
+        "Optimization"
+      ],
+      "hints": [
+        "Reuse computed sum/window instead of recalculating",
+        "Useful for subarray sum problems"
+      ],
+      "expected_answer": "Sliding window maintains a window of fixed or variable size, adding new elements and dropping old ones as it shifts right. Reduces nested loop O(n^2) to linear O(n).",
+      "explanation": "Essential technique for array and string subarray optimization problems."
+    },
+    {
+      "question": "What is the difference between an Array and a Linked List? When would you prefer a Linked List?",
+      "short_description": "Array vs Linked List comparison",
+      "category": "DSA",
+      "topic": "Linked Lists",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Linked List",
+        "Arrays",
+        "Data Structures"
+      ],
+      "hints": [
+        "Arrays have contiguous memory, linked lists use pointers",
+        "Arrays have O(1) random access"
+      ],
+      "expected_answer": "Arrays have contiguous memory and O(1) random access. Linked Lists have non-contiguous memory, O(n) access, but O(1) insertions/deletions once pointer is positioned.",
+      "explanation": "Core data structure trade-offs knowledge required for all placement interviews."
+    },
+    {
+      "question": "How do you detect a cycle in a linked list using Floyd's Cycle Finding Algorithm?",
+      "short_description": "Detect cycle in linked list",
+      "category": "DSA",
+      "topic": "Linked Lists",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Linked List",
+        "Floyd Algorithm",
+        "Two-Pointers"
+      ],
+      "hints": [
+        "Use slow pointer (1 step) and fast pointer (2 steps)",
+        "If fast meets slow, a cycle exists"
+      ],
+      "expected_answer": "Advance slow by 1 node and fast by 2 nodes. If fast reaches NULL, no cycle. If fast == slow, cycle detected. Time: O(n), Space: O(1).",
+      "explanation": "Classic interview problem for testing pointer manipulation."
+    },
+    {
+      "question": "Explain how to reverse a singly linked list recursively and iteratively.",
+      "short_description": "Reverse singly linked list",
+      "category": "DSA",
+      "topic": "Linked Lists",
+      "difficulty": "Easy",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Linked List",
+        "Recursion",
+        "Pointer Manipulation"
+      ],
+      "hints": [
+        "Iterative: track prev, curr, next pointers",
+        "Update curr.next = prev"
+      ],
+      "expected_answer": "Iterative: Maintain prev=None, curr=head. Loop: next=curr.next, curr.next=prev, prev=curr, curr=next. Return prev as new head. Recursive: Reverse sublist and fix tail pointer.",
+      "explanation": "Fundamental list modification technique."
+    },
+    {
+      "question": "How do you find the middle node of a linked list in a single traversal?",
+      "short_description": "Find middle of linked list",
+      "category": "DSA",
+      "topic": "Linked Lists",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Linked List",
+        "Two-Pointers"
+      ],
+      "hints": [
+        "Use slow and fast pointers",
+        "When fast reaches end, slow is at the middle"
+      ],
+      "expected_answer": "Move slow pointer by 1 step and fast pointer by 2 steps. When fast reaches end (NULL or fast.next is NULL), slow points to the middle node.",
+      "explanation": "Fast & slow pointer application without needing two passes."
+    },
+    {
+      "question": "Explain the difference between Stack and Queue data structures with real-world examples.",
+      "short_description": "Stack vs Queue differences",
+      "category": "DSA",
+      "topic": "Stacks & Queues",
+      "difficulty": "Easy",
+      "expected_duration": 3,
+      "answer_type": "Text",
+      "tags": [
+        "Stack",
+        "Queue",
+        "LIFO",
+        "FIFO"
+      ],
+      "hints": [
+        "Stack is Last-In-First-Out",
+        "Queue is First-In-First-Out"
+      ],
+      "expected_answer": "Stack: LIFO (e.g. undo history, stack of plates). Queue: FIFO (e.g. print queue, customer line). Stack uses push/pop; Queue uses enqueue/dequeue.",
+      "explanation": "Fundamental conceptual comparison."
+    },
+    {
+      "question": "How do you evaluate if a string containing parentheses '()[]{}' is valid and balanced using a Stack?",
+      "short_description": "Valid parentheses using stack",
+      "category": "DSA",
+      "topic": "Stacks & Queues",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Stack",
+        "Strings",
+        "Validation"
+      ],
+      "hints": [
+        "Push opening brackets to stack",
+        "On closing bracket, check if top of stack matches"
+      ],
+      "expected_answer": "Push opening brackets onto stack. For closing bracket, pop top item and verify matching pair. If stack is empty at end, expression is valid. Time: O(n), Space: O(n).",
+      "explanation": "Standard stack application problem."
+    },
+    {
+      "question": "How can you implement a Queue using two Stacks?",
+      "short_description": "Implement Queue using Stacks",
+      "category": "DSA",
+      "topic": "Stacks & Queues",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Queue",
+        "Stack",
+        "Design"
+      ],
+      "hints": [
+        "Use stack1 for enqueue, stack2 for dequeue",
+        "Transfer elements from stack1 to stack2 when stack2 is empty"
+      ],
+      "expected_answer": "Enqueue: Push to stack1. Dequeue: If stack2 is empty, pop all items from stack1 and push to stack2, then pop stack2. Amortized time per operation: O(1).",
+      "explanation": "Data structure implementation challenge."
+    },
+    {
+      "question": "What is a Binary Search Tree (BST) and how is it different from a general Binary Tree?",
+      "short_description": "BST vs Binary Tree",
+      "category": "DSA",
+      "topic": "Trees & BST",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "BST",
+        "Trees",
+        "Binary Search"
+      ],
+      "hints": [
+        "BST maintains ordering property",
+        "Left child < parent < right child"
+      ],
+      "expected_answer": "Binary Tree has no ordering rule for node values. BST enforces left subtree < node < right subtree, allowing O(log n) search in balanced trees.",
+      "explanation": "Core tree concept."
+    },
+    {
+      "question": "Explain Tree Traversal methods: Inorder, Preorder, and Postorder traversals.",
+      "short_description": "Tree traversal methods explained",
+      "category": "DSA",
+      "topic": "Trees & BST",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Trees",
+        "Traversal",
+        "DFS"
+      ],
+      "hints": [
+        "Inorder: Left, Root, Right",
+        "Preorder: Root, Left, Right",
+        "Postorder: Left, Right, Root"
+      ],
+      "expected_answer": "Inorder (L-Root-R) prints BST in sorted order. Preorder (Root-L-R) useful for copying tree structure. Postorder (L-R-Root) useful for bottom-up tree deletion.",
+      "explanation": "Basic tree traversal fundamentals."
+    },
+    {
+      "question": "How do you calculate the height (max depth) of a Binary Tree recursively?",
+      "short_description": "Max depth of binary tree",
+      "category": "DSA",
+      "topic": "Trees & BST",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Trees",
+        "Recursion",
+        "Height"
+      ],
+      "hints": [
+        "Base case: height of NULL is 0",
+        "Height = 1 + max(left_height, right_height)"
+      ],
+      "expected_answer": "If node is NULL, return 0. Else return 1 + max(height(node.left), height(node.right)). Time: O(n), Space: O(h) for call stack.",
+      "explanation": "Standard recursive tree depth problem."
+    },
+    {
+      "question": "What is a Hash Table and how does a Hash Function work?",
+      "short_description": "Hash Table concept & mechanism",
+      "category": "DSA",
+      "topic": "Hashing",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Hashing",
+        "Hash Table",
+        "Data Structures"
+      ],
+      "hints": [
+        "Maps key to index via hash code",
+        "Provides O(1) average lookup time"
+      ],
+      "expected_answer": "Hash Table uses a Hash Function to convert keys into array indices for O(1) average key-value lookup, insertion, and deletion.",
+      "explanation": "Foundational hashing concept."
+    },
+    {
+      "question": "What is a Hash Collision and what are the two main collision handling techniques?",
+      "short_description": "Hash collision resolution techniques",
+      "category": "DSA",
+      "topic": "Hashing",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Hashing",
+        "Collisions",
+        "Chaining"
+      ],
+      "hints": [
+        "Collision occurs when two keys map to same index",
+        "Separate Chaining uses linked lists",
+        "Open Addressing searches next free slot"
+      ],
+      "expected_answer": "Collision occurs when two distinct keys yield the same index. Techniques: 1. Separate Chaining (linked list at index). 2. Open Addressing (linear probing, quadratic probing, double hashing).",
+      "explanation": "Essential internal working of hash maps."
+    },
+    {
+      "question": "Explain how Binary Search works. What is its prerequisite?",
+      "short_description": "Binary Search algorithm explanation",
+      "category": "DSA",
+      "topic": "Sorting & Searching",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Binary Search",
+        "Searching",
+        "Algorithms"
+      ],
+      "hints": [
+        "Prerequisite: Array must be sorted",
+        "Halves search space each iteration"
+      ],
+      "expected_answer": "Prerequisite: Array must be sorted. Compare target to mid element. If target == mid, return index. If target < mid, search left half, else right half. Time: O(log n).",
+      "explanation": "Core divide-and-conquer search algorithm."
+    },
+    {
+      "question": "Compare Bubble Sort, Selection Sort, and Insertion Sort in terms of time complexity.",
+      "short_description": "Elementary sorting algorithms comparison",
+      "category": "DSA",
+      "topic": "Sorting & Searching",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Sorting",
+        "Complexity",
+        "Algorithms"
+      ],
+      "hints": [
+        "All have O(n^2) worst-case time complexity",
+        "Insertion sort is efficient for small/nearly sorted data"
+      ],
+      "expected_answer": "All three have O(n^2) average and worst-case time complexity. Bubble Sort swaps adjacent elements; Selection Sort selects minimum element; Insertion Sort inserts into sorted subarray.",
+      "explanation": "Basic sorting algorithms overview."
+    },
+    {
+      "question": "Explain Merge Sort algorithm and why its time complexity is O(n log n).",
+      "short_description": "Merge Sort algorithm and complexity",
+      "category": "DSA",
+      "topic": "Sorting & Searching",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Sorting",
+        "Merge Sort",
+        "Divide and Conquer"
+      ],
+      "hints": [
+        "Uses Divide and Conquer",
+        "Splits array into halves, recursively sorts, then merges"
+      ],
+      "expected_answer": "Merge Sort recursively divides array into two halves until size 1 (log n splits), then merges sorted halves in O(n) time. Total time: O(n log n), Space: O(n).",
+      "explanation": "Standard O(n log n) sorting algorithm."
+    },
+    {
+      "question": "What is the difference between Breadth-First Search (BFS) and Depth-First Search (DFS) in Graphs?",
+      "short_description": "BFS vs DFS comparison",
+      "category": "DSA",
+      "topic": "Graphs",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Graphs",
+        "BFS",
+        "DFS"
+      ],
+      "hints": [
+        "BFS uses Queue (level order)",
+        "DFS uses Stack/Recursion (path deep dive)"
+      ],
+      "expected_answer": "BFS explores graph level by level using a Queue (ideal for shortest path in unweighted graph). DFS explores as deep as possible along each branch before backtracking using a Stack/Recursion.",
+      "explanation": "Basic graph traversal algorithms."
+    },
+    {
+      "question": "What is Dynamic Programming? How is Memoization different from Tabulation?",
+      "short_description": "Dynamic Programming concept & Memoization vs Tabulation",
+      "category": "DSA",
+      "topic": "Dynamic Programming",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "DP",
+        "Memoization",
+        "Tabulation"
+      ],
+      "hints": [
+        "Used for overlapping subproblems & optimal substructure",
+        "Memoization is Top-Down, Tabulation is Bottom-Up"
+      ],
+      "expected_answer": "DP solves complex problems by breaking them into overlapping subproblems. Memoization is Top-Down (recursion + caching result). Tabulation is Bottom-Up (iterative table filling).",
+      "explanation": "Introductory DP concepts for freshers."
+    },
+    {
+      "question": "What are ACID properties in DBMS? Explain each property with an example.",
+      "short_description": "ACID properties in DBMS",
+      "category": "DBMS",
+      "topic": "ACID Properties",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "DBMS",
+        "ACID",
+        "Transactions"
+      ],
+      "hints": [
+        "Atomicity: All or nothing",
+        "Consistency: Valid DB state",
+        "Isolation: Concurrent safety",
+        "Durability: Saved permanently"
+      ],
+      "expected_answer": "Atomicity (all operations succeed or rollback), Consistency (valid state rules), Isolation (concurrent transactions execute independently), Durability (committed data survives system crashes).",
+      "explanation": "Fundamental database transaction properties."
+    },
+    {
+      "question": "Explain Database Normalization and why 1NF, 2NF, and 3NF are needed.",
+      "short_description": "Database Normalization 1NF to 3NF",
+      "category": "DBMS",
+      "topic": "Normalization",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "DBMS",
+        "Normalization",
+        "Database Design"
+      ],
+      "hints": [
+        "1NF: Atomic values",
+        "2NF: No partial dependency",
+        "3NF: No transitive dependency"
+      ],
+      "expected_answer": "Normalization reduces data redundancy and eliminates update anomalies. 1NF (atomic attributes), 2NF (1NF + no non-key attribute depends on part of primary key), 3NF (2NF + no non-key attribute depends on another non-key attribute).",
+      "explanation": "Core relational schema design concept."
+    },
+    {
+      "question": "What is a Database Index? Compare Clustered and Non-Clustered Indexes.",
+      "short_description": "Database Indexing clustered vs non-clustered",
+      "category": "DBMS",
+      "topic": "Indexing",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "DBMS",
+        "Indexing",
+        "Performance"
+      ],
+      "hints": [
+        "Index speeds up SELECT queries at cost of slower INSERT/UPDATE",
+        "Clustered index determines physical row order"
+      ],
+      "expected_answer": "Index is a data structure (B-tree) for fast data retrieval. Clustered Index sorts physical data rows in table (only 1 per table). Non-Clustered Index stores logical order with pointers to actual rows (multiple allowed).",
+      "explanation": "Critical topic for database optimization questions."
+    },
+    {
+      "question": "What is an ER Diagram? Define Entity, Attribute, and Primary vs Foreign Key.",
+      "short_description": "ER Modeling concepts & Keys",
+      "category": "DBMS",
+      "topic": "ER Modeling",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "DBMS",
+        "ER Diagram",
+        "Keys"
+      ],
+      "hints": [
+        "Entity = Table/Object",
+        "Attribute = Column/Property",
+        "Primary Key uniquely identifies row",
+        "Foreign Key links tables"
+      ],
+      "expected_answer": "Entity represents real-world object. Attribute is a property. Primary Key uniquely identifies a record in a table. Foreign Key references Primary Key of another table to maintain referential integrity.",
+      "explanation": "Basic relational modeling concept."
+    },
+    {
+      "question": "Compare Relational Databases (SQL) and NoSQL Databases with examples.",
+      "short_description": "SQL vs NoSQL databases comparison",
+      "category": "DBMS",
+      "topic": "SQL vs NoSQL",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "DBMS",
+        "SQL",
+        "NoSQL"
+      ],
+      "hints": [
+        "SQL has fixed schema and ACID support",
+        "NoSQL has dynamic schema (JSON/Key-Value) and horizontal scaling"
+      ],
+      "expected_answer": "SQL (PostgreSQL, MySQL): Structured, tabular, schema-enforced, ACID compliant, vertical scaling. NoSQL (MongoDB, Redis): Unstructured/JSON, schema-less, BASE consistency, horizontal scaling.",
+      "explanation": "Modern database choice evaluation."
+    },
+    {
+      "question": "Explain the 4 main pillars of Object-Oriented Programming (OOP).",
+      "short_description": "Four pillars of OOP",
+      "category": "OOP",
+      "topic": "Classes & Objects",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "OOP",
+        "Fundamentals",
+        "Pillars"
+      ],
+      "hints": [
+        "Encapsulation, Abstraction, Inheritance, Polymorphism"
+      ],
+      "expected_answer": "1. Encapsulation (bundling data & methods, hiding internal state). 2. Abstraction (showing only necessary features). 3. Inheritance (reusing parent class properties). 4. Polymorphism (one interface, multiple implementations).",
+      "explanation": "Most common OOP interview question."
+    },
+    {
+      "question": "What is the difference between Abstraction and Encapsulation?",
+      "short_description": "Abstraction vs Encapsulation",
+      "category": "OOP",
+      "topic": "Encapsulation & Abstraction",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "OOP",
+        "Abstraction",
+        "Encapsulation"
+      ],
+      "hints": [
+        "Abstraction hides complexity (What)",
+        "Encapsulation hides data (How)"
+      ],
+      "expected_answer": "Abstraction solves design-level complexity by hiding implementation details and showing essential features. Encapsulation solves application-level privacy by wrapping data and code into a single unit using access modifiers (private/protected).",
+      "explanation": "Differentiates two often confused core concepts."
+    },
+    {
+      "question": "Compare Method Overloading and Method Overriding with examples.",
+      "short_description": "Method Overloading vs Overriding",
+      "category": "OOP",
+      "topic": "Polymorphism",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "OOP",
+        "Polymorphism",
+        "Overloading",
+        "Overriding"
+      ],
+      "hints": [
+        "Overloading: Same method name, different parameters (compile-time)",
+        "Overriding: Child class redefines parent method (runtime)"
+      ],
+      "expected_answer": "Overloading (Compile-Time Polymorphism): Methods in same class with same name but different parameter list. Overriding (Runtime Polymorphism): Child class provides specific implementation of method declared in parent class.",
+      "explanation": "Core polymorphism mechanics."
+    },
+    {
+      "question": "What is an Interface and how does it differ from an Abstract Class?",
+      "short_description": "Interface vs Abstract Class",
+      "category": "OOP",
+      "topic": "Interfaces vs Abstract Classes",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "OOP",
+        "Interfaces",
+        "Abstract Class"
+      ],
+      "hints": [
+        "Abstract class can have state and non-abstract methods",
+        "Interface defines pure contract"
+      ],
+      "expected_answer": "Abstract Class can have method implementations, state/member variables, and constructors. Interface contains abstract methods (contracts) without state (enabling multiple interface inheritance in languages like Java/C#).",
+      "explanation": "Object-oriented design contract principles."
+    },
+    {
+      "question": "What are the SOLID principles in Object-Oriented Design? Explain the Single Responsibility Principle.",
+      "short_description": "SOLID principles intro & SRP",
+      "category": "OOP",
+      "topic": "Design Principles",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "OOP",
+        "SOLID",
+        "Design Principles"
+      ],
+      "hints": [
+        "SRP: A class should have only one reason to change"
+      ],
+      "expected_answer": "SOLID stands for Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion. Single Responsibility Principle states a class should have one, and only one, reason to change.",
+      "explanation": "Clean code software architecture design principles."
+    },
+    {
+      "question": "What is the difference between a Process and a Thread? Give real-world examples.",
+      "short_description": "Process vs Thread",
+      "category": "OS",
+      "topic": "Process Management",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "OS",
+        "Process",
+        "Thread"
+      ],
+      "hints": [
+        "Process has independent memory address space",
+        "Threads share memory within same process"
+      ],
+      "expected_answer": "Process is an independent program in execution with private memory address space (e.g. Browser application). Thread is a lightweight execution path inside a process sharing its memory (e.g. background tab rendering).",
+      "explanation": "Fundamental OS operating system concepts."
+    },
+    {
+      "question": "What is a Deadlock? Explain the 4 necessary conditions for a Deadlock to occur.",
+      "short_description": "Deadlock conditions",
+      "category": "OS",
+      "topic": "Deadlock",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "OS",
+        "Deadlock",
+        "Concurrency"
+      ],
+      "hints": [
+        "Four conditions: Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait"
+      ],
+      "expected_answer": "Deadlock is a state where set of processes are blocked waiting for resources held by each other. Conditions: 1. Mutual Exclusion. 2. Hold and Wait. 3. No Preemption. 4. Circular Wait.",
+      "explanation": "Critical concurrency and OS resource allocation concept."
+    },
+    {
+      "question": "What is Virtual Memory and Paging in Operating Systems?",
+      "short_description": "Virtual Memory and Paging",
+      "category": "OS",
+      "topic": "Memory Management",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "OS",
+        "Virtual Memory",
+        "Paging"
+      ],
+      "hints": [
+        "Allows running programs larger than physical RAM",
+        "Paging divides memory into fixed-size pages"
+      ],
+      "expected_answer": "Virtual Memory provides illusion of large RAM by using secondary storage. Paging breaks virtual memory into fixed-size pages and physical RAM into page frames mapped by Page Table.",
+      "explanation": "Core memory management architecture."
+    },
+    {
+      "question": "Explain the 7 layers of the OSI Model and their functions.",
+      "short_description": "OSI 7 Layers model",
+      "category": "Networking",
+      "topic": "OSI Model",
+      "difficulty": "Easy",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Networking",
+        "OSI Model",
+        "Protocols"
+      ],
+      "hints": [
+        "Physical, Data Link, Network, Transport, Session, Presentation, Application"
+      ],
+      "expected_answer": "7 Layers: 1. Physical (bits). 2. Data Link (frames, MAC). 3. Network (packets, IP). 4. Transport (segments, TCP/UDP). 5. Session (dialogue control). 6. Presentation (encryption, formatting). 7. Application (HTTP, FTP, SMTP).",
+      "explanation": "Standard networking framework."
+    },
+    {
+      "question": "Explain the TCP Three-Way Handshake process for establishing a connection.",
+      "short_description": "TCP Three-Way Handshake",
+      "category": "Networking",
+      "topic": "TCP/IP",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Networking",
+        "TCP",
+        "Handshake"
+      ],
+      "hints": [
+        "SYN, SYN-ACK, ACK steps"
+      ],
+      "expected_answer": "Step 1: Client sends SYN packet to Server. Step 2: Server responds with SYN-ACK packet. Step 3: Client responds with ACK packet. Connection established.",
+      "explanation": "Core reliable transport protocol connection mechanism."
+    },
+    {
+      "question": "What are common HTTP request methods (GET, POST, PUT, DELETE) and HTTP status codes (200, 404, 500)?",
+      "short_description": "HTTP Methods and Status Codes",
+      "category": "Networking",
+      "topic": "HTTP Basics",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Networking",
+        "HTTP",
+        "REST"
+      ],
+      "hints": [
+        "GET retrieves data, POST creates, PUT updates, DELETE removes",
+        "2xx success, 4xx client error, 5xx server error"
+      ],
+      "expected_answer": "Methods: GET (read), POST (create), PUT (replace/update), DELETE (remove). Status codes: 200 OK, 201 Created, 400 Bad Request, 401 Unauthorized, 404 Not Found, 500 Internal Server Error.",
+      "explanation": "Essential Web & HTTP protocol knowledge."
+    }
+  ]
+}

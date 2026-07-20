@@ -27,10 +27,27 @@ INTERVIEW_TYPE_CHOICES = [
 # Mode Choices
 MODE_TEXT = 'Text'
 MODE_VOICE = 'Voice'
+MODE_CODING = 'Coding'
+MODE_SYSTEM_DESIGN = 'System Design'
+MODE_BEHAVIORAL = 'Behavioral Round'
+MODE_HR = 'HR Round'
+MODE_RAPID_FIRE = 'Rapid Fire'
+MODE_MIXED_MOCK = 'Mixed Mock'
 
 MODE_CHOICES = [
-    (MODE_TEXT, 'Text'),
-    (MODE_VOICE, 'Voice'),
+    ('Text', 'Text'),
+    ('Voice', 'Voice'),
+    ('Coding', 'Coding'),
+    ('System Design', 'System Design'),
+    ('Behavioral Round', 'Behavioral Round'),
+    ('HR Round', 'HR Round'),
+    ('Rapid Fire', 'Rapid Fire'),
+    ('Mixed Mock', 'Mixed Mock'),
+    ('Sys-design', 'Sys-design'),
+    ('Behavioral', 'Behavioral'),
+    ('Hr', 'Hr'),
+    ('Rapid', 'Rapid'),
+    ('Mixed', 'Mixed'),
 ]
 
 # Session Status Choices

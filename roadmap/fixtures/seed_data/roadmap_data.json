@@ -1,0 +1,3234 @@
+[
+  {
+    "role": "Frontend Developer",
+    "description": "Comprehensive learning path to master modern web frontend development.",
+    "estimated_duration": "4 Months",
+    "difficulty": "Beginner",
+    "modules": [
+      {
+        "title": "HTML5 & Semantic Markup",
+        "description": "Master document structure, semantic tags, forms, accessibility (a11y), and SEO fundamentals.",
+        "module_order": 1,
+        "estimated_hours": 12,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Semantic Elements",
+          "HTML5 Forms & Validation",
+          "ARIA Attributes & Accessibility",
+          "SEO Meta Tags"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "CSS3, Flexbox & Grid",
+        "description": "Learn modern layouts, box model, Flexbox, CSS Grid, media queries, and responsive design.",
+        "module_order": 2,
+        "estimated_hours": 18,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Box Model & Specificity",
+          "Flexbox Layouts",
+          "CSS Grid Systems",
+          "Responsive Media Queries"
+        ],
+        "prerequisites": "HTML5 & Semantic Markup"
+      },
+      {
+        "title": "JavaScript Fundamentals & DOM",
+        "description": "Core JS syntax, data types, DOM manipulation, event handling, and scope fundamentals.",
+        "module_order": 3,
+        "estimated_hours": 25,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Variables & Data Types",
+          "DOM Manipulation & Events",
+          "Functions & Scope",
+          "Array Methods (map, filter, reduce)"
+        ],
+        "prerequisites": "CSS3, Flexbox & Grid"
+      },
+      {
+        "title": "Modern JS (ES6+) & Async Programming",
+        "description": "Master ES6+ syntax, Promises, Async/Await, Fetch API, and Event Loop internals.",
+        "module_order": 4,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Promises & Async/Await",
+          "Fetch API & REST",
+          "Destructuring & Rest/Spread",
+          "Modules (Import/Export)"
+        ],
+        "prerequisites": "JavaScript Fundamentals & DOM"
+      },
+      {
+        "title": "Git & Version Control",
+        "description": "Git branching, pull requests, merge conflicts, and GitHub collaboration workflows.",
+        "module_order": 5,
+        "estimated_hours": 10,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Git Init, Commit & Push",
+          "Branching & Merging",
+          "Resolving Merge Conflicts",
+          "GitHub Pull Requests"
+        ],
+        "prerequisites": "JavaScript Fundamentals & DOM"
+      },
+      {
+        "title": "React.js Core & Component Architecture",
+        "description": "JSX, functional components, props, state, lifecycle, and component composition.",
+        "module_order": 6,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "JSX Syntax & Rendering",
+          "State (useState) & Props",
+          "Component Lifecycle & useEffect",
+          "Conditional Rendering"
+        ],
+        "prerequisites": "Modern JS (ES6+) & Async Programming"
+      },
+      {
+        "title": "Tailwind CSS & Utility-First Styling",
+        "description": "Rapid UI styling using Tailwind CSS, dark mode design systems, and responsive utilities.",
+        "module_order": 7,
+        "estimated_hours": 12,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Tailwind Utility Classes",
+          "Responsive Design Variants",
+          "Custom Theme Configuration",
+          "Dark Mode Setup"
+        ],
+        "prerequisites": "CSS3, Flexbox & Grid"
+      },
+      {
+        "title": "State Management & React Router",
+        "description": "SPA routing with React Router v6, Context API, and global state with Zustand or Redux Toolkit.",
+        "module_order": 8,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "React Router Dynamic Routes",
+          "Context API",
+          "Zustand State Store",
+          "Redux Toolkit Basics"
+        ],
+        "prerequisites": "React.js Core & Component Architecture"
+      },
+      {
+        "title": "Web Performance & SEO Optimization",
+        "description": "Lighthouse audits, code splitting, memoization, Core Web Vitals, and asset optimization.",
+        "module_order": 9,
+        "estimated_hours": 15,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "React.memo & useMemo",
+          "Lazy Loading & Code Splitting",
+          "Core Web Vitals (LCP, CLS, FID)",
+          "Image & Bundle Optimization"
+        ],
+        "prerequisites": "State Management & React Router"
+      },
+      {
+        "title": "Frontend Capstone Project & Deployment",
+        "description": "Build, test, and deploy a production React web application to Vercel/Netlify.",
+        "module_order": 10,
+        "estimated_hours": 30,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Full Application Architecture",
+          "Vercel / Netlify Deployment",
+          "CI/CD Pipeline Setup",
+          "Production Bug Fixing"
+        ],
+        "prerequisites": "Web Performance & SEO Optimization"
+      }
+    ]
+  },
+  {
+    "role": "Backend Developer",
+    "description": "Master backend architecture, databases, REST APIs, microservices, and server infrastructure.",
+    "estimated_duration": "5 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Backend Language Core (Python/Node.js/Java)",
+        "description": "Language syntax, OOP, error handling, standard library, and package management.",
+        "module_order": 1,
+        "estimated_hours": 20,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Syntax & Control Flow",
+          "OOP Principles",
+          "Package Managers (pip/npm/maven)",
+          "Exception Handling"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "Relational Databases & SQL Mastery",
+        "description": "PostgreSQL database design, indexing, ACID transactions, complex JOINs, and aggregation.",
+        "module_order": 2,
+        "estimated_hours": 25,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Schema Design & Normalization",
+          "Complex SQL JOINs",
+          "Database Indexing & Optimization",
+          "ACID Transactions"
+        ],
+        "prerequisites": "Backend Language Core"
+      },
+      {
+        "title": "RESTful API Design & Best Practices",
+        "description": "Designing clean, scalable REST APIs with standard HTTP verbs, status codes, and JSON payloads.",
+        "module_order": 3,
+        "estimated_hours": 18,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "HTTP Methods & Status Codes",
+          "REST URI Naming Conventions",
+          "JSON Serialization",
+          "API Versioning & Errors"
+        ],
+        "prerequisites": "Backend Language Core"
+      },
+      {
+        "title": "Authentication & Authorization (JWT/OAuth)",
+        "description": "Secure API endpoints using JWT tokens, passkey hashing (bcrypt), and Role-Based Access Control (RBAC).",
+        "module_order": 4,
+        "estimated_hours": 15,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Bcrypt Password Hashing",
+          "JWT Generation & Validation",
+          "OAuth2 Basics",
+          "Role-Based Access Control"
+        ],
+        "prerequisites": "RESTful API Design"
+      },
+      {
+        "title": "NoSQL Databases & Data Caching (Redis/MongoDB)",
+        "description": "MongoDB document stores, Redis key-value caching, session storage, and rate limiting.",
+        "module_order": 5,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "MongoDB Schema & Aggregation",
+          "Redis In-Memory Caching",
+          "Cache Invalidation Strategies",
+          "API Rate Limiting"
+        ],
+        "prerequisites": "Relational Databases & SQL Mastery"
+      },
+      {
+        "title": "Asynchronous Processing & Message Queues",
+        "description": "Celery, Redis/RabbitMQ message queues, background tasks, and scheduled cron jobs.",
+        "module_order": 6,
+        "estimated_hours": 20,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Background Task Queues",
+          "Celery & RabbitMQ/Redis",
+          "Event-Driven Processing",
+          "Scheduled Cron Tasks"
+        ],
+        "prerequisites": "Authentication & Authorization"
+      },
+      {
+        "title": "Automated Testing (Unit & Integration)",
+        "description": "Write automated unit tests, mock external services, and execute test suites using PyTest/Jest.",
+        "module_order": 7,
+        "estimated_hours": 15,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Unit Testing & Test Suites",
+          "Mocking External APIs",
+          "Integration Testing",
+          "Test Coverage Reports"
+        ],
+        "prerequisites": "RESTful API Design"
+      },
+      {
+        "title": "Docker Containerization & Environments",
+        "description": "Containerize backend applications using Docker, multi-stage builds, and Docker Compose environments.",
+        "module_order": 8,
+        "estimated_hours": 18,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Dockerfile Best Practices",
+          "Docker Compose Multi-Container Setup",
+          "Volume Mounts & Port Mapping",
+          "Container Image Minimization"
+        ],
+        "prerequisites": "Backend Language Core"
+      },
+      {
+        "title": "Backend Security & OWASP Standards",
+        "description": "Prevent SQL injection, XSS, CSRF, CORS issues, rate limit abuse, and secret leaks.",
+        "module_order": 9,
+        "estimated_hours": 15,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "SQL Injection Mitigation",
+          "CORS & CSRF Policies",
+          "Secret Management (.env)",
+          "OWASP Top 10 Defenses"
+        ],
+        "prerequisites": "Authentication & Authorization"
+      },
+      {
+        "title": "Backend Capstone Project & Cloud Deployment",
+        "description": "Build and deploy a scalable microservices/monolith backend to Neon Postgres & Render/AWS.",
+        "module_order": 10,
+        "estimated_hours": 30,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Production Environment Setup",
+          "Neon Postgres Cloud DB Wiring",
+          "Health Checks & Logging",
+          "CI/CD Deployment Pipeline"
+        ],
+        "prerequisites": "Docker Containerization & Security"
+      }
+    ]
+  },
+  {
+    "role": "Full Stack Developer",
+    "description": "Complete end-to-end roadmap for building full-stack applications from database to UI.",
+    "estimated_duration": "6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "HTML5, CSS3 & Responsive Design",
+        "description": "Core layout design, semantic markup, flexbox, grid, and mobile-first responsiveness.",
+        "module_order": 1,
+        "estimated_hours": 15,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Semantic HTML",
+          "Flexbox & Grid Layouts",
+          "Responsive Media Queries",
+          "Modern CSS Reset"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "JavaScript Fundamentals & ES6+",
+        "description": "JavaScript language semantics, DOM API, Promises, Async/Await, and modular code.",
+        "module_order": 2,
+        "estimated_hours": 20,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "ES6+ Syntax",
+          "DOM Manipulation",
+          "Promises & Async/Await",
+          "Array Operations"
+        ],
+        "prerequisites": "HTML5, CSS3 & Responsive Design"
+      },
+      {
+        "title": "Git & Version Control Workflow",
+        "description": "Master branch management, commits, pull requests, and Git team collaboration.",
+        "module_order": 3,
+        "estimated_hours": 8,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Git Commands",
+          "Branching Strategy",
+          "Merge Conflict Resolution",
+          "GitHub Pull Requests"
+        ],
+        "prerequisites": "JavaScript Fundamentals & ES6+"
+      },
+      {
+        "title": "Frontend Framework (React.js) Basics",
+        "description": "Build interactive single page applications using React components, state, and hooks.",
+        "module_order": 4,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "JSX & Components",
+          "useState & useEffect",
+          "React Router Navigation",
+          "State Lifting"
+        ],
+        "prerequisites": "JavaScript Fundamentals & ES6+"
+      },
+      {
+        "title": "Backend Fundamentals (Node.js/Express or Python/Django)",
+        "description": "Server-side environment configuration, routing, middleware, and request/response handling.",
+        "module_order": 5,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Server Environments",
+          "REST Routing",
+          "Middleware Architecture",
+          "Error Handling"
+        ],
+        "prerequisites": "JavaScript Fundamentals & ES6+"
+      },
+      {
+        "title": "Databases \u2014 SQL & NoSQL Basics",
+        "description": "Data modeling, PostgreSQL tables, MongoDB collections, queries, and ORM integration.",
+        "module_order": 6,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "PostgreSQL & Relational Data",
+          "MongoDB & Documents",
+          "ORM/ODM Integration",
+          "Database Migration"
+        ],
+        "prerequisites": "Backend Fundamentals"
+      },
+      {
+        "title": "REST API Design & Integration",
+        "description": "Connecting React frontend to backend REST APIs with proper loading states and error handling.",
+        "module_order": 7,
+        "estimated_hours": 15,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Axios/Fetch Data Fetching",
+          "REST Resource Design",
+          "HTTP Headers & Payloads",
+          "CORS Configuration"
+        ],
+        "prerequisites": "Frontend Framework & Backend Fundamentals"
+      },
+      {
+        "title": "Authentication & Security Basics",
+        "description": "Implement user signup, login, password hashing, JWT storage, and protected frontend routes.",
+        "module_order": 8,
+        "estimated_hours": 12,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Password Hashing",
+          "JWT Token Flow",
+          "Protected Routes in React",
+          "HTTPS & Security Basics"
+        ],
+        "prerequisites": "REST API Design & Integration"
+      },
+      {
+        "title": "Testing Fundamentals (Unit & Integration)",
+        "description": "Write tests for frontend components and backend API endpoints using Jest/PyTest.",
+        "module_order": 9,
+        "estimated_hours": 12,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Frontend Component Testing",
+          "Backend API Integration Tests",
+          "Test Mocks & Spies",
+          "CI Test Automation"
+        ],
+        "prerequisites": "REST API Design & Integration"
+      },
+      {
+        "title": "Deployment & CI/CD Basics",
+        "description": "Automate build and deployment pipelines using GitHub Actions, Vercel, and Render.",
+        "module_order": 10,
+        "estimated_hours": 15,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "GitHub Actions CI/CD",
+          "Environment Variables Setup",
+          "Frontend Cloud Hosting",
+          "Backend Cloud Deployment"
+        ],
+        "prerequisites": "Authentication & Security"
+      },
+      {
+        "title": "System Design Basics for Full Stack Apps",
+        "description": "Architecture principles, load balancing, caching, database indexing, and scalability.",
+        "module_order": 11,
+        "estimated_hours": 15,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Monolith vs Microservices",
+          "Redis Caching Strategy",
+          "Database Indexing",
+          "Scalability Bottlenecks"
+        ],
+        "prerequisites": "Deployment & CI/CD Basics"
+      },
+      {
+        "title": "Building a Capstone Full Stack Project",
+        "description": "Architect and deploy a complete production-grade full-stack web application.",
+        "module_order": 12,
+        "estimated_hours": 30,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "End-to-End System Architecture",
+          "Production Deployment & Domain",
+          "Real-World Monitoring",
+          "Final Showcase & Documentation"
+        ],
+        "prerequisites": "System Design Basics"
+      }
+    ]
+  },
+  {
+    "role": "React Developer",
+    "description": "Master React 18, Hooks, Redux Toolkit, Next.js, and modern React Ecosystem.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "JavaScript & ES6+ Mastery",
+        "description": "Deep dive into JS closures, promises, async/await, and event loop.",
+        "module_order": 1,
+        "estimated_hours": 15,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Closures & Scope",
+          "Promises & Async/Await",
+          "ES6+ Array Methods"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "React Fundamentals & JSX",
+        "description": "Understanding virtual DOM, JSX compilation, and component trees.",
+        "module_order": 2,
+        "estimated_hours": 20,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "JSX Rules",
+          "Virtual DOM Reconciliation",
+          "Functional Components"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "State & Props Management",
+        "description": "Managing local state with useState, immutability, and prop drilling solutions.",
+        "module_order": 3,
+        "estimated_hours": 20,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "useState Hook",
+          "Props Validation",
+          "Lifting State Up"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "React Hooks In-Depth",
+        "description": "Master useEffect, useRef, useMemo, useCallback, and custom hooks.",
+        "module_order": 4,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "useEffect Lifecycle",
+          "useMemo & useCallback",
+          "Custom Hook Patterns"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "React Router v6 & SPA Navigation",
+        "description": "Dynamic routing, nested layouts, loader functions, and page transitions.",
+        "module_order": 5,
+        "estimated_hours": 15,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "BrowserRouter & Routes",
+          "Dynamic Route Params",
+          "Protected Route Layouts"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Global State (Redux Toolkit & Zustand)",
+        "description": "Manage complex global state using Redux Toolkit and lightweight Zustand.",
+        "module_order": 6,
+        "estimated_hours": 22,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Redux Slices & Store",
+          "Zustand Store Creation",
+          "Async Thunks & API"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "API Integration & React Query",
+        "description": "Server state management, caching, background refetching with TanStack Query.",
+        "module_order": 7,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "useQuery & useMutation",
+          "Cache Invalidation",
+          "Optimistic UI Updates"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "React Performance Optimization",
+        "description": "Identify re-render bottlenecks, use Profiler, memoization, and lazy loading.",
+        "module_order": 8,
+        "estimated_hours": 18,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "React Profiler Tool",
+          "React.lazy & Suspense",
+          "Code Splitting Strategies"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Testing React Applications",
+        "description": "Unit & component testing using React Testing Library and Vitest.",
+        "module_order": 9,
+        "estimated_hours": 15,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "React Testing Library",
+          "Mocking API Requests",
+          "Integration Testing Components"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Next.js App Router & SSR",
+        "description": "Server Side Rendering, Static Site Generation, Server Components, and App Router.",
+        "module_order": 10,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Server Components vs Client Components",
+          "App Router Layouts",
+          "SSG, SSR & ISR"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "Node.js Developer",
+    "description": "Build asynchronous backend applications, microservices, and APIs with Node.js.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Node.js Architecture & Event Loop",
+        "description": "Understand Node.js single-threaded event loop, libuv, and non-blocking I/O.",
+        "module_order": 1,
+        "estimated_hours": 15,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Event Loop Phases",
+          "EventEmitters & Streams",
+          "Node.js Process & Buffer"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "Express.js Framework Core",
+        "description": "Building HTTP servers, routing, request parsing, and custom middleware.",
+        "module_order": 2,
+        "estimated_hours": 20,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Express Application Router",
+          "Custom Middleware",
+          "Error Handling Middleware"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Asynchronous Operations & Streams",
+        "description": "Master async/await patterns, Readable/Writable streams, and backpressure.",
+        "module_order": 3,
+        "estimated_hours": 18,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Streams & Pipes",
+          "Buffer Operations",
+          "Async Flow Control"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "MongoDB & Mongoose ORM",
+        "description": "Document modeling, schemas, queries, population, and indexing.",
+        "module_order": 4,
+        "estimated_hours": 22,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Mongoose Schemas & Models",
+          "Population & Joins",
+          "Aggregation Pipelines"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "PostgreSQL & Knex/Prisma",
+        "description": "Relational database integration, migration scripts, and Prisma ORM.",
+        "module_order": 5,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Prisma Schema Definition",
+          "Migrations Workflow",
+          "Raw SQL & Query Building"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Authentication & JWT Security",
+        "description": "Secure session tokens, password hashing, and cookie-based authentication.",
+        "module_order": 6,
+        "estimated_hours": 18,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "JWT Authentication Flow",
+          "Bcrypt Hashing",
+          "Cookie Session Security"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Testing Node.js Applications",
+        "description": "Write integration and unit tests using Jest, Supertest, and Mocking.",
+        "module_order": 7,
+        "estimated_hours": 15,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Jest Suite Setup",
+          "Supertest API Testing",
+          "Database Fixtures & Mocks"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Microservices & Message Queues",
+        "description": "Decouple services using Redis Pub/Sub, RabbitMQ, and gRPC communication.",
+        "module_order": 8,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "RabbitMQ Worker Queues",
+          "Redis Pub/Sub Messaging",
+          "gRPC Service Definition"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Node.js Performance Tuning",
+        "description": "Clustering, memory leak detection, profiling, and CPU optimization.",
+        "module_order": 9,
+        "estimated_hours": 18,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Node Cluster Module",
+          "Memory Leak Profiling",
+          "PM2 Process Manager"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Docker Containerization & Production",
+        "description": "Containerize Node APIs, environment configurations, and cloud deployment.",
+        "module_order": 10,
+        "estimated_hours": 20,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Multi-stage Dockerfiles",
+          "Health Check Endpoints",
+          "Production Deployment"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "Java Developer",
+    "description": "Master Java OOP, Spring Boot framework, microservices, and enterprise backend engineering.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Java Language Fundamentals & Syntax",
+        "description": "Core Java syntax, primitive types, loops, arrays, and control structures.",
+        "module_order": 1,
+        "estimated_hours": 18,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Java Environment Setup",
+          "Variables & Control Flow",
+          "Methods & Parameter Passing"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "Object-Oriented Programming in Java",
+        "description": "Encapsulation, Inheritance, Polymorphism, Abstraction, and Interfaces.",
+        "module_order": 2,
+        "estimated_hours": 22,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Classes & Objects",
+          "Interface vs Abstract Class",
+          "Polymorphism & Method Overriding"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Java Collections & Generics",
+        "description": "List, Set, Map implementations, Iterator, Collections framework, and Generics.",
+        "module_order": 3,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "ArrayList & LinkedList",
+          "HashMap & HashSet",
+          "Generics & Type Parameters"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Java Streams API & Lambda Expressions",
+        "description": "Functional programming in Java, Stream operations, Optional, and Lambdas.",
+        "module_order": 4,
+        "estimated_hours": 18,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Lambda Expression Syntax",
+          "Stream Filter, Map, Reduce",
+          "Optional Class Handling"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Spring Boot Core & Dependency Injection",
+        "description": "Spring container, ApplicationContext, Inversion of Control, and @Autowired.",
+        "module_order": 5,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Spring IoC Container",
+          "Bean Lifecycle & Scopes",
+          "Spring Boot Starters"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Spring Data JPA & Hibernate ORM",
+        "description": "Entity mapping, Repositories, HQL, JPQL, Transactions, and Relationships.",
+        "module_order": 6,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "@Entity & @Table Mapping",
+          "Spring Data JPA Repositories",
+          "OneToMany / ManyToOne Relations"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "RESTful Web Services with Spring MVC",
+        "description": "Build REST APIs using @RestController, Request Mapping, and DTOs.",
+        "module_order": 7,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "@RestController & Endpoints",
+          "DTO Pattern & Mapping",
+          "Global Exception Handling"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Spring Security & OAuth2",
+        "description": "Authentication, Authorization, Spring Security Filter Chain, and JWT.",
+        "module_order": 8,
+        "estimated_hours": 22,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Security Filter Chain",
+          "UserDetailsService Setup",
+          "JWT Provider Integration"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Microservices with Spring Cloud",
+        "description": "Service Discovery (Eureka), API Gateway, Resilience4j Circuit Breaker.",
+        "module_order": 9,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Eureka Service Discovery",
+          "Spring Cloud Gateway",
+          "Resilience4j Circuit Breakers"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Testing JUnit 5 & Mockito",
+        "description": "Unit testing Spring components, mocking dependencies, and Integration Tests.",
+        "module_order": 10,
+        "estimated_hours": 15,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "JUnit 5 Annotations",
+          "Mockito @Mock & @InjectMocks",
+          "@SpringBootTest Integration Tests"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "Python Developer",
+    "description": "Master Python programming, Django, FastAPI, data structures, and production automation.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Python Language Fundamentals",
+        "description": "Python syntax, primitive data types, control structures, and function definitions.",
+        "module_order": 1,
+        "estimated_hours": 15,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Python Built-in Types",
+          "Control Statements",
+          "Functions & Scopes"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "Python Data Structures & Collections",
+        "description": "Lists, Dictionaries, Sets, Tuples, List Comprehensions, and Generators.",
+        "module_order": 2,
+        "estimated_hours": 18,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "List & Dict Operations",
+          "List/Dict Comprehensions",
+          "Generators & Yield"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Object-Oriented Python",
+        "description": "Classes, inheritance, dunder methods, decorators, and encapsulation.",
+        "module_order": 3,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Classes & Instance Methods",
+          "Dunder/Magic Methods",
+          "Custom Decorators Pattern"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Django Web Framework Basics",
+        "description": "MVT Architecture, Django ORM, Models, Views, URLs, and Django Admin.",
+        "module_order": 4,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Django MVT Pattern",
+          "Django ORM & Migrations",
+          "Views & Template Engine"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "FastAPI & Asynchronous Web APIs",
+        "description": "Building high-performance async APIs with Pydantic and OpenAPI docs.",
+        "module_order": 5,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Pydantic Data Models",
+          "Async Endpoint Handlers",
+          "Automatic OpenAPI Generation"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "PostgreSQL & Django ORM Optimization",
+        "description": "Complex queries, select_related, prefetch_related, indexing, and raw SQL.",
+        "module_order": 6,
+        "estimated_hours": 22,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "select_related vs prefetch_related",
+          "Database Indexing Strategy",
+          "Query Set Optimization"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Automated Testing with PyTest",
+        "description": "Write clean unit tests, fixtures, mocking external requests, and coverage.",
+        "module_order": 7,
+        "estimated_hours": 15,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "PyTest Fixtures",
+          "Mocking unittest.mock",
+          "Code Coverage Reports"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Asynchronous Task Execution (Celery)",
+        "description": "Background task processing, Celery workers, and Redis broker wiring.",
+        "module_order": 8,
+        "estimated_hours": 20,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Celery Worker Architecture",
+          "Task Scheduling & Retries",
+          "Redis Message Broker"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Python Packaging & Virtual Environments",
+        "description": "Poetry, Pipenv, virtualenv, PyPI packaging, and dependency isolation.",
+        "module_order": 9,
+        "estimated_hours": 12,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Virtualenv & Venv",
+          "Poetry Package Manager",
+          "Creating Reusable Packages"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Deployment & Production Hardening",
+        "description": "Gunicorn, Uvicorn, Dockerization, environment configuration, and cloud deploy.",
+        "module_order": 10,
+        "estimated_hours": 20,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Gunicorn/Uvicorn Setup",
+          "Docker Multi-stage Container",
+          "Cloud Platform Deployment"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "MERN Stack Developer",
+    "description": "Master MongoDB, Express.js, React.js, and Node.js full-stack development.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Modern ES6+ JavaScript",
+        "description": "Promises, async/await, modules, destructuring, and array operations.",
+        "module_order": 1,
+        "estimated_hours": 15,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "ES6+ Syntax",
+          "Promises & Fetch API",
+          "Async/Await Flow"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "MongoDB & Mongoose Schema Design",
+        "description": "Document database design, schemas, subdocuments, and queries.",
+        "module_order": 2,
+        "estimated_hours": 20,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "MongoDB CRUD",
+          "Mongoose Schema Rules",
+          "Population Joins"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Express.js Server & REST API",
+        "description": "Building REST endpoints, custom middleware, and input validation.",
+        "module_order": 3,
+        "estimated_hours": 22,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Express Routing",
+          "Request Validation",
+          "Global Error Handling"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "React.js Components & State",
+        "description": "JSX, props, useState, useEffect, and component tree architecture.",
+        "module_order": 4,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "React JSX Engine",
+          "useState & useEffect",
+          "Component Composition"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Node.js Backend Integration",
+        "description": "Connecting Express endpoints with Mongoose and frontend fetch requests.",
+        "module_order": 5,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Express-Mongoose Wiring",
+          "CORS Configuration",
+          "Environment Variables"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "JWT Authentication & Route Protection",
+        "description": "User authentication, JWT token storage, bcrypt hashing, and frontend guards.",
+        "module_order": 6,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Bcrypt Password Security",
+          "JWT Authentication",
+          "Private Route Component"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Redux Toolkit Global State",
+        "description": "State management across full stack application with Redux Toolkit.",
+        "module_order": 7,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Redux Toolkit Slices",
+          "Async Thunk API Calls",
+          "Store Configuration"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "MERN Stack Integration",
+        "description": "Combining MongoDB, Express, React, and Node into a cohesive web app.",
+        "module_order": 8,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Full Stack Workflow",
+          "File Upload Handling",
+          "State Synchronization"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Testing & Security Best Practices",
+        "description": "Testing frontend & backend, preventing XSS/CSRF, and input sanitization.",
+        "module_order": 9,
+        "estimated_hours": 18,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Jest & Supertest",
+          "Sanitizing MongoDB Queries",
+          "Security Headers Setup"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Cloud Deployment (AWS / Vercel / Render)",
+        "description": "Deploying React frontend to Vercel and Node/Mongo backend to Render/AWS.",
+        "module_order": 10,
+        "estimated_hours": 20,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Frontend Vercel Deploy",
+          "Backend Render Deploy",
+          "Production Database Wiring"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "MEAN Stack Developer",
+    "description": "Master MongoDB, Express.js, Angular, and Node.js full-stack web applications.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "TypeScript & ES6 Fundamentals",
+        "description": "Strong typing, interfaces, classes, decorators, and modern JS features.",
+        "module_order": 1,
+        "estimated_hours": 18,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "TypeScript Types & Interfaces",
+          "Classes & Access Modifiers",
+          "Decorators Syntax"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "MongoDB Document Database",
+        "description": "Document database schema modeling, indexing, and MongoDB shell commands.",
+        "module_order": 2,
+        "estimated_hours": 18,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Document Data Model",
+          "Indexing Strategies",
+          "Aggregation Pipeline"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Express.js Backend Framework",
+        "description": "Building HTTP servers, REST routing, and middleware pipelines.",
+        "module_order": 3,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Express Routing",
+          "Custom Middleware",
+          "Error Handler"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Angular Fundamentals & CLI",
+        "description": "Components, templates, databinding, and Angular CLI project setup.",
+        "module_order": 4,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Angular Modules & Components",
+          "Two-way Data Binding",
+          "Angular Directives"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "RxJS & Reactive Programming",
+        "description": "Observables, subjects, operators (map, filter, switchMap), and subscriptions.",
+        "module_order": 5,
+        "estimated_hours": 22,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "RxJS Observables",
+          "Common Operators",
+          "Unsubscribing Strategies"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Node.js API Services",
+        "description": "Building scalable RESTful backend services connecting MongoDB and Angular.",
+        "module_order": 6,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "REST Services",
+          "Mongoose ODM",
+          "Environment Configurations"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Angular Services & HTTP Client",
+        "description": "HttpClient module, dependency injection, and data fetching.",
+        "module_order": 7,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "HttpClient Integration",
+          "Injectable Services",
+          "HTTP Interceptors"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Angular Routing & Form Controls",
+        "description": "Reactive forms, form validation, dynamic routing, and route guards.",
+        "module_order": 8,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Reactive Form Builder",
+          "Route Guards (CanActivate)",
+          "Lazy Loaded Modules"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "MEAN Security & Testing",
+        "description": "JWT authentication, Jasmine & Karma unit testing, and CORS policies.",
+        "module_order": 9,
+        "estimated_hours": 18,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "JWT Interceptors",
+          "Jasmine & Karma Tests",
+          "Security Policies"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Production Cloud Hosting",
+        "description": "Deploying Angular SPA frontend and Node/Express backend to production cloud.",
+        "module_order": 10,
+        "estimated_hours": 20,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Angular Production Build",
+          "Node Server Hosting",
+          "Cloud Database Setup"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "DevOps Engineer",
+    "description": "Automate infrastructure, CI/CD pipelines, container orchestration, and cloud monitoring.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Linux Systems Administration & Shell",
+        "description": "Linux command line, file permissions, systemd services, and Bash scripting.",
+        "module_order": 1,
+        "estimated_hours": 20,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Linux CLI Navigation",
+          "File Permissions & Users",
+          "Bash Shell Scripting"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "Git Version Control & Workflow",
+        "description": "Advanced Git branching strategies, rebase, cherry-pick, and team workflows.",
+        "module_order": 2,
+        "estimated_hours": 12,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Git Rebase vs Merge",
+          "Cherry-picking Commits",
+          "Git Flow Strategy"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Networking & Infrastructure Basics",
+        "description": "IP addressing, DNS resolution, HTTP/HTTPS, SSH, firewalls, and CIDR blocks.",
+        "module_order": 3,
+        "estimated_hours": 18,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "TCP/IP & OSI Model",
+          "DNS & Domain Setup",
+          "SSH Keys & Firewall Rules"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Docker Containerization",
+        "description": "Building container images, multi-stage Dockerfiles, and Docker Compose.",
+        "module_order": 4,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Dockerfile Directives",
+          "Multi-stage Builds",
+          "Docker Compose Multi-service"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Kubernetes Orchestration",
+        "description": "Pods, Deployments, Services, ConfigMaps, Secrets, and Ingress controllers.",
+        "module_order": 5,
+        "estimated_hours": 30,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Pods & Deployments",
+          "Cluster Services & Networking",
+          "ConfigMaps & Secrets"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "CI/CD Pipelines (GitHub Actions/Jenkins)",
+        "description": "Automating build, test, and release pipelines using GitHub Actions or Jenkins.",
+        "module_order": 6,
+        "estimated_hours": 22,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "GitHub Actions Workflows",
+          "Build & Test Automation",
+          "Automated Release Pipeline"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Infrastructure as Code (Terraform)",
+        "description": "Declarative infrastructure provisioning on cloud providers using Terraform.",
+        "module_order": 7,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Terraform HCL Syntax",
+          "State File Management",
+          "Modules & Providers"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Configuration Management (Ansible)",
+        "description": "Automating server configuration, playbooks, and inventory management.",
+        "module_order": 8,
+        "estimated_hours": 18,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Ansible Playbook Structure",
+          "Inventory & Variables",
+          "Role Reusability"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Cloud Infrastructure (AWS/Azure)",
+        "description": "Deploying compute, networking, and storage instances on AWS/Azure.",
+        "module_order": 9,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "AWS EC2 & S3",
+          "VPC & Security Groups",
+          "Cloud IAM Roles"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Monitoring & Logging (Prometheus/Grafana)",
+        "description": "Set up metric scraping, log aggregation, and real-time alert dashboards.",
+        "module_order": 10,
+        "estimated_hours": 20,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Prometheus Metric Collection",
+          "Grafana Dashboard Design",
+          "Alertmanager Configurations"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "Cloud Engineer",
+    "description": "Architect, deploy, and manage scalable cloud infrastructure on AWS, Azure, or GCP.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Cloud Computing Principles",
+        "description": "Cloud service models (IaaS, PaaS, SaaS), public/private cloud, and cloud economics.",
+        "module_order": 1,
+        "estimated_hours": 12,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Cloud Service Models",
+          "Shared Responsibility Model",
+          "Cloud Region & AZ Architecture"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "AWS / Azure Core Infrastructure",
+        "description": "Virtual machines (EC2/VMs), object storage (S3/Blob), and cloud databases.",
+        "module_order": 2,
+        "estimated_hours": 22,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "EC2 & Virtual Machines",
+          "S3 & Blob Storage",
+          "Managed Database Instances"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Cloud Networking & Virtual Networks",
+        "description": "VPC, Subnets, Internet Gateways, Route Tables, NAT Gateways, and VPNs.",
+        "module_order": 3,
+        "estimated_hours": 22,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "VPC Subnet Creation",
+          "Route Tables & Gateways",
+          "Network Access Control Lists"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Cloud Security & IAM",
+        "description": "Identity and Access Management, policies, roles, least privilege, and encryption.",
+        "module_order": 4,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "IAM Policies & Roles",
+          "Least Privilege Principle",
+          "KMS Data Encryption"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Serverless Architecture (Lambda/Functions)",
+        "description": "Event-driven serverless functions, API Gateway, and event triggers.",
+        "module_order": 5,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "AWS Lambda Functions",
+          "API Gateway Integration",
+          "Event Trigger Architecture"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Cloud Storage & Database Management",
+        "description": "RDS, DynamoDB, Cosmos DB, backup strategies, and replication.",
+        "module_order": 6,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Relational DB Services (RDS)",
+          "NoSQL Cloud Databases",
+          "Automated Snapshots & Backups"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Auto Scaling & Load Balancing",
+        "description": "Elastic Load Balancing, Auto Scaling Groups, and health monitoring.",
+        "module_order": 7,
+        "estimated_hours": 18,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Application Load Balancers",
+          "Auto Scaling Policies",
+          "Health Check Configurations"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Infrastructure as Code (Terraform)",
+        "description": "Provision cloud infrastructure declaratively using Terraform scripts.",
+        "module_order": 8,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Terraform Resource Definition",
+          "Remote State Backend",
+          "Infrastructure Modules"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Cloud Governance & Cost Optimization",
+        "description": "Tagging strategies, cost explorer, resource budgeting, and compliance.",
+        "module_order": 9,
+        "estimated_hours": 15,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Resource Tagging Standards",
+          "AWS Cost Explorer / Budgeting",
+          "Compliance Auditing"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Multicloud Deployment & Architecture",
+        "description": "High availability cross-region deployment and disaster recovery planning.",
+        "module_order": 10,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Cross-Region Replication",
+          "Disaster Recovery Failover",
+          "Multicloud Connectivity"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "Data Engineer",
+    "description": "Build scalable data pipelines, data warehouses, and big data processing systems.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Python & SQL for Data Engineering",
+        "description": "Python data manipulation, advanced SQL queries, window functions, and CTEs.",
+        "module_order": 1,
+        "estimated_hours": 20,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Advanced SQL Window Functions",
+          "CTEs & Complex Joins",
+          "Python Data Processing"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "Data Warehousing Fundamentals",
+        "description": "Star schema, Snowflake schema, dimensional modeling, and OLAP vs OLTP.",
+        "module_order": 2,
+        "estimated_hours": 22,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Dimensional Data Modeling",
+          "Star & Snowflake Schemas",
+          "OLAP vs OLTP Storage"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "ETL & ELT Pipeline Design",
+        "description": "Extract, Transform, Load architecture, batch vs streaming data pipelines.",
+        "module_order": 3,
+        "estimated_hours": 22,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "ETL Pipeline Patterns",
+          "Data Sanitization & Validation",
+          "Batch vs Streaming Data"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Apache Spark & Distributed Computing",
+        "description": "Spark PySpark DataFrames, RDDs, transformations, actions, and cluster execution.",
+        "module_order": 4,
+        "estimated_hours": 28,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "PySpark DataFrame API",
+          "Spark Transformations & Actions",
+          "Memory Management & Partitioning"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Airflow Workflow Orchestration",
+        "description": "Create and schedule DAGs (Directed Acyclic Graphs), operators, and tasks.",
+        "module_order": 5,
+        "estimated_hours": 22,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Airflow DAG Construction",
+          "Custom Operators & Hooks",
+          "Task Dependencies & Scheduling"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Data Warehouses (Snowflake / BigQuery)",
+        "description": "Managing cloud data warehouses, partitioning, clustering, and performance.",
+        "module_order": 6,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Snowflake Virtual Warehouses",
+          "BigQuery Partitioning",
+          "Query Performance Optimization"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Real-time Streaming (Apache Kafka)",
+        "description": "Kafka topics, producers, consumers, partition keys, and streaming data.",
+        "module_order": 7,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Kafka Topic Architecture",
+          "Producers & Consumer Groups",
+          "Kafka Connect & Streams"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Data Quality, Testing & Governance",
+        "description": "Great Expectations data testing, data lineage, metadata management.",
+        "module_order": 8,
+        "estimated_hours": 18,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Great Expectations Testing",
+          "Data Lineage Tracking",
+          "Metadata Cataloging"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Cloud Data Lake Infrastructure",
+        "description": "Building data lakes on AWS S3/Glue/Athena or Azure Data Lake.",
+        "module_order": 9,
+        "estimated_hours": 22,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "S3 Data Lake Architecture",
+          "AWS Glue Data Catalog",
+          "Athena Query Execution"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "End-to-End Data Pipeline Project",
+        "description": "Architect a complete automated data pipeline from ingestion to analytics.",
+        "module_order": 10,
+        "estimated_hours": 30,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "End-to-End Pipeline Wiring",
+          "Automated Data Ingestion",
+          "Dashboard Consumption Layer"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "Data Analyst",
+    "description": "Transform raw data into business insights using SQL, Excel, Python, and Tableau/Power BI.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Excel & Business Spreadsheet Analytics",
+        "description": "Advanced Excel formulas, VLOOKUP/XLOOKUP, Pivot Tables, and charts.",
+        "module_order": 1,
+        "estimated_hours": 15,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "XLOOKUP & Nested Formulas",
+          "Pivot Tables & Slicers",
+          "Conditional Formatting & Charts"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "SQL Data Extraction & Aggregation",
+        "description": "SQL queries, GROUP BY, HAVING, subqueries, and table joins.",
+        "module_order": 2,
+        "estimated_hours": 22,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "SELECT, WHERE, ORDER BY",
+          "GROUP BY & Aggregations",
+          "INNER, LEFT, RIGHT JOINs"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Python for Data Analysis (Pandas)",
+        "description": "DataFrames, Series, reading CSV/Excel, data filtering, and manipulation.",
+        "module_order": 3,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Pandas DataFrames",
+          "Data Filtering & Selection",
+          "Handling Missing Data"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Data Cleaning & Preprocessing",
+        "description": "Cleaning messy data, handling duplicates, data type conversions, and string ops.",
+        "module_order": 4,
+        "estimated_hours": 18,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Duplicate Removal & Imputation",
+          "String Manipulation Methods",
+          "Datetime Operations"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Data Visualization (Matplotlib & Seaborn)",
+        "description": "Creating line charts, bar plots, scatter plots, histograms, and heatmaps.",
+        "module_order": 5,
+        "estimated_hours": 18,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Matplotlib Chart Types",
+          "Seaborn Statistical Plots",
+          "Customizing Chart Styling"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Business Intelligence (Power BI / Tableau)",
+        "description": "Building interactive dashboards, DAX formulas, calculation fields, and reports.",
+        "module_order": 6,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Connecting Data Sources",
+          "DAX Calculated Measures",
+          "Interactive Dashboard Visuals"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Applied Statistics & Hypothesis Testing",
+        "description": "Descriptive statistics, probability distributions, confidence intervals, p-values.",
+        "module_order": 7,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Mean, Median, Standard Dev",
+          "Normal Distribution & Z-scores",
+          "Hypothesis Testing & p-values"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "A/B Testing & Metric Evaluation",
+        "description": "Designing A/B test experiments, sample sizing, and statistical significance.",
+        "module_order": 8,
+        "estimated_hours": 18,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Experiment Sample Sizing",
+          "Statistical Significance Tests",
+          "Conversion Rate Analysis"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Exploratory Data Analysis (EDA)",
+        "description": "Uncovering patterns, correlations, trends, and anomalies in complex datasets.",
+        "module_order": 9,
+        "estimated_hours": 20,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Correlation Matrix Analysis",
+          "Outlier Detection Methods",
+          "Trend & Seasonality Analysis"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Executive Data Storytelling & Reporting",
+        "description": "Presenting data insights, executive summary slide decks, and recommendations.",
+        "module_order": 10,
+        "estimated_hours": 15,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Executive Summary Crafting",
+          "Data Storytelling Framework",
+          "Actionable Recommendations"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "Data Scientist",
+    "description": "Build predictive models, machine learning algorithms, and data science solutions.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Python & Math Foundations",
+        "description": "Python data structures, NumPy arrays, linear algebra, and calculus basics.",
+        "module_order": 1,
+        "estimated_hours": 20,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "NumPy Matrix Operations",
+          "Linear Algebra Vectors & Matrices",
+          "Calculus Derivatives Intro"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "Exploratory Data Analysis (Pandas & Seaborn)",
+        "description": "Data manipulation, EDA workflows, statistical distribution visualization.",
+        "module_order": 2,
+        "estimated_hours": 22,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Pandas Data Manipulation",
+          "Statistical Visualization",
+          "Feature Correlation Analysis"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Applied Probability & Statistics",
+        "description": "Probability rules, Bayes theorem, distributions, confidence intervals, hypothesis tests.",
+        "module_order": 3,
+        "estimated_hours": 22,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Bayesian Probability",
+          "Probability Distributions",
+          "Hypothesis Testing (t-test, ANOVA)"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Supervised Machine Learning (Regression)",
+        "description": "Linear regression, polynomial regression, Ridge/Lasso regularization, evaluation metrics.",
+        "module_order": 4,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Linear & Ridge Regression",
+          "Gradient Descent Optimization",
+          "MSE, RMSE, R-squared Metrics"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Supervised Machine Learning (Classification)",
+        "description": "Logistic regression, Decision Trees, Random Forests, SVMs, and XGBoost.",
+        "module_order": 5,
+        "estimated_hours": 28,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Logistic Regression & Decision Trees",
+          "Random Forest Ensembles",
+          "Precision, Recall, F1-Score, ROC-AUC"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Unsupervised Learning & Clustering",
+        "description": "K-Means clustering, Hierarchical clustering, PCA dimension reduction, t-SNE.",
+        "module_order": 6,
+        "estimated_hours": 22,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "K-Means Clustering",
+          "Principal Component Analysis (PCA)",
+          "Hierarchical Dendrograms"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Feature Engineering & Selection",
+        "description": "One-hot encoding, feature scaling, polynomial features, mutual information.",
+        "module_order": 7,
+        "estimated_hours": 18,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Scaling & Normalization",
+          "Categorical Encoding",
+          "Feature Importance & Selection"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Deep Learning Intro (PyTorch / TensorFlow)",
+        "description": "Neural network architecture, backpropagation, activation functions, loss functions.",
+        "module_order": 8,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Feedforward Neural Networks",
+          "Backpropagation Algorithm",
+          "PyTorch Tensor Operations"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Model Evaluation, Tuning & MLOps",
+        "description": "Cross-validation, Hyperparameter tuning (GridSearch), model persistence.",
+        "module_order": 9,
+        "estimated_hours": 20,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "K-Fold Cross Validation",
+          "GridSearchCV & RandomSearch",
+          "Model Pickling & Deployment"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Capstone Data Science Project",
+        "description": "End-to-end data science project from data collection to deployed ML web app.",
+        "module_order": 10,
+        "estimated_hours": 30,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Problem Formulation & EDA",
+          "Model Building & Optimization",
+          "Streamlit/Gradio App Deployment"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "AI Engineer",
+    "description": "Build AI applications powered by LLMs, Neural Networks, RAG systems, and AI Agents.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Python & PyTorch Foundations",
+        "description": "PyTorch Tensors, Autograd, neural network modules, and GPU execution.",
+        "module_order": 1,
+        "estimated_hours": 20,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "PyTorch Tensor Basics",
+          "Autograd Automatic Differentiation",
+          "nn.Module Neural Networks"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "Deep Learning & Neural Networks",
+        "description": "Convolutional networks, Recurrent networks, Transformers architecture.",
+        "module_order": 2,
+        "estimated_hours": 25,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "CNNs & Image Embeddings",
+          "RNNs & Sequence Data",
+          "Transformer Self-Attention Mechanism"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Large Language Models (LLMs) Core",
+        "description": "Understanding Tokenization, Transformers, HuggingFace Transformers API, and Prompting.",
+        "module_order": 3,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Tokenization & BPE",
+          "HuggingFace Pipelines API",
+          "LLM Inference Parameters"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Prompt Engineering & System Prompting",
+        "description": "Few-shot prompting, Chain-of-Thought, System Instruction design, and structured JSON output.",
+        "module_order": 4,
+        "estimated_hours": 18,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Zero/Few-Shot Prompting",
+          "Chain-of-Thought Reasoning",
+          "Structured Output Schema Enforcement"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Retrieval-Augmented Generation (RAG)",
+        "description": "Embeddings, Chunking strategies, Vector Databases (Pinecone/Qdrant), and Context Retrieval.",
+        "module_order": 5,
+        "estimated_hours": 28,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Text Chunking Strategies",
+          "Sentence Transformers & Embeddings",
+          "Vector Database Indexing & Search"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "LangChain & LlamaIndex Frameworks",
+        "description": "Chains, PromptTemplates, Output Parsers, Memory, and Document Loaders.",
+        "module_order": 6,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "LangChain Expression Language (LCEL)",
+          "VectorStoreRetriever",
+          "Conversational Memory Management"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "AI Agents & Tool Calling",
+        "description": "Autonomous AI agents, ReAct framework, function calling, and external API tools.",
+        "module_order": 7,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "ReAct Agent Pattern",
+          "Function Calling & Tool Definition",
+          "Multi-Agent System Orchestration"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "LLM Fine-Tuning & Quantization",
+        "description": "LoRA, QLoRA, Parameter Efficient Fine-Tuning (PEFT), and GGML/GGUF models.",
+        "module_order": 8,
+        "estimated_hours": 28,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "LoRA / QLoRA Fine-tuning",
+          "Dataset Preparation for SFT",
+          "Model Quantization & Unsloth"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "AI System Optimization & Evaluation",
+        "description": "RAG evaluation (Ragas), LLM benchmarks, latency optimization, and streaming responses.",
+        "module_order": 9,
+        "estimated_hours": 20,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "RAG Evaluation Metrics (Ragas)",
+          "Streaming Tokens (SSE/WebSockets)",
+          "LLM Cache & Rate Management"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Production AI Deployment & Capstone",
+        "description": "Deploy full-stack AI application with FastApi, Pinecone, LangChain, and React UI.",
+        "module_order": 10,
+        "estimated_hours": 30,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "FastAPI AI Service Endpoints",
+          "Vector Database Cloud Sync",
+          "React AI Chatbot Interface Deployment"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "Machine Learning Engineer",
+    "description": "Deploy, optimize, and maintain production machine learning pipelines and MLOps.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Math & Linear Algebra for ML",
+        "description": "Linear algebra, matrix factorizations, vector calculus, and probability.",
+        "module_order": 1,
+        "estimated_hours": 20,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Matrix Multiplication & Inverses",
+          "Eigenvalues & Eigenvectors",
+          "Multivariate Calculus Basics"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "Scikit-Learn & Machine Learning Core",
+        "description": "Classification, Regression, Clustering, Pipelines, and Preprocessing.",
+        "module_order": 2,
+        "estimated_hours": 22,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Scikit-Learn Estimators API",
+          "Machine Learning Pipelines",
+          "Model Evaluation Metrics"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Deep Learning Architectures (PyTorch)",
+        "description": "Custom PyTorch models, Training loops, DataLoaders, and Loss functions.",
+        "module_order": 3,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "PyTorch DataLoader & Datasets",
+          "Custom Training & Validation Loops",
+          "Loss Functions & Optimizers"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Feature Engineering & Feature Stores",
+        "description": "Feature extraction, Feast feature store, offline and online feature serving.",
+        "module_order": 4,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Automated Feature Generation",
+          "Feast Feature Store Setup",
+          "Online/Offline Feature Sync"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "ML Pipeline Automation (Kubeflow/Airflow)",
+        "description": "Building reproducible ML training pipelines and automated retraining triggers.",
+        "module_order": 5,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Pipeline Step Definition",
+          "Automated Model Retraining",
+          "Dataset Version Control (DVC)"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "MLOps & Experiment Tracking (MLflow)",
+        "description": "Experiment tracking, artifact logging, model registry, and versioning.",
+        "module_order": 6,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "MLflow Experiment Logging",
+          "Model Registry Lifecycle",
+          "Hyperparameter Log Visualization"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Model Serving & API Deployment",
+        "description": "Deploy ML models using FastAPI, Triton Inference Server, or TorchServe.",
+        "module_order": 7,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "FastAPI Model Inference Endpoint",
+          "Triton Inference Server",
+          "Batching Inference Requests"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Model Monitoring & Drift Detection",
+        "description": "Detect data drift, concept drift, model performance degradation in production.",
+        "module_order": 8,
+        "estimated_hours": 20,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Evidently AI Drift Detection",
+          "Data Distribution Shift Alerting",
+          "Production Monitoring Dashboards"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Distributed ML Training",
+        "description": "Multi-GPU training using PyTorch DistributedDataParallel (DDP) and Ray.",
+        "module_order": 9,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "PyTorch DDP Setup",
+          "Ray Distributed Execution",
+          "Model Parallelism Basics"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Edge ML & Model Compression",
+        "description": "ONNX conversion, TensorRT optimization, pruning, and quantization.",
+        "module_order": 10,
+        "estimated_hours": 22,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "ONNX Model Export",
+          "TensorRT Engine Optimization",
+          "Model Pruning & Post-Training Quantization"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "Prompt Engineer",
+    "description": "Master generative AI prompting, system instruction design, and LLM orchestration.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Generative AI & LLM Mechanics",
+        "description": "How LLMs generate text, temperature, top_p, tokenization, and context windows.",
+        "module_order": 1,
+        "estimated_hours": 15,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "LLM Sampling Parameters",
+          "Tokenization & Context Limits",
+          "Generative AI Architecture Overview"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "Prompt Structure & Principles",
+        "description": "Clear instruction writing, role assignment, output formatting, and constraints.",
+        "module_order": 2,
+        "estimated_hours": 18,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "System vs User Prompts",
+          "Role-Based Prompting",
+          "Negative Constraints & Guardrails"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Zero-Shot & Few-Shot Techniques",
+        "description": "Designing high-performing zero-shot, single-shot, and multi-example prompts.",
+        "module_order": 3,
+        "estimated_hours": 18,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Zero-Shot Prompt Design",
+          "Few-Shot In-Context Examples",
+          "Example Selection & Diversity"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Chain-of-Thought & Reasoning Prompts",
+        "description": "Chain-of-Thought (CoT), Tree of Thoughts (ToT), and step-by-step reasoning.",
+        "module_order": 4,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Step-by-Step CoT Prompting",
+          "Self-Consistency Sampling",
+          "Tree of Thoughts Reasoning"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "System Prompt & Persona Tuning",
+        "description": "Crafting bulletproof system prompts, brand voice, and personality guidelines.",
+        "module_order": 5,
+        "estimated_hours": 18,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Brand Voice System Rules",
+          "Adversarial Prompt Resistance",
+          "Instruction Following Benchmark"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Structured Data Output Enforcement",
+        "description": "Forcing LLMs to output valid JSON, XML, Markdown, and custom schemas.",
+        "module_order": 6,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "JSON Schema Prompting",
+          "Pydantic Output Parsing",
+          "Instructor Library Integration"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Prompt Defense & Security (Jailbreak Proofing)",
+        "description": "Prevent prompt injection, system prompt leaks, and malicious bypasses.",
+        "module_order": 7,
+        "estimated_hours": 20,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Direct & Indirect Injection Attacks",
+          "System Prompt Protection",
+          "Input/Output Guardrail Layers"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "LLM Evaluation & Prompt Benchmarking",
+        "description": "Evaluate prompt performance, output consistency, and automated grading.",
+        "module_order": 8,
+        "estimated_hours": 18,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Prompt Benchmark Datasets",
+          "LLM-as-a-Judge Evaluation",
+          "Automated Quality Scoring"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "LangChain & AI Agent Orchestration",
+        "description": "Integrating prompts into dynamic software chains, tools, and agent workflows.",
+        "module_order": 9,
+        "estimated_hours": 22,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "PromptTemplate Composition",
+          "Dynamic Variable Injection",
+          "Agent Tool Prompting"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Enterprise AI Prompt Application",
+        "description": "Build enterprise prompt repository, versioning, and prompt CI/CD pipelines.",
+        "module_order": 10,
+        "estimated_hours": 20,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Prompt Versioning Strategy",
+          "Prompt Performance Monitoring",
+          "Production Prompt Operations"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "Android Developer",
+    "description": "Build native Android mobile applications using Kotlin, Jetpack Compose, and Material Design.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Kotlin Language Fundamentals",
+        "description": "Kotlin syntax, null safety, data classes, extension functions, and lambdas.",
+        "module_order": 1,
+        "estimated_hours": 18,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Kotlin Null Safety",
+          "Data Classes & Smart Casts",
+          "Extension Functions & Lambdas"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "Android Studio & Project Structure",
+        "description": "Android Studio IDE, Gradle build scripts, manifest file, and app lifecycle.",
+        "module_order": 2,
+        "estimated_hours": 15,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Android Studio Setup",
+          "Gradle Dependencies",
+          "Activity & App Lifecycle"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Jetpack Compose UI Layouts",
+        "description": "Modern declarative UI, Composables, Modifiers, Column, Row, and LazyColumn.",
+        "module_order": 3,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Composable Functions",
+          "Modifiers & Layout Styling",
+          "LazyColumn & LazyRow Lists"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "State Management in Compose",
+        "description": "remember, mutableStateOf, ViewModel, and StateFlow in Jetpack Compose.",
+        "module_order": 4,
+        "estimated_hours": 22,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "remember & mutableStateOf",
+          "ViewModel & State Flow",
+          "Unidirectional Data Flow"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Android Navigation & Material 3",
+        "description": "Compose Navigation component, deep links, and Material Design 3 components.",
+        "module_order": 5,
+        "estimated_hours": 18,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "NavHost & NavController",
+          "Material Design 3 Components",
+          "Theme Customization"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Kotlin Coroutines & Asynchronous Code",
+        "description": "Dispatchers, CoroutineScope, suspend functions, and Flow for reactive streams.",
+        "module_order": 6,
+        "estimated_hours": 22,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Coroutines & Dispatchers",
+          "suspend Functions",
+          "StateFlow & SharedFlow Streams"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Networking with Retrofit & OkHttp",
+        "description": "REST API consumption, JSON parsing with KotlinX Serialization, and OkHttp interceptors.",
+        "module_order": 7,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Retrofit Interface Definition",
+          "KotlinX Serialization",
+          "OkHttp Logging Interceptors"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Local Persistence with Room Database",
+        "description": "Room entities, DAOs, migrations, and reactive database queries.",
+        "module_order": 8,
+        "estimated_hours": 22,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Room @Entity & @Dao",
+          "LiveData / Flow DB Queries",
+          "Database Migrations"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Android Architecture (MVVM / Clean)",
+        "description": "Layered MVVM architecture, Repository pattern, Dependency Injection with Hilt.",
+        "module_order": 9,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "MVVM Architecture Pattern",
+          "Repository Pattern Design",
+          "Hilt Dependency Injection"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Play Store Publishing & App Performance",
+        "description": "APK/AAB bundling, Play Console submission, ProGuard obfuscation, and performance.",
+        "module_order": 10,
+        "estimated_hours": 20,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "ProGuard / R8 Rules",
+          "Android App Bundle (.aab)",
+          "Google Play Console Publishing"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "Flutter Developer",
+    "description": "Build cross-platform mobile apps for iOS and Android using Dart and Flutter.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Dart Programming Language",
+        "description": "Dart syntax, null safety, OOP, collections, futures, and streams.",
+        "module_order": 1,
+        "estimated_hours": 18,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Dart Null Safety",
+          "Classes & Mixins",
+          "Futures & Async/Await"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "Flutter Framework & Widget Tree",
+        "description": "Understanding StatelessWidget, StatefulWidget, build context, and widget tree.",
+        "module_order": 2,
+        "estimated_hours": 20,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Stateless vs Stateful Widgets",
+          "BuildContext Mechanics",
+          "Widget Tree Rendering"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "UI Layouts & Material/Cupertino",
+        "description": "Row, Column, Container, ListView, GridView, Material & Cupertino widgets.",
+        "module_order": 3,
+        "estimated_hours": 22,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Flex, Row & Column Layouts",
+          "ListView & GridView Builders",
+          "Material & iOS Cupertino Theme"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "State Management (Provider / BLoC)",
+        "description": "Manage local and global application state using Provider or BLoC pattern.",
+        "module_order": 4,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Provider Package Setup",
+          "BLoC & Cubit Architecture",
+          "Event-Driven State Changes"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Navigation & Routing (GoRouter)",
+        "description": "Declarative routing, route parameters, nested navigation, and redirects.",
+        "module_order": 5,
+        "estimated_hours": 18,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "GoRouter Setup",
+          "Path & Query Parameters",
+          "Navigation Guards"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "REST API Integration & Dio",
+        "description": "Fetching remote HTTP data, Dio HTTP client, JSON serialization with freezable.",
+        "module_order": 6,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Dio HTTP Client",
+          "JSON Serialization",
+          "API Interceptors & Headers"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Local Database (Hive / Isar / SQLite)",
+        "description": "Offline data persistence using Hive key-value store or Isar database.",
+        "module_order": 7,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Hive Adapters & Boxes",
+          "Isar Database Queries",
+          "Offline Data Sync"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Animations & Custom Painters",
+        "description": "Implicit/explicit animations, AnimationController, CustomPainter for canvas.",
+        "module_order": 8,
+        "estimated_hours": 22,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "AnimatedContainer & Hero",
+          "AnimationController & CurvedAnimation",
+          "CustomPainter Drawing"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Native Device Features & Plugins",
+        "description": "Accessing camera, GPS location, push notifications, and native platform channels.",
+        "module_order": 9,
+        "estimated_hours": 22,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Platform Channels (MethodChannel)",
+          "Camera & Geolocation Plugins",
+          "Firebase Push Notifications"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Cross-Platform Publishing (iOS & Android)",
+        "description": "App Store & Google Play Store release configuration, CI/CD with Codemagic.",
+        "module_order": 10,
+        "estimated_hours": 22,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "iOS Xcode Signing & Provisioning",
+          "Android Keystore Release",
+          "Codemagic CI/CD Build"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "Cyber Security Engineer",
+    "description": "Protect systems, networks, applications, and cloud environments from cyber threats.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Networking Protocols & Security Fundamentals",
+        "description": "TCP/IP, OSI model, DNS, HTTP/S, SSL/TLS, firewalls, and subnetting.",
+        "module_order": 1,
+        "estimated_hours": 20,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "TCP/IP Handshake & Packets",
+          "SSL/TLS Certificate Chain",
+          "Firewall Rules & CIDR"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "Linux Security & Systems Hardening",
+        "description": "Linux permissions, SSH security, sudoers, SELinux/AppArmor, and system logs.",
+        "module_order": 2,
+        "estimated_hours": 22,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "SSH Key Enforcement",
+          "SELinux / AppArmor Policies",
+          "Syslog & Audit Log Review"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Web Application Security (OWASP Top 10)",
+        "description": "SQL Injection, XSS, CSRF, SSRF, IDOR, and authentication bypasses.",
+        "module_order": 3,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "SQLi & XSS Vulnerabilities",
+          "CSRF & SSRF Protections",
+          "Broken Access Control (IDOR)"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Ethical Hacking & Penetration Testing",
+        "description": "Reconnaissance, Nmap port scanning, Burp Suite, Metasploit, and vulnerability assessment.",
+        "module_order": 4,
+        "estimated_hours": 28,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Nmap Network Reconnaissance",
+          "Burp Suite Proxy & Interceptor",
+          "Metasploit Framework Exploitation"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Cryptography & Public Key Infrastructure",
+        "description": "Symmetric/Asymmetric encryption, AES, RSA, Hashing (SHA256), PKI & Certs.",
+        "module_order": 5,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "AES vs RSA Encryption",
+          "Hashing & Hashing Algorithms",
+          "PKI & Digital Certificates"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Network Security & Intrusion Detection",
+        "description": "IDS/IPS systems (Snort/Suricata), Wireshark packet analysis, and VPNs.",
+        "module_order": 6,
+        "estimated_hours": 22,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Wireshark Packet Capture Analysis",
+          "Snort Rule Writing",
+          "VPN & IPsec Architecture"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "SIEM & Threat Detection (Splunk/Elastic)",
+        "description": "Log aggregation, Security Information and Event Management (SIEM), and alerts.",
+        "module_order": 7,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "SIEM Log Ingestion",
+          "Splunk Search Processing Language",
+          "Threat Hunting Rules"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Cloud Security (AWS/Azure Security)",
+        "description": "Cloud IAM, VPC Security Groups, AWS GuardDuty, Security Hub, and CloudTrail.",
+        "module_order": 8,
+        "estimated_hours": 22,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "AWS GuardDuty Threat Alerts",
+          "CloudTrail Security Auditing",
+          "IAM Least Privilege Enforcement"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Incident Response & Forensics",
+        "description": "Incident response lifecycle, disk/memory forensics, and malware analysis intro.",
+        "module_order": 9,
+        "estimated_hours": 22,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Incident Response Lifecycle",
+          "Memory Forensics (Volatility)",
+          "Malware Sandboxing Basics"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Security Compliance & Governance",
+        "description": "ISO 27001, SOC 2, GDPR, HIPAA, vulnerability management, and risk assessments.",
+        "module_order": 10,
+        "estimated_hours": 18,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "ISO 27001 Controls",
+          "SOC 2 Trust Principles",
+          "Vulnerability Management Program"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "Software Engineer",
+    "description": "Master computer science foundations, algorithms, object-oriented design, and system architecture.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Data Structures & Algorithm Fundamentals",
+        "description": "Arrays, Linked Lists, Stacks, Queues, Hash Tables, Big-O Notation.",
+        "module_order": 1,
+        "estimated_hours": 25,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Big-O Time & Space Complexity",
+          "Array & Linked List Operations",
+          "Hash Table Implementation"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "Advanced Algorithms & Problem Solving",
+        "description": "Sorting, Searching, Trees, Graphs (BFS/DFS), Dynamic Programming.",
+        "module_order": 2,
+        "estimated_hours": 28,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Tree & BST Traversals",
+          "Graph BFS & DFS Algorithms",
+          "Dynamic Programming Basics"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Object-Oriented Design & SOLID Principles",
+        "description": "Encapsulation, Inheritance, SOLID principles, design patterns (Factory, Singleton).",
+        "module_order": 3,
+        "estimated_hours": 22,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "SOLID Design Principles",
+          "Creational & Structural Patterns",
+          "UML Diagramming"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Clean Code & Refactoring",
+        "description": "Code readability, DRY principle, refactoring code smells, and unit testing.",
+        "module_order": 4,
+        "estimated_hours": 18,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Clean Code Principles",
+          "Code Smell Identification",
+          "Automated Refactoring Tools"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Database Systems & SQL Optimization",
+        "description": "Relational database internals, indexing, transactions, indexing B-trees, query plans.",
+        "module_order": 5,
+        "estimated_hours": 22,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "B-Tree Database Indexing",
+          "Transaction Isolation Levels",
+          "SQL Query Execution Plans"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Operating Systems & Multithreading",
+        "description": "Processes, Threads, Concurrency, Synchronization, Locks, and Memory Management.",
+        "module_order": 6,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Process vs Thread Execution",
+          "Mutex Locks & Deadlocks",
+          "Memory Paging & Virtual Memory"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Computer Networks & Protocols",
+        "description": "HTTP/1.1, HTTP/2, WebSockets, TCP vs UDP, DNS, TLS Encryption.",
+        "module_order": 7,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "HTTP Protocol Specification",
+          "WebSocket Real-time Connections",
+          "TCP Socket Programming"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Software Testing & Quality Assurance",
+        "description": "Unit testing, Integration testing, Test Driven Development (TDD).",
+        "module_order": 8,
+        "estimated_hours": 18,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Test Driven Development Workflow",
+          "Integration Test Strategies",
+          "Code Coverage Benchmarks"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "System Architecture Patterns",
+        "description": "Monoliths, Microservices, Event-Driven Architecture, Caching, and Message Queues.",
+        "module_order": 9,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Microservice Boundaries",
+          "Event-Driven Message Bus",
+          "Distributed Caching Strategies"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Software Capstone & Delivery Pipeline",
+        "description": "Build and ship an end-to-end software application with CI/CD and monitoring.",
+        "module_order": 10,
+        "estimated_hours": 30,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "End-to-End System Integration",
+          "Automated CI/CD Delivery Pipeline",
+          "Production Monitoring & Logging"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "QA Engineer",
+    "description": "Master manual testing, automation frameworks, API testing, and continuous quality assurance.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "Software Testing Principles & Test Planning",
+        "description": "Software Testing Life Cycle (STLC), Test Plans, Test Cases, Bug Reports.",
+        "module_order": 1,
+        "estimated_hours": 15,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "STLC Stages",
+          "Test Plan & Strategy Drafting",
+          "Bug Lifecycle & Severity/Priority"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "Test Case Design Techniques",
+        "description": "Equivalence Partitioning, Boundary Value Analysis, Decision Tables, State Transition.",
+        "module_order": 2,
+        "estimated_hours": 18,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Equivalence Partitioning",
+          "Boundary Value Analysis",
+          "Decision Table Testing"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Manual & Exploratory Testing",
+        "description": "Functional, regression, smoke, sanity, ad-hoc, and usability testing.",
+        "module_order": 3,
+        "estimated_hours": 15,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Smoke & Sanity Checks",
+          "Exploratory Testing Charters",
+          "Usability & Accessibility Testing"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "SQL for Quality Assurance Testers",
+        "description": "SQL queries to verify database state, data integrity, and backend test validation.",
+        "module_order": 4,
+        "estimated_hours": 18,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Database Verification Queries",
+          "Data Integrity Checks",
+          "Joins for Test Data Validation"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "API Testing with Postman & Newman",
+        "description": "REST API testing, status codes, assertions, environment variables, Postman runner.",
+        "module_order": 5,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Postman Request Collections",
+          "JavaScript Test Assertions",
+          "Newman CLI Automated Runs"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Automation Fundamentals (Python / Java)",
+        "description": "Programming fundamentals for QA automation engineers in Python or Java.",
+        "module_order": 6,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Python/Java Automation Basics",
+          "File I/O & JSON Parsing",
+          "Exception Handling in Tests"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Web UI Automation (Selenium / Playwright)",
+        "description": "Locators, Page Object Model (POM), element waits, and browser automation.",
+        "module_order": 7,
+        "estimated_hours": 28,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Locators (XPath, CSS Selectors)",
+          "Page Object Model Architecture",
+          "Explicit & Implicit Waits"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "CI/CD Integration for QA Automation",
+        "description": "Run automated test suites inside GitHub Actions / Jenkins pipelines.",
+        "module_order": 8,
+        "estimated_hours": 18,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "GitHub Actions Test Runner",
+          "HTML Test Report Artifacts",
+          "Parallel Test Execution"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Performance & Load Testing (JMeter)",
+        "description": "Performance test plan design, thread groups, latency, throughput, and JMeter reports.",
+        "module_order": 9,
+        "estimated_hours": 20,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "JMeter Thread Groups",
+          "Throughput & Response Time Metrics",
+          "Load & Stress Test Reports"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Agile QA & Quality Operations",
+        "description": "Jira, Xray/Zephyr integration, Agile QA practices, and continuous testing.",
+        "module_order": 10,
+        "estimated_hours": 15,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Agile Sprint Testing",
+          "Jira & Test Management Tools",
+          "Quality Metrics & Dashboarding"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  },
+  {
+    "role": "System Design Engineer",
+    "description": "Master scalable system design, distributed systems, high availability, and architecture.",
+    "estimated_duration": "4-6 Months",
+    "difficulty": "Intermediate",
+    "modules": [
+      {
+        "title": "System Design Fundamentals & Metrics",
+        "description": "Scalability (vertical vs horizontal), Latency vs Throughput, CAP Theorem.",
+        "module_order": 1,
+        "estimated_hours": 20,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Horizontal vs Vertical Scaling",
+          "Latency, Throughput & SLA",
+          "CAP Theorem & PACELC"
+        ],
+        "prerequisites": "None"
+      },
+      {
+        "title": "Load Balancing & Domain Name Routing",
+        "description": "DNS routing, Layer 4 vs Layer 7 load balancers, Round Robin, Least Connections.",
+        "module_order": 2,
+        "estimated_hours": 20,
+        "difficulty": "Beginner",
+        "key_topics": [
+          "Layer 4 vs Layer 7 Load Balancing",
+          "Weighted Round Robin & Hashing",
+          "DNS Round Robin Routing"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Caching Strategies & In-Memory Stores",
+        "description": "Redis, Memcached, Cache-Aside, Write-Through, Write-Back, Eviction policies (LRU).",
+        "module_order": 3,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Cache-Aside & Write-Through",
+          "LRU & LFU Eviction Policies",
+          "Redis Cluster & Persistence"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Database Scaling & Sharding",
+        "description": "Replication (Master-Slave), Sharding keys, Consistent Hashing, Database Read Replicas.",
+        "module_order": 4,
+        "estimated_hours": 28,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Master-Slave Replication",
+          "Database Sharding Strategies",
+          "Consistent Hashing Algorithm"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Message Queues & Event-Driven Architecture",
+        "description": "Kafka, RabbitMQ, Asynchronous tasks, Publish/Subscribe, Event Sourcing.",
+        "module_order": 5,
+        "estimated_hours": 25,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "Message Broker Architecture",
+          "Pub/Sub Messaging Model",
+          "Event Sourcing & CQRS Pattern"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Distributed Storage Systems & CDN",
+        "description": "Object storage (S3), Content Delivery Networks (CDN), Block vs Object storage.",
+        "module_order": 6,
+        "estimated_hours": 20,
+        "difficulty": "Intermediate",
+        "key_topics": [
+          "CDN Edge Caching",
+          "Object Storage Architecture",
+          "Distributed File Systems"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Microservices Architecture & API Gateways",
+        "description": "Service decomposition, API Gateway pattern, Circuit Breakers, Service Mesh.",
+        "module_order": 7,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Microservice Boundaries",
+          "API Gateway Routing & Throttling",
+          "Circuit Breaker Pattern"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Rate Limiting & Security Infrastructure",
+        "description": "Token Bucket, Leaky Bucket, Fixed Window, Distributed Rate Limiting.",
+        "module_order": 8,
+        "estimated_hours": 20,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Token Bucket Algorithm",
+          "Leaky Bucket Algorithm",
+          "Distributed Rate Limiter Redis"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "High Availability & Fault Tolerance",
+        "description": "Redundancy, Health checks, Failover mechanisms, Heartbeats, Consensus (Raft/Paxos).",
+        "module_order": 9,
+        "estimated_hours": 25,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "Raft Consensus Algorithm",
+          "Automated Failover Systems",
+          "Multi-AZ Disaster Recovery"
+        ],
+        "prerequisites": "Previous Module"
+      },
+      {
+        "title": "Real-World System Design Case Studies",
+        "description": "Design Uber, Netflix, Twitter Feed, URL Shortener, and Distributed Chat.",
+        "module_order": 10,
+        "estimated_hours": 30,
+        "difficulty": "Advanced",
+        "key_topics": [
+          "URL Shortener Architecture",
+          "Newsfeed System Design",
+          "Real-time Messaging System"
+        ],
+        "prerequisites": "Previous Module"
+      }
+    ]
+  }
+]

@@ -1,0 +1,505 @@
+{
+  "categories": [
+    {
+      "name": "SQL",
+      "icon": "Database",
+      "display_order": 6
+    },
+    {
+      "name": "Frontend Development",
+      "icon": "Layout",
+      "display_order": 7
+    },
+    {
+      "name": "DevOps & Infrastructure",
+      "icon": "Server",
+      "display_order": 8
+    },
+    {
+      "name": "System Design",
+      "icon": "Network",
+      "display_order": 9
+    }
+  ],
+  "topics": [
+    {
+      "name": "Aggregations & Joins",
+      "category": "SQL",
+      "description": "INNER, LEFT, RIGHT JOINs, GROUP BY, HAVING, COUNT, SUM"
+    },
+    {
+      "name": "Basic Queries",
+      "category": "SQL",
+      "description": "SELECT, WHERE filtering, ORDER BY, LIMIT, LIKE pattern matching"
+    },
+    {
+      "name": "Subqueries",
+      "category": "SQL",
+      "description": "Nested queries, correlated subqueries, IN, EXISTS operators"
+    },
+    {
+      "name": "Views",
+      "category": "SQL",
+      "description": "Virtual tables, security views, materialized views concepts"
+    },
+    {
+      "name": "Constraints & Keys",
+      "category": "SQL",
+      "description": "PRIMARY KEY, FOREIGN KEY, UNIQUE, NOT NULL, CHECK constraints"
+    },
+    {
+      "name": "Window Functions",
+      "category": "SQL",
+      "description": "ROW_NUMBER(), RANK(), DENSE_RANK(), OVER clause basics"
+    },
+    {
+      "name": "Query Optimization",
+      "category": "SQL",
+      "description": "EXPLAIN plan, indexing usage, avoiding SELECT *"
+    },
+    {
+      "name": "CSS Layouts & Responsive Design",
+      "category": "Frontend Development",
+      "description": "Flexbox, Grid, Media Queries, Box Model"
+    },
+    {
+      "name": "HTML Semantics",
+      "category": "Frontend Development",
+      "description": "Semantic elements, accessibility, forms, meta tags"
+    },
+    {
+      "name": "JavaScript Fundamentals",
+      "category": "Frontend Development",
+      "description": "Closures, promises, async/await, event loop, ES6+"
+    },
+    {
+      "name": "DOM Manipulation",
+      "category": "Frontend Development",
+      "description": "Selecting elements, event delegation, event propagation"
+    },
+    {
+      "name": "React/Framework Basics",
+      "category": "Frontend Development",
+      "description": "Components, props, state, hooks (useState, useEffect), Virtual DOM"
+    },
+    {
+      "name": "Browser Basics",
+      "category": "Frontend Development",
+      "description": "Critical rendering path, local storage, cookies, CORS"
+    },
+    {
+      "name": "CI/CD Pipelines",
+      "category": "DevOps & Infrastructure",
+      "description": "Continuous Integration, Continuous Deployment, build pipelines"
+    },
+    {
+      "name": "Version Control",
+      "category": "DevOps & Infrastructure",
+      "description": "Git branching, merge vs rebase, commit history, pull requests"
+    },
+    {
+      "name": "Containers",
+      "category": "DevOps & Infrastructure",
+      "description": "Docker basics, images, containers, Dockerfile, volumes"
+    },
+    {
+      "name": "Cloud Fundamentals",
+      "category": "DevOps & Infrastructure",
+      "description": "IaaS, PaaS, SaaS, AWS EC2, S3, cloud security basics"
+    },
+    {
+      "name": "Monitoring & Logging",
+      "category": "DevOps & Infrastructure",
+      "description": "Application logs, metrics, alerts, centralized logging"
+    },
+    {
+      "name": "Caching & Sharding",
+      "category": "System Design",
+      "description": "Redis caching, Cache-aside pattern, database sharding & partitioning"
+    },
+    {
+      "name": "Load Balancing",
+      "category": "System Design",
+      "description": "Round-robin, least connections, Layer 4 vs Layer 7 load balancing"
+    },
+    {
+      "name": "Database Scaling",
+      "category": "System Design",
+      "description": "Read replicas, vertical vs horizontal scaling, replication lag"
+    },
+    {
+      "name": "API Design",
+      "category": "System Design",
+      "description": "RESTful API guidelines, status codes, pagination, rate limiting"
+    },
+    {
+      "name": "High-Level Design",
+      "category": "System Design",
+      "description": "Fresher-friendly architecture walkthroughs (e.g. URL shortener)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "What is the difference between INNER JOIN, LEFT JOIN, and RIGHT JOIN in SQL?",
+      "short_description": "SQL JOIN types comparison",
+      "category": "SQL",
+      "topic": "Aggregations & Joins",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "SQL",
+        "Joins",
+        "Queries"
+      ],
+      "hints": [
+        "INNER JOIN returns matching rows only",
+        "LEFT JOIN returns all rows from left table"
+      ],
+      "expected_answer": "INNER JOIN returns matching rows from both tables. LEFT JOIN returns all rows from left table and matching rows from right table. RIGHT JOIN returns all rows from right table and matching rows from left table.",
+      "explanation": "Fundamental SQL joining techniques."
+    },
+    {
+      "question": "What is the difference between WHERE and HAVING clauses in SQL?",
+      "short_description": "WHERE vs HAVING clause in SQL",
+      "category": "SQL",
+      "topic": "Basic Queries",
+      "difficulty": "Easy",
+      "expected_duration": 3,
+      "answer_type": "Text",
+      "tags": [
+        "SQL",
+        "Filtering",
+        "Aggregations"
+      ],
+      "hints": [
+        "WHERE filters rows before grouping",
+        "HAVING filters aggregated groups after GROUP BY"
+      ],
+      "expected_answer": "WHERE clause filters individual rows BEFORE GROUP BY aggregation. HAVING clause filters aggregated groups AFTER GROUP BY calculations.",
+      "explanation": "Core SQL query order of execution concept."
+    },
+    {
+      "question": "What is a SQL Subquery? Explain the difference between correlated and non-correlated subqueries.",
+      "short_description": "SQL Subqueries correlated vs non-correlated",
+      "category": "SQL",
+      "topic": "Subqueries",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "SQL",
+        "Subqueries",
+        "Nested Queries"
+      ],
+      "hints": [
+        "Non-correlated subquery runs independently once",
+        "Correlated subquery evaluates once per row of outer query"
+      ],
+      "expected_answer": "A subquery is a query nested inside another SQL statement. Non-correlated subqueries run independently once. Correlated subqueries reference columns from outer query and re-execute for each outer row.",
+      "explanation": "Intermediate SQL nested query concept."
+    },
+    {
+      "question": "What is a SQL View and why would you use one in a database application?",
+      "short_description": "SQL Views purpose and benefits",
+      "category": "SQL",
+      "topic": "Views",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "SQL",
+        "Views",
+        "Database Design"
+      ],
+      "hints": [
+        "View is a virtual table based on a SELECT query",
+        "Provides security and simplifies complex queries"
+      ],
+      "expected_answer": "A View is a virtual table representing stored query results. Benefits: Simplifies complex JOIN queries, enforces column-level security, presents consistent data interface.",
+      "explanation": "Database schema abstraction object."
+    },
+    {
+      "question": "Explain Primary Key, Foreign Key, UNIQUE, and CHECK constraints in SQL.",
+      "short_description": "SQL Database Constraints & Keys",
+      "category": "SQL",
+      "topic": "Constraints & Keys",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "SQL",
+        "Keys",
+        "Constraints"
+      ],
+      "hints": [
+        "Primary Key = Unique + Not Null",
+        "Foreign Key enforces referential integrity"
+      ],
+      "expected_answer": "Primary Key uniquely identifies rows (NOT NULL + UNIQUE). Foreign Key links records to another table. UNIQUE enforces distinct values. CHECK validates custom domain rules.",
+      "explanation": "Relational data integrity rules."
+    },
+    {
+      "question": "What are SQL Window Functions? Explain ROW_NUMBER() vs RANK() vs DENSE_RANK().",
+      "short_description": "SQL Window Functions ROW_NUMBER, RANK, DENSE_RANK",
+      "category": "SQL",
+      "topic": "Window Functions",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "SQL",
+        "Window Functions",
+        "Analytics"
+      ],
+      "hints": [
+        "Uses OVER (PARTITION BY ... ORDER BY ...)",
+        "RANK leaves gaps on ties, DENSE_RANK leaves no gaps"
+      ],
+      "expected_answer": "Window functions compute across a set of table rows related to current row. ROW_NUMBER assigns unique sequential numbers. RANK assigns rank with gaps on ties (1,2,2,4). DENSE_RANK assigns rank without gaps (1,2,2,3).",
+      "explanation": "Essential analytical SQL functions."
+    },
+    {
+      "question": "Explain the CSS Box Model (content, padding, border, margin) and box-sizing: border-box.",
+      "short_description": "CSS Box Model & border-box",
+      "category": "Frontend Development",
+      "topic": "CSS Layouts & Responsive Design",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "CSS",
+        "Box Model",
+        "Web Design"
+      ],
+      "hints": [
+        "4 layers: Content, Padding, Border, Margin",
+        "border-box includes padding and border in total width"
+      ],
+      "expected_answer": "CSS Box model consists of Content, Padding, Border, and Margin. box-sizing: border-box includes padding and border within the specified element width and height.",
+      "explanation": "Foundation of CSS layout calculations."
+    },
+    {
+      "question": "What is the difference between Flexbox and CSS Grid? When would you use each?",
+      "short_description": "Flexbox vs CSS Grid",
+      "category": "Frontend Development",
+      "topic": "CSS Layouts & Responsive Design",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "CSS",
+        "Flexbox",
+        "Grid"
+      ],
+      "hints": [
+        "Flexbox is 1-dimensional (row OR column)",
+        "Grid is 2-dimensional (rows AND columns)"
+      ],
+      "expected_answer": "Flexbox is 1D layout model for distributing space along single row or column. Grid is 2D layout model for rows and columns simultaneously. Use Flexbox for components, Grid for page structure.",
+      "explanation": "Modern CSS layout choice."
+    },
+    {
+      "question": "What are JavaScript Closures? Give a practical code example of a closure.",
+      "short_description": "JavaScript Closures explanation",
+      "category": "Frontend Development",
+      "topic": "JavaScript Fundamentals",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "JavaScript",
+        "Closures",
+        "Scope"
+      ],
+      "hints": [
+        "A closure remembers outer function variables even after outer function returns",
+        "Used for data privacy and state encapsulation"
+      ],
+      "expected_answer": "A closure is a function bundled together with references to its lexical environment. Inner function retains access to outer variables even after outer function executes (e.g. creating counter functions).",
+      "explanation": "Core JavaScript mechanism."
+    },
+    {
+      "question": "What is the Event Loop in JavaScript? Explain single-threaded non-blocking I/O.",
+      "short_description": "JavaScript Event Loop and Async execution",
+      "category": "Frontend Development",
+      "topic": "JavaScript Fundamentals",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "JavaScript",
+        "Event Loop",
+        "Asynchronous"
+      ],
+      "hints": [
+        "Call Stack, Microtask Queue (Promises), Macrotask Queue (setTimeout)",
+        "Event loop checks stack and moves callbacks when stack is empty"
+      ],
+      "expected_answer": "JavaScript is single-threaded. Event Loop continuously checks Call Stack. When stack is empty, it moves callbacks from Microtask Queue (Promises) and Callback Queue (setTimeout) to Call Stack for execution.",
+      "explanation": "Crucial JS asynchronous runtime model."
+    },
+    {
+      "question": "What is React Virtual DOM and how does Reconciliation work?",
+      "short_description": "React Virtual DOM & Reconciliation",
+      "category": "Frontend Development",
+      "topic": "React/Framework Basics",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "React",
+        "Virtual DOM",
+        "Frontend"
+      ],
+      "hints": [
+        "Lightweight in-memory copy of real DOM",
+        "Diffing algorithm compares old vs new Virtual DOM"
+      ],
+      "expected_answer": "Virtual DOM is lightweight JavaScript object tree mimicking real DOM. On state change, React creates new Virtual DOM tree, diffs it with previous tree (Reconciliation), and updates only changed nodes in real DOM.",
+      "explanation": "Core React performance mechanism."
+    },
+    {
+      "question": "What is CI/CD (Continuous Integration / Continuous Deployment) and why is it useful?",
+      "short_description": "CI/CD Pipeline principles",
+      "category": "DevOps & Infrastructure",
+      "topic": "CI/CD Pipelines",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "DevOps",
+        "CI/CD",
+        "Automation"
+      ],
+      "hints": [
+        "CI automates testing & merging code",
+        "CD automates deployment to staging/production"
+      ],
+      "expected_answer": "CI (Continuous Integration) automatically builds and runs unit tests whenever code is pushed. CD (Continuous Deployment) automatically deploys validated code to production servers.",
+      "explanation": "Modern software delivery pipeline standard."
+    },
+    {
+      "question": "Explain Git basics: What is the difference between Git Merge and Git Rebase?",
+      "short_description": "Git Merge vs Git Rebase",
+      "category": "DevOps & Infrastructure",
+      "topic": "Version Control",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "Git",
+        "Version Control",
+        "DevOps"
+      ],
+      "hints": [
+        "Merge creates a merge commit preserving full history",
+        "Rebase rewrites commit history linearly"
+      ],
+      "expected_answer": "Git Merge joins two branch histories together creating a new merge commit. Git Rebase moves/re-applies commits on top of another base tip, creating a linear history.",
+      "explanation": "Essential team collaboration Git workflow."
+    },
+    {
+      "question": "What is Docker and how is a Container different from a Virtual Machine (VM)?",
+      "short_description": "Docker Containers vs Virtual Machines",
+      "category": "DevOps & Infrastructure",
+      "topic": "Containers",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "Docker",
+        "Containers",
+        "DevOps"
+      ],
+      "hints": [
+        "VM includes full guest OS",
+        "Containers share host OS kernel, lightweight and fast"
+      ],
+      "expected_answer": "VMs run full guest OS on top of hypervisor (heavy, slow boot). Docker Containers share host OS kernel, packaging application and dependencies in isolated lightweight processes.",
+      "explanation": "Core containerization concept."
+    },
+    {
+      "question": "What is Caching and how does the Cache-Aside pattern work?",
+      "short_description": "Caching concepts & Cache-Aside pattern",
+      "category": "System Design",
+      "topic": "Caching & Sharding",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "System Design",
+        "Caching",
+        "Redis"
+      ],
+      "hints": [
+        "Cache stores frequently read data in RAM",
+        "Cache-Aside: check cache first, on miss fetch from DB and populate cache"
+      ],
+      "expected_answer": "Caching stores high-frequency data in fast RAM (e.g. Redis). Cache-Aside Pattern: App checks cache first; if hit, return data; if miss, query database, save result to cache, and return response.",
+      "explanation": "Essential high-throughput web system design pattern."
+    },
+    {
+      "question": "What is a Load Balancer and what is the difference between Round Robin and Least Connections algorithms?",
+      "short_description": "Load Balancer algorithms comparison",
+      "category": "System Design",
+      "topic": "Load Balancing",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "System Design",
+        "Load Balancing",
+        "Architecture"
+      ],
+      "hints": [
+        "Distributes incoming traffic across multiple backend servers",
+        "Round Robin distributes sequentially, Least Connections routes to quietest server"
+      ],
+      "expected_answer": "Load Balancer distributes client traffic across server pool to prevent overload. Round Robin passes requests sequentially. Least Connections sends requests to server with fewest active connections.",
+      "explanation": "Foundational horizontal scaling component."
+    },
+    {
+      "question": "Explain RESTful API design principles and HTTP status code conventions.",
+      "short_description": "REST API design principles",
+      "category": "System Design",
+      "topic": "API Design",
+      "difficulty": "Easy",
+      "expected_duration": 4,
+      "answer_type": "Text",
+      "tags": [
+        "System Design",
+        "REST API",
+        "Backend"
+      ],
+      "hints": [
+        "Stateless communication",
+        "Use nouns for endpoints (/users, /orders)",
+        "Use standard HTTP verbs"
+      ],
+      "expected_answer": "REST principles: Stateless, client-server separation, uniform interface, resource-oriented URLs using nouns (e.g. GET /api/v1/users), standard JSON representations.",
+      "explanation": "Standard backend API design."
+    },
+    {
+      "question": "How would you design a simple URL Shortener service (like bit.ly)? Walk through high-level components.",
+      "short_description": "System Design: URL Shortener High-Level Architecture",
+      "category": "System Design",
+      "topic": "High-Level Design",
+      "difficulty": "Medium",
+      "expected_duration": 5,
+      "answer_type": "Text",
+      "tags": [
+        "System Design",
+        "Architecture",
+        "URL Shortener"
+      ],
+      "hints": [
+        "Base62 encoding of auto-increment ID or Hash",
+        "Key-Value DB for fast lookup (long_url -> short_url)",
+        "Redis caching for hot links"
+      ],
+      "expected_answer": "1. API endpoints (POST /shorten, GET /{shortCode}). 2. Short Code Generation using Base62 encoding on unique integer ID. 3. Database storing (shortCode, longUrl, createdAt). 4. Redis cache for fast redirection.",
+      "explanation": "Classic starter System Design interview walkthrough."
+    }
+  ]
+}

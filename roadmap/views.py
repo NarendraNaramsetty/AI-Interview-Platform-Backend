@@ -294,24 +294,82 @@ class GeneratePersonalizedRoadmapView(APIView):
         experience_info = f"Experience: {experience_level}. Target: {target_company}. Weekly hours: {weekly_hours}. Styles: {', '.join(preferred_learning_style)}."
 
         try:
-            from nlp.utils.roadmap_generator import generate_roadmap
             from django.db import transaction
             from .models import CareerPath, Roadmap, RoadmapModule, UserRoadmap, ModuleProgress
             from .constants import STATUS_IN_PROGRESS
 
-            # Generate structured roadmap data using the LLM helper
+            # First: Search pre-seeded database bank for matching CareerPath / Roadmap
+            interest_clean = interest.strip()
+            
+            # Split multi-role inputs if any (e.g., "Full Stack Developer & Frontend Developer")
+            primary_role = interest_clean.split('&')[0].strip() if '&' in interest_clean else interest_clean
+            
+            seeded_roadmap = (
+                Roadmap.objects.filter(career_path__name__iexact=primary_role, total_modules__gt=0).first() or
+                Roadmap.objects.filter(title__iexact=f"{primary_role} Roadmap", total_modules__gt=0).first() or
+                Roadmap.objects.filter(career_path__name__icontains=primary_role, total_modules__gt=0).order_by('-total_modules').first() or
+                Roadmap.objects.filter(title__icontains=primary_role, total_modules__gt=0).order_by('-total_modules').first()
+            )
+
+            if seeded_roadmap and seeded_roadmap.modules.exists():
+                with transaction.atomic():
+                    # Deactivate any previous active UserRoadmap for this user
+                    UserRoadmap.objects.filter(
+                        user=request.user, 
+                        status=STATUS_IN_PROGRESS
+                    ).update(status='Paused')
+
+                    first_module = seeded_roadmap.modules.order_by('module_order', 'id').first()
+
+                    user_roadmap = UserRoadmap.objects.create(
+                        user=request.user,
+                        roadmap=seeded_roadmap,
+                        status=STATUS_IN_PROGRESS,
+                        current_module=first_module,
+                        progress_percentage=0.0,
+                        completed_modules=0
+                    )
+
+                    # Create ModuleProgress for each module
+                    progresses = [
+                        ModuleProgress(
+                            user_roadmap=user_roadmap,
+                            roadmap_module=module,
+                            is_completed=False
+                        )
+                        for module in seeded_roadmap.modules.all()
+                    ]
+                    ModuleProgress.objects.bulk_create(progresses, ignore_conflicts=True)
+
+                from .serializers import UserRoadmapSerializer
+                response_serializer = UserRoadmapSerializer(user_roadmap, context={'request': request})
+                return Response({
+                    "success": True,
+                    "message": f"Pre-seeded curriculum loaded for '{seeded_roadmap.career_path.name}'.",
+                    "data": response_serializer.data
+                }, status=status.HTTP_200_OK)
+
+            # Second: Fallback to LLM dynamic generation if no pre-seeded roadmap matched
+            from nlp.utils.roadmap_generator import generate_roadmap
+
             roadmap_data = generate_roadmap(
                 user_interest_text=interest,
                 self_described_experience=experience_info
             )
 
             with transaction.atomic():
+                # Deactivate any previous active UserRoadmap
+                UserRoadmap.objects.filter(
+                    user=request.user, 
+                    status=STATUS_IN_PROGRESS
+                ).update(status='Paused')
+
                 # Find or create a CareerPath
-                career_path_name = f"AI {roadmap_data.get('pathway_title', interest)[:140]}"
+                career_path_name = f"{roadmap_data.get('pathway_title', interest)[:140]}"
                 career_path, _ = CareerPath.objects.get_or_create(
                     name=career_path_name,
                     defaults={
-                        "description": f"AI generated path for {interest}",
+                        "description": f"Custom learning path for {interest}",
                         "difficulty": roadmap_data.get('inferred_starting_level', 'Medium'),
                         "estimated_duration": "Variable"
                     }
@@ -320,7 +378,7 @@ class GeneratePersonalizedRoadmapView(APIView):
                 # Create the Roadmap template
                 duration_hours = sum(m.get('estimated_hours', 10) for m in roadmap_data.get('milestones', []))
                 roadmap = Roadmap.objects.create(
-                    title=roadmap_data.get('pathway_title', f"AI - {interest}"),
+                    title=roadmap_data.get('pathway_title', f"Roadmap - {interest}"),
                     description=roadmap_data.get('inferred_level_reason', f"Level inferred: {roadmap_data.get('inferred_starting_level', 'Medium')}"),
                     career_path=career_path,
                     estimated_duration=f"{duration_hours} hours",
@@ -373,7 +431,7 @@ class GeneratePersonalizedRoadmapView(APIView):
         except Exception as e:
             return Response({
                 "success": False,
-                "message": f"AI Generation Failed: {str(e)}"
+                "message": f"Roadmap Generation Error: {str(e)}"
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

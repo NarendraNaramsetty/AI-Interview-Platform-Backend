@@ -5,8 +5,90 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+import uuid
+import random
+
 class CodeChallengeGenerator:
     
+    @classmethod
+    def get_starter_code(cls, language: str, function_name: str = "solution", params: str = "input_data") -> str:
+        lang = (language or "python").lower()
+        if "python" in lang:
+            return f"def {function_name}({params}):\n    # Write your solution here\n    pass"
+        elif "javascript" in lang or "js" in lang:
+            return f"function {function_name}({params}) {{\n    // Write your solution here\n    return null;\n}}"
+        elif "typescript" in lang or "ts" in lang:
+            return f"function {function_name}({params}: any): any {{\n    // Write your solution here\n    return null;\n}}"
+        elif "java" in lang:
+            return f"public class Solution {{\n    public static Object {function_name}(Object {params}) {{\n        // Write your solution here\n        return null;\n    }}\n}}"
+        elif "c++" in lang or "cpp" in lang:
+            return f"#include <iostream>\n#include <vector>\nusing namespace std;\n\nclass Solution {{\npublic:\n    auto {function_name}(auto {params}) {{\n        // Write your solution here\n    }}\n}};"
+        elif "go" in lang or "golang" in lang:
+            return f"package main\n\nimport \"fmt\"\n\nfunc {function_name}({params} interface{{}}) interface{{}} {{\n    // Write your solution here\n    return nil\n}}"
+        else:
+            return f"def {function_name}({params}):\n    pass"
+
+    @classmethod
+    def get_randomized_fallback(cls, language: str, company_focus: str, difficulty: str, current_question_index: int) -> dict:
+        fallback_pool = [
+            {
+                "title": f"{company_focus} Order Processing Pipeline",
+                "problem_statement": f"You are building a high-throughput order processing system for {company_focus}. Given an array of order IDs and timestamps, return the longest contiguous sequence of valid orders processed within the SLA window.",
+                "constraints": ["1 <= N <= 10^5", "Time Complexity O(N)"],
+                "example_test_cases": [{"input": "[1, 2, 3, 5, 6]", "output": "3"}],
+                "hidden_test_cases": [{"input": "[10, 20, 30]", "expected_output": "3"}],
+                "estimated_time_mins": 25
+            },
+            {
+                "title": f"{company_focus} Rate Limiting Token Bucket",
+                "problem_statement": f"Design a rate-limiting algorithm for {company_focus} API gateways. Given a list of request timestamps and user IDs, calculate how many requests exceed the allowed burst rate threshold.",
+                "constraints": ["Memory O(K) where K is unique users", "Time Complexity O(R)"],
+                "example_test_cases": [{"input": "['user1:100', 'user1:101', 'user1:102']", "output": "1"}],
+                "hidden_test_cases": [{"input": "['uA:1', 'uB:1']", "expected_output": "0"}],
+                "estimated_time_mins": 20
+            },
+            {
+                "title": f"{company_focus} Service Dependency Graph Resolution",
+                "problem_statement": f"In {company_focus}'s microservice architecture, services depend on each other. Given a list of service dependencies [A, B] (service A requires B), find if there exists a circular dependency causing deadlock.",
+                "constraints": ["Number of services <= 1000", "Time Complexity O(V + E)"],
+                "example_test_cases": [{"input": "[[1,0], [0,1]]", "output": "True"}],
+                "hidden_test_cases": [{"input": "[[1,0], [2,1]]", "expected_output": "False"}],
+                "estimated_time_mins": 30
+            },
+            {
+                "title": f"{company_focus} Inventory Stock Allocation",
+                "problem_statement": f"Given warehouse stock levels and customer cart requests for {company_focus}, allocate items to minimize shipping distances across distribution hubs.",
+                "constraints": ["Greedy optimization", "Time O(N log N)"],
+                "example_test_cases": [{"input": "[10, 20, 15]", "output": "45"}],
+                "hidden_test_cases": [{"input": "[5, 5]", "expected_output": "10"}],
+                "estimated_time_mins": 25
+            },
+            {
+                "title": f"{company_focus} Real-time Stream Analytics Buffer",
+                "problem_statement": f"Implement a sliding window stream aggregator for {company_focus}'s event metrics. Calculate the moving average over the last K stream frames.",
+                "constraints": ["Sliding Window O(1) amortized update", "Memory limit 128MB"],
+                "example_test_cases": [{"input": "Window=3, Stream=[1, 3, 5, 7]", "output": "[1.0, 2.0, 3.0, 5.0]"}],
+                "hidden_test_cases": [{"input": "Window=2, Stream=[10, 20]", "expected_output": "[10.0, 15.0]"}],
+                "estimated_time_mins": 20
+            }
+        ]
+        
+        chosen = random.choice(fallback_pool)
+        starter = cls.get_starter_code(language)
+        
+        return {
+            "question_id": f"challenge_{current_question_index}_{random.randint(1000, 9999)}",
+            "title": chosen["title"],
+            "difficulty_tag": str(difficulty).lower(),
+            "company_style_note": f"{company_focus} real-world scenario ({difficulty} level)",
+            "problem_statement": chosen["problem_statement"],
+            "constraints": chosen["constraints"],
+            "example_test_cases": chosen["example_test_cases"],
+            "hidden_test_cases": chosen["hidden_test_cases"],
+            "starter_code": starter,
+            "estimated_time_mins": chosen["estimated_time_mins"]
+        }
+
     @classmethod
     def generate_challenge(cls, language: str, questions_count: int, company_focus: str, 
                            experience_tier: str, difficulty: str, current_question_index: int, 
@@ -16,6 +98,7 @@ class CodeChallengeGenerator:
         
         score_history_str = str(score_history) if score_history else "[]"
         prev_score_str = str(prev_score) if prev_score is not None else "None"
+        random_seed = str(uuid.uuid4())[:8]
         
         user_prompt = f"""
 SANDBOX SESSION CONFIG:
@@ -23,8 +106,9 @@ SANDBOX SESSION CONFIG:
 - Questions Count: {questions_count}
 - Target Company: {company_focus}
 - Experience Tier: {experience_tier}
-- Difficulty: {difficulty}
-- Resume Context: {resume_parsed_summary}
+- Target Difficulty: {difficulty} (Must strictly be easy, medium, or hard)
+- Random Seed (Ensure unique problem): {random_seed}
+- Candidate Resume Context: {resume_parsed_summary}
 
 SESSION STATE (for question 2+):
 - Question Index: {current_question_index} / {questions_count}
@@ -33,16 +117,17 @@ SESSION STATE (for question 2+):
 - Rolling Score Trend: {score_history_str}
 
 TASK:
-Generate challenge #{current_question_index} of {questions_count} for this 
-candidate.
+Generate challenge #{current_question_index} of {questions_count} for this candidate in {language}.
+The problem MUST be a unique real-world scenario reflecting actual engineering tasks at {company_focus} at the requested {difficulty} level.
+Generate starter code ONLY in {language} matching standard syntax (e.g. Python def solution(...), Java public class Solution, C++ class Solution, Go func solution, JavaScript function solution).
 
 Respond strictly in this JSON schema:
 
 {{
-  "question_id": "challenge_{current_question_index}",
+  "question_id": "challenge_{current_question_index}_{random_seed}",
   "title": "...",
-  "difficulty_tag": "easy" | "medium" | "hard" | "expert",
-  "company_style_note": "<1 line, e.g. 'Amazon-style OOP design question'>",
+  "difficulty_tag": "{str(difficulty).lower()}",
+  "company_style_note": "{company_focus} Real-World Engineering Problem",
   "problem_statement": "...",
   "constraints": ["...", "..."],
   "example_test_cases": [
@@ -52,56 +137,31 @@ Respond strictly in this JSON schema:
   "hidden_test_cases": [
     {{"input": "...", "expected_output": "..."}}
   ],
-  "starter_code": "def solution(...):\n    pass",
+  "starter_code": "...",
   "estimated_time_mins": 25
 }}
 """
 
-        system_prompt = """
-You are "PrepAI Code Architect" — an expert technical interviewer who designs 
-custom coding challenges that mimic real interview questions from top tech 
-companies.
+        system_prompt = f"""
+You are "PrepAI Code Architect" — an expert technical interviewer designing real-world coding challenges for {company_focus} at {difficulty} difficulty in {language}.
 
-RULES:
-1. Generate challenges ONLY in the specified programming language.
-2. Match the challenge style to the target company's known interview patterns 
-   (e.g. Amazon → leadership-principle-flavored + data structures/OOP design; 
-   Google → algorithmic depth/optimization; Meta → product-sense + system 
-   scale; Microsoft → practical engineering scenarios).
-3. Scale difficulty and problem framing to experience tier:
-   - 0-1 Years: basic data structures, loops, simple string/array manipulation
-   - 1-3 Years: algorithms, moderate optimization, common patterns (two-pointer, 
-     sliding window, recursion)
-   - 3-5 Years: system-aware coding, multi-step logic, edge-case heavy
-   - 5-8 Years: design-oriented coding (e.g. design a rate limiter), performance 
-     trade-offs
-   - 8+ Years: architecture-level coding tasks, concurrency, large-scale data
-4. If "Adaptive AI" difficulty is selected, generate the FIRST question at Medium, 
-   then adjust difficulty of subsequent questions using submitted score history.
-5. Each challenge must include: problem statement, constraints, 2-3 example 
-   test cases (input/output), and hidden edge-case tests for grading.
-6. Never reveal hidden test cases in the question shown to the candidate.
-7. Respond ONLY in the JSON schema provided. No markdown, no extra text.
+RULES & GUIDELINES:
+1. STRICT DIFFICULTY ({difficulty.upper()}):
+   - "easy": Basic parsing, array/string scanning, simple map lookups, 1-2 edge cases.
+   - "medium": Multi-step algorithmic logic (two pointer, sliding window, BFS/DFS, priority queues), time & memory optimization.
+   - "hard": Complex algorithms, concurrency, system-level design coding, heavy edge cases.
+
+2. TARGET COMPANY ({company_focus.upper()}):
+   - Make the problem statement reflect actual engineering problems encountered at {company_focus}.
+
+3. PROGRAMMING LANGUAGE ({language.upper()}):
+   - Provide starter code and test case formats strictly for {language}.
+
+4. OUTPUT FORMAT:
+   - Respond ONLY in valid JSON matching the exact schema provided.
 """
         full_query = f"{system_prompt}\n\n{user_prompt}"
-        
-        fallback_challenge = {
-            "question_id": f"challenge_{current_question_index}",
-            "title": f"Validating Parentheses in {language}",
-            "difficulty_tag": "medium",
-            "company_style_note": f"{company_focus}-style parsing question",
-            "problem_statement": "Write a function that validates if brackets are correctly closed.",
-            "constraints": ["Time complexity: O(N)", "Memory limit: 256MB"],
-            "example_test_cases": [
-                {"input": "()", "output": "True"},
-                {"input": "([)", "output": "False"}
-            ],
-            "hidden_test_cases": [
-                {"input": "()[]{}", "expected_output": "True"}
-            ],
-            "starter_code": "def solution(s):\n    pass" if language.lower() == "python" else "function solution(s) {\n    return true;\n}",
-            "estimated_time_mins": 20
-        }
+        fallback_challenge = cls.get_randomized_fallback(language, company_focus, difficulty, current_question_index)
 
         try:
             res_dict = AIService.route_request("chat", full_query, user)
@@ -114,6 +174,8 @@ RULES:
                     parsed = json.loads(raw_response)
                 
                 if isinstance(parsed, dict) and "problem_statement" in parsed:
+                    if not parsed.get("starter_code") or len(parsed.get("starter_code", "")) < 5:
+                        parsed["starter_code"] = cls.get_starter_code(language)
                     return parsed
         except Exception as e:
             logger.error(f"Challenge AI generation failed: {str(e)}")

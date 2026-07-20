@@ -223,27 +223,108 @@ class InterviewService:
             # Start query set
             qs = BankQuestion.objects.filter(is_active=True)
             
-            # If candidate selected specific tech stack tags/topics, filter by them!
-            if session.tech_stack:
-                tech_filter = Q()
-                for tech in session.tech_stack:
-                    tech_filter |= Q(topic__name__icontains=tech) | Q(category__name__icontains=tech) | Q(question__icontains=tech)
-                tech_qs = qs.filter(tech_filter)
-                if tech_qs.exists():
-                    qs = tech_qs
+            # Normalize difficulty string (Easy, Medium, Hard)
+            target_diff = str(difficulty or 'Medium').capitalize()
+
+            # 1. Apply difficulty filter
+            diff_qs = qs.filter(difficulty__iexact=target_diff)
+            if not diff_qs.exists():
+                diff_qs = qs  # fallback if specified difficulty has no questions
+
+            # 2. Check Interview Mode-specific Category Overrides
+            mode_str = str(session.interview_mode or '').lower()
             
-            # Filter by matching target role name or category
-            role_qs = qs.filter(role__title__icontains=role)
-            if not role_qs.exists() and "frontend" in role.lower():
-                role_qs = qs.filter(category__name__icontains="frontend")
-            elif not role_qs.exists() and "backend" in role.lower():
-                role_qs = qs.filter(category__name__icontains="backend")
+            if 'behavioral' in mode_str:
+                mode_qs = diff_qs.filter(category__name__icontains='Behavioral')
+                if not mode_qs.exists():
+                    mode_qs = qs.filter(category__name__icontains='Behavioral')
+                bank_qs = list(mode_qs.order_by('?')[:session.total_questions])
+            elif 'hr' in mode_str:
+                mode_qs = diff_qs.filter(category__name__icontains='HR')
+                if not mode_qs.exists():
+                    mode_qs = qs.filter(category__name__icontains='HR')
+                bank_qs = list(mode_qs.order_by('?')[:session.total_questions])
+            elif 'rapid' in mode_str:
+                mode_qs = diff_qs.filter(Q(category__name__icontains='Behavioral') | Q(category__name__icontains='HR') | Q(category__name__icontains='Technical'))
+                if not mode_qs.exists():
+                    mode_qs = diff_qs
+                bank_qs = list(mode_qs.order_by('?')[:session.total_questions])
+            elif 'mixed' in mode_str:
+                mode_qs = diff_qs
+                bank_qs = list(mode_qs.order_by('?')[:session.total_questions])
+            elif 'design' in mode_str:
+                mode_qs = diff_qs.filter(category__name__icontains='System Design')
+                if not mode_qs.exists():
+                    mode_qs = qs.filter(category__name__icontains='System Design')
+                bank_qs = list(mode_qs.order_by('?')[:session.total_questions])
+            elif 'coding' in mode_str:
+                mode_qs = diff_qs.filter(category__name__icontains='DSA')
+                if not mode_qs.exists():
+                    mode_qs = qs.filter(category__name__icontains='DSA')
+                bank_qs = list(mode_qs.order_by('?')[:session.total_questions])
+            elif session.tech_stack:
+                skills = [str(s).strip() for s in session.tech_stack if str(s).strip()]
+                num_skills = len(skills)
+                total_req = session.total_questions
                 
-            if not role_qs.exists():
-                role_qs = qs  # fallback to all active questions
+                # Proportionally allocate questions across selected skills/categories
+                base_per_skill = max(1, total_req // num_skills) if num_skills > 0 else total_req
+                remainder = total_req % num_skills if num_skills > 0 else 0
                 
-            # Retrieve requested number of questions
-            bank_qs = list(role_qs.order_by('?')[:session.total_questions])
+                collected_qs = []
+                seen_q_ids = set()
+                
+                for idx, tech in enumerate(skills):
+                    quota = base_per_skill + (1 if idx < remainder else 0)
+                    if quota <= 0:
+                        continue
+                    
+                    tech_q = (
+                        Q(tags__icontains=tech) |
+                        Q(topic__name__icontains=tech) |
+                        Q(category__name__icontains=tech) |
+                        Q(question__icontains=tech) |
+                        Q(short_description__icontains=tech) |
+                        Q(expected_answer__icontains=tech)
+                    )
+                    
+                    # Priority A: Match tech skill AND target difficulty
+                    skill_diff_qs = diff_qs.filter(tech_q).exclude(id__in=seen_q_ids)
+                    chosen = list(skill_diff_qs.order_by('?')[:quota])
+                    
+                    # Priority B: Fallback to match tech skill across any difficulty if needed
+                    if len(chosen) < quota:
+                        needed = quota - len(chosen)
+                        already_ids = seen_q_ids.union(set(q.id for q in chosen))
+                        skill_any_diff = qs.filter(tech_q).exclude(id__in=already_ids)
+                        chosen.extend(list(skill_any_diff.order_by('?')[:needed]))
+                        
+                    for q in chosen:
+                        seen_q_ids.add(q.id)
+                        collected_qs.append(q)
+                
+                # Fill remaining slots from difficulty-matched questions if needed
+                if len(collected_qs) < total_req:
+                    needed = total_req - len(collected_qs)
+                    fillers = list(diff_qs.exclude(id__in=seen_q_ids).order_by('?')[:needed])
+                    for q in fillers:
+                        seen_q_ids.add(q.id)
+                        collected_qs.append(q)
+
+                final_qs = collected_qs
+                bank_qs = final_qs[:total_req]
+            else:
+                # If no specific tech stack specified, filter by target role or category
+                role_qs = diff_qs.filter(role__title__icontains=role)
+                if not role_qs.exists() and "frontend" in role.lower():
+                    role_qs = diff_qs.filter(category__name__icontains="frontend")
+                elif not role_qs.exists() and "backend" in role.lower():
+                    role_qs = diff_qs.filter(category__name__icontains="backend")
+                    
+                if not role_qs.exists():
+                    role_qs = diff_qs
+                final_qs = role_qs
+                bank_qs = list(final_qs.order_by('?')[:session.total_questions])
         except Exception as err:
             import logging
             logger = logging.getLogger(__name__)
