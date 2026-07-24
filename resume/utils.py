@@ -85,3 +85,62 @@ def parse_resume_document(file_path, file_type: str) -> tuple:
     elif ft in ['doc', 'docx']:
         return extract_docx_text_and_pages(file_path)
     return "", 1
+
+
+class JobMatchGenerator:
+    SYSTEM_PROMPT = """
+You are "PrepAI Job Description Matcher" — an expert AI recruiter and talent analyst.
+Your task is to analyze a candidate's resume text against a target Job Description (JD) text, perform a professional skill-gap analysis, and provide clear recommendations.
+
+RULES:
+1. Extract candidate's skills strictly from the resume. Do not assume skills not mentioned or implied by actual accomplishments.
+2. Extract required skills from the job description.
+3. Compare the candidate's skills against the job description requirements to identify:
+   - Matching Skills (skills in the resume that match the JD requirements)
+   - Missing Skills (critical/important skills in the JD that are missing or weak in the resume)
+4. Calculate a match_score (0 to 100) representing how well the candidate's profile aligns with the JD. Be realistic:
+   - 90-100: Perfect or near-perfect match of all required tech stack and experience.
+   - 70-89: Good match, possesses most core skills, minor gaps in secondary requirements.
+   - 50-69: Moderate match, has some matching core skills but misses several key requirements.
+   - Below 50: Weak match, fits very few requirements.
+5. Provide a professional list of strengths (why they fit) and a constructive gap analysis (where they fall short).
+6. Provide actionable recommendations on how to update their resume or prepare for the interview to address the gaps.
+7. Respond ONLY in the requested JSON format. No markdown block wrapper, no preamble, no tail.
+"""
+
+    @classmethod
+    def build_user_prompt(cls, resume_text: str, job_description: str) -> str:
+        return f"""
+RESUME TEXT:
+\"\"\"
+{resume_text}
+\"\"\"
+
+JOB DESCRIPTION (JD):
+\"\"\"
+{job_description}
+\"\"\"
+
+TASK:
+Perform a professional match analysis. Output a JSON object matching this schema:
+{{
+  "match_score": 85,
+  "detected_candidate_skills": ["Python", "Django", "PostgreSQL", "React", "REST APIs"],
+  "required_job_skills": ["Python", "Django", "Kubernetes", "AWS", "gRPC"],
+  "matching_skills": ["Python", "Django"],
+  "missing_skills": ["Kubernetes", "AWS", "gRPC"],
+  "strengths": [
+    "Strong backend engineering foundation with Django and Python.",
+    "Good experience in REST APIs and database modeling."
+  ],
+  "gap_analysis": [
+    "Missing container orchestration experience (Kubernetes).",
+    "No explicit AWS cloud hosting experience mentioned in the resume."
+  ],
+  "actionable_recommendations": [
+    "Add any project work involving Kubernetes or Docker containers to highlight your deployment skills.",
+    "If you have used AWS, explicitly mention services like EC2, S3, or ECS under your professional experience."
+  ]
+}}
+"""
+

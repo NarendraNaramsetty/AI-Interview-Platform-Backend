@@ -94,7 +94,7 @@ class CodeChallengeGenerator:
                            experience_tier: str, difficulty: str, current_question_index: int, 
                            prev_difficulty: str = "medium", prev_score: int = None, 
                            score_history: list = None, resume_parsed_summary: str = "No Resume Parsed", 
-                           user = None) -> dict:
+                           user = None, session_id: str = "unknown") -> dict:
         
         score_history_str = str(score_history) if score_history else "[]"
         prev_score_str = str(prev_score) if prev_score is not None else "None"
@@ -143,44 +143,68 @@ Respond strictly in this JSON schema:
 """
 
         system_prompt = f"""
-You are "PrepAI Code Architect" — an expert technical interviewer designing real-world coding challenges for {company_focus} at {difficulty} difficulty in {language}.
+You are "PrepAI Code Architect" — a distinguished technical interviewer who designs production-oriented, highly realistic software engineering coding challenges for {company_focus} at {difficulty} difficulty using {language}.
 
-RULES & GUIDELINES:
-1. STRICT DIFFICULTY ({difficulty.upper()}):
-   - "easy": Basic parsing, array/string scanning, simple map lookups, 1-2 edge cases.
-   - "medium": Multi-step algorithmic logic (two pointer, sliding window, BFS/DFS, priority queues), time & memory optimization.
-   - "hard": Complex algorithms, concurrency, system-level design coding, heavy edge cases.
-
-2. TARGET COMPANY ({company_focus.upper()}):
-   - Make the problem statement reflect actual engineering problems encountered at {company_focus}.
-
-3. PROGRAMMING LANGUAGE ({language.upper()}):
-   - Provide starter code and test case formats strictly for {language}.
-
-4. OUTPUT FORMAT:
-   - Respond ONLY in valid JSON matching the exact schema provided.
+RULES & GUIDELINES FOR PROBLEM DESIGN:
+1. NO TOY OR ABSTRACT PUZZLES: Do not generate pure mathematical problems (e.g., Fibonacci, Factorial, Prime counting) or abstract textbook challenges. Wrap every problem in a highly realistic software engineering story context typical of {company_focus} (e.g., e-commerce order queues, streaming data packet buffers, rate limiters, graph dependencies, high-concurrency event handlers, telemetry log aggregations, transaction ledger verifiers).
+2. STRICT DIFFICULTIES:
+   - "easy": 1-2 core algorithmic operations (basic arrays/strings scanning, simple dictionary tracking, or sliding window) with 2-3 standard edge cases.
+   - "medium": Multi-step production algorithms (BFS/DFS graph path search, dynamic programming caches, two-pointer arrays sorting, custom structures, priority queues).
+   - "hard": Highly optimized distributed architecture coding scenarios (concurrency models, circular dependency graphs, custom memory limits, low-level binary data parsing, memory-efficient streams parsing).
+3. DESIGN ROBUST STARTER CODE:
+   - Provide a clean class and function structure in {language} with type safety where appropriate. Make parameter and function names meaningful.
+4. TEST CASES AND CONSTRAINTS:
+   - Provide clear time and space complexity constraints (e.g., "Time: O(N log N)", "Space: O(N)").
+   - Include 2-3 example test cases illustrating normal cases, and 2-3 hidden test cases validating edge inputs (e.g., empty parameters, maximum numbers limits, duplicates).
+5. Output STRICTLY raw JSON matching the requested schema. No markdown codeblock formatting, no text before or after the JSON.
 """
         full_query = f"{system_prompt}\n\n{user_prompt}"
         fallback_challenge = cls.get_randomized_fallback(language, company_focus, difficulty, current_question_index)
 
-        try:
-            res_dict = AIService.route_request("chat", full_query, user)
-            raw_response = res_dict.get("response") if res_dict else None
-            if raw_response:
-                json_match = re.search(r'(\{.*\}|\[.*\])', raw_response, re.DOTALL)
-                if json_match:
-                    parsed = json.loads(json_match.group(1))
-                else:
-                    parsed = json.loads(raw_response)
-                
-                if isinstance(parsed, dict) and "problem_statement" in parsed:
-                    if not parsed.get("starter_code") or len(parsed.get("starter_code", "")) < 5:
-                        parsed["starter_code"] = cls.get_starter_code(language)
-                    return parsed
-        except Exception as e:
-            logger.error(f"Challenge AI generation failed: {str(e)}")
+        from nlp.utils.ai_runner import execute_ai_call_with_retry
+        
+        user_id_str = str(user.id) if user else "unknown"
+        session_id_str = str(session_id) if session_id else "unknown"
+        
+        metadata = {
+            "difficulty": str(difficulty).lower(),
+            "company": company_focus,
+            "mode": "DSA",
+            "language": language
+        }
+        
+        def validator_func(raw_response: str) -> dict:
+            if not raw_response:
+                raise ValueError("Response is empty")
+            json_match = re.search(r'(\{.*\}|\[.*\])', raw_response, re.DOTALL)
+            if json_match:
+                parsed = json.loads(json_match.group(1))
+            else:
+                parsed = json.loads(raw_response)
+            
+            if not isinstance(parsed, dict) or "problem_statement" not in parsed:
+                raise ValueError("Parsed JSON is not a dictionary or missing problem_statement")
+            
+            if not parsed.get("starter_code") or len(parsed.get("starter_code", "")) < 5:
+                parsed["starter_code"] = cls.get_starter_code(language)
+            return parsed
 
-        return fallback_challenge
+        try:
+            parsed_challenge = execute_ai_call_with_retry(
+                request_type="chat",
+                prompt=full_query,
+                user=user,
+                feature="sandbox",
+                session_id=session_id_str,
+                user_id=user_id_str,
+                metadata=metadata,
+                validator_func=validator_func,
+                fallback_tier=3
+            )
+            return parsed_challenge
+        except Exception as e:
+            logger.error(f"Challenge AI generation failed and fell back to Tier 3: {str(e)}")
+            return fallback_challenge
 
     @classmethod
     def evaluate_submission(cls, problem_statement: str, hidden_test_cases: list, 

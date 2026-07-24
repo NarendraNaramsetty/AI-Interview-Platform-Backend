@@ -56,7 +56,8 @@ class CodingSandboxService:
             prev_score=prev_score,
             score_history=score_history,
             resume_parsed_summary=resume_summary,
-            user=session.user
+            user=session.user,
+            session_id=str(session.id)
         )
 
         return CodingChallengeResult.objects.create(

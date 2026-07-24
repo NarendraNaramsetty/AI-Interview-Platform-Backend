@@ -211,9 +211,90 @@ class InterviewService:
         """
         Generates role-specific mock InterviewQuestions, inserting them in the database.
         """
+        import time
+        overall_start = time.time()
         role = session.target_role
         company = session.target_company
         difficulty = session.difficulty
+
+        # 1. Try to generate custom questions via AI in real-time first
+        try:
+            from nlp.utils.ai_runner import execute_ai_call_with_retry
+            import json
+            import re
+
+            from nlp.utils.question_generator import InterviewQuestionGenerator
+            
+            resume_summary = "No Resume Connected"
+            if session.resume:
+                resume_text = getattr(session.resume, "parsed_text", "") or getattr(session.resume, "extracted_skills", "")
+                resume_summary = str(resume_text)[:800]
+
+            system_prompt, user_prompt = InterviewQuestionGenerator.build_prompts(
+                role=role,
+                company=company,
+                difficulty=difficulty,
+                mode=session.interview_mode,
+                skills=session.tech_stack,
+                question_count=session.total_questions,
+                experience_level=getattr(session, "experience_level", "Mid-Level"),
+                resume_summary=resume_summary
+            )
+            user_id_str = str(session.user.id) if session.user else "unknown"
+            session_id_str = str(session.id) if session else "unknown"
+            
+            metadata = {
+                "difficulty": str(difficulty).lower(),
+                "company": company,
+                "mode": session.interview_mode,
+                "role": role
+            }
+
+            def validator_func(raw_response: str) -> list:
+                if not raw_response:
+                    raise ValueError("Response is empty")
+                json_match = re.search(r'(\[.*\]|\{.*\})', raw_response, re.DOTALL)
+                if json_match:
+                    parsed = json.loads(json_match.group(1))
+                else:
+                    parsed = json.loads(raw_response)
+                
+                if not isinstance(parsed, list) or len(parsed) == 0:
+                    raise ValueError("Parsed JSON is not a non-empty list of questions")
+                return parsed
+
+            parsed_questions = execute_ai_call_with_retry(
+                request_type="chat",
+                prompt=f"{system_prompt}\n\n{user_prompt}",
+                user=session.user,
+                feature="interview",
+                session_id=session_id_str,
+                user_id=user_id_str,
+                metadata=metadata,
+                validator_func=validator_func,
+                fallback_tier=2
+            )
+
+            questions_list = []
+            for idx, q_data in enumerate(parsed_questions[:session.total_questions]):
+                q = InterviewQuestion.objects.create(
+                    session=session,
+                    question_text=q_data.get("question_text", "Explain your experience."),
+                    topic=q_data.get("topic", "General"),
+                    category=q_data.get("category", "Technical"),
+                    difficulty=difficulty,
+                    sequence_number=idx + 1,
+                    source='AI_Core',
+                    expected_answer_placeholder=q_data.get("expected_answer_placeholder", "Demonstrate standard principles.")
+                )
+                questions_list.append(q)
+            
+            if len(questions_list) > 0:
+                return questions_list
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Interview AI question generation failed and fell back to Tier 2: {str(e)}")
 
         # Try to load matching questions from the main InterviewQuestion bank
         try:
@@ -362,7 +443,28 @@ class InterviewService:
                     )
                     questions_list.append(q)
         else:
-            # Set default generic tech/HR mock prompts
+            # Set default generic tech/HR mock prompts (Tier 3 fallback reached)
+            tracker_logger = logging.getLogger("ai_generation_tracker")
+            from nlp.utils.metrics import MetricsCollector
+            user_id_str = str(session.user.id) if session.user else "unknown"
+            session_id_str = str(session.id) if session else "unknown"
+            latency_ms = int((time.time() - overall_start) * 1000)
+            
+            log_data = {
+                "tier_reached": 3,
+                "failure_reason": "no_db_match",
+                "latency_ms": latency_ms,
+                "role": role,
+                "company": company,
+                "difficulty": difficulty,
+                "mode": session.interview_mode,
+                "session_id": session_id_str,
+                "user_id": user_id_str
+            }
+            tracker_logger.error(json.dumps(log_data))
+            MetricsCollector.increment_counter("generation_tier_result_total", {"tier": "3", "failure_reason": "no_db_match", "feature": "interview"})
+            MetricsCollector.record_histogram("generation_latency_ms", latency_ms, {"tier": "3", "feature": "interview"})
+
             mock_prompts = [
                 f"Introduce yourself and highlight your experience as a {role}.",
                 f"What do you know about the engineering culture at {company} and why do you want to join?",

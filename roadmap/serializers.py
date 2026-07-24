@@ -237,7 +237,7 @@ class RoadmapDetailSerializer(serializers.ModelSerializer):
 
 class UserRoadmapSerializer(serializers.ModelSerializer):
     roadmap_title = serializers.CharField(source='roadmap.title', read_only=True)
-    roadmap_details = RoadmapSerializer(source='roadmap', read_only=True)
+    roadmap_details = RoadmapDetailSerializer(source='roadmap', read_only=True)
 
     class Meta:
         model = UserRoadmap

@@ -26,7 +26,7 @@ class CodingChallengeResult(models.Model):
 
     def __str__(self):
         return f"Challenge Result of Session {self.session_id} - Score: {self.ai_score}"
-
+    
 
 class InterviewSession(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

@@ -1,30 +1,85 @@
+import uuid
 from .keyword_extractor import TechKeywordExtractor
 
 class InterviewQuestionGenerator:
-    SYSTEM_PROMPT = """
-You are "PrepAI Interviewer" — a senior technical interviewer at a top tech company conducting a realistic, role-specific mock interview.
+    COMPANY_SCENARIO_MAP = {
+        "Amazon": "Logistics, fulfillment, scale. (e.g. 'Design a system to reprioritize warehouse pick-paths when a shipment is delayed')",
+        "Netflix": "Streaming, recommendation, buffering. (e.g. 'A user's video buffer stutters intermittently on 4G — walk through your debugging approach')",
+        "Google": "Search relevance, massive-scale infrastructure. (e.g. 'How would you reduce P99 latency on a query serving 1M req/s?')",
+        "Meta": "Social graph, feed ranking, real-time sync. (e.g. 'Design a rate limiter for a comment-spam surge during a live event')",
+        "Stripe": "Idempotency, consistency, fraud detection. (e.g. 'A payment webhook fires twice for the same transaction — how do you prevent double-charging?')",
+        "Fintech": "Idempotency, consistency, fraud detection. (e.g. 'A payment webhook fires twice for the same transaction — how do you prevent double-charging?')",
+        "Uber": "Geospatial, matching, real-time dispatch. (e.g. 'Two drivers get matched to the same rider due to a race condition — diagnose it')",
+        "Lyft": "Geospatial, matching, real-time dispatch. (e.g. 'Two drivers get matched to the same rider due to a race condition — diagnose it')",
+    }
 
-RULES & GUIDELINES FOR INTERVIEW MODES:
-1. "System Design": Ask high-level architecture, database schema, caching layers, load balancing, message queues, microservices, and scalability trade-offs (e.g. "Design a notification service for Netflix handling 100M active streams").
-2. "Behavioral Round": Use the STAR method (Situation, Task, Action, Result) asking for real scenarios about leadership, technical conflicts, tight deadlines, or managing failures.
-3. "HR Round": Focus on personal background, career vision, motivation for the target company, work environment fit, strengths/weaknesses, and salary/role expectations.
-4. "Rapid Fire": Short, crisp, fast-paced technical and conceptual questions designed for quick 1-2 minute answers.
-5. "Coding": Focus on data structures, algorithmic efficiency, optimization, and edge case handling.
-6. "Voice": Conversational questions suitable for verbal explanations and microphone delivery.
-7. "Text": Standard written technical scenarios and architectural walk-throughs.
-8. "Mixed Mock": A balanced hybrid evaluation blending technical scenarios, system design logic, and behavioral prompts.
+    MODE_RULES = {
+        "Text": "Standard written Q&A. The question text should be answerable in 3-6 sentences. No code is expected.",
+        "Voice": "Conversational and shorter (one sentence setup + one sentence ask) since the candidate will speak the answer aloud.",
+        "Coding": "Include I/O expectations and constraints (e.g. input size, time limit) since this feeds the Sandbox. Do NOT include full test cases.",
+        "System Design": "Specify scale numbers (e.g. '10M DAU', '500 writes/sec') and explicitly ask for tradeoffs, not just a diagram ask.",
+        "Behavioral": "Describe an interpersonal or ownership situation ('a teammate's PR breaks prod the night before a launch'), not a technical one. Use STAR-eliciting phrasing ('Tell me about a time when...', 'Walk me through how you handled...').",
+        "HR": "Focus on motivation, culture fit, career trajectory — no technical scenario is needed. Keep to well-known HR question archetypes but personalize using the target role and company.",
+        "Rapid Fire": "Answerable in <30 seconds. Prefer single-concept, low-ambiguity questions even at Medium/Hard difficulty.",
+        "Mixed Mock": "Distribute questions roughly evenly across Technical, Behavioral, and System Design/Coding categories. Do not let one category dominate."
+    }
 
-DIFFICULTY CONSTRAINTS (STRICTLY EASY, MEDIUM, HARD):
-- "easy": Entry-level concepts, fundamental syntax/logic, basic debugging scenarios, 1 core skill focus.
-- "medium": Mid-level production challenges, architectural patterns, multi-skill integration, debugging real outages.
-- "hard": Senior/Lead system design, complex edge cases, high-concurrency/scale bottlenecks, trade-off evaluations.
+    @classmethod
+    def build_prompts(cls, role: str, company: str, difficulty: str, mode: str, skills: list, question_count: int, experience_level: str = "Mid-Level", resume_summary: str = None) -> tuple:
+        # Resolve company flavor
+        company_flavor = cls.COMPANY_SCENARIO_MAP.get(company, "General tech company engineering scale and operational stability.")
+        
+        # Resolve mode instructions
+        mode_instruction = cls.MODE_RULES.get(mode, "Standard written technical and behavioral evaluation.")
+        
+        skills_str = ", ".join(skills) if skills else "General software development engineering concepts"
+        
+        system_prompt = f"""
+You are a Staff Engineer at {company} conducting a real {mode} interview for a {role} candidate.
+You do not ask generic textbook definition questions. Every question must be grounded in a specific, plausible engineering situation that could actually occur at {company}, matching this domain flavor:
+Domain Flavor: {company_flavor}
 
-REAL-WORLD COMPANY CONTEXT:
-- Frame every question within realistic software engineering scenarios typical of the candidate's target company (e.g., e-commerce logistics for Amazon, search/indexing for Google, social graph/feed for Meta, stream buffering for Netflix, microservice APIs for Startups).
+HARD RULES:
+1. Never ask 'What is X?' or 'Explain the difference between X and Y' in isolation. Instead, embed the concept inside a scenario the candidate must reason through.
+2. Each question must reference a concrete situation: a metric, a failure mode, a scale number, or a business constraint — not an abstract topic.
+3. Do not repeat the same underlying concept twice across the generated questions.
+4. Match difficulty ({difficulty}) precisely:
+   - Easy: one clear correct approach, minimal ambiguity, single skill area.
+   - Medium: 2+ skills combined, one tradeoff to reason about, some missing info.
+   - Hard: open-ended, multiple valid approaches, candidate must state assumptions.
+5. Apply these mode-specific rules for {mode}:
+   {mode_instruction}
 
-NEVER generate generic, textbook, or placeholder questions like "What is a variable?". Every question must be grounded in a realistic scenario.
-Respond ONLY in valid JSON matching the schema provided. No markdown codeblock wrappers.
+DO NOT generate questions like:
+- 'What is RAG and how does it work?'
+- 'Explain the difference between SQL and NoSQL.'
+- 'What is a rate limiter?'
+
+INSTEAD, generate questions that require reasoning, such as:
+- 'Your RAG system's retrieval step is fast, but generation quality drops when the corpus doubles — where would you look first?'
+- 'A webhook fires twice for the same payment transaction on a high-throughput endpoint — how do you design the consumer to guarantee idempotency under a 50ms processing limit?'
 """
+
+        user_prompt = f"""
+Generate exactly {question_count} mock interview questions matching:
+- Target Role: {role}
+- Target Company: {company}
+- Experience Level: {experience_level}
+- Difficulty: {difficulty}
+- Selected Tech Stack: {skills_str}
+- Resume context: {resume_summary or 'No resume provided.'}
+
+Respond strictly in this JSON array schema (no markdown fences, no preamble, no tail):
+[
+  {{
+    "question_text": "Detailed question prompt conforming to the {mode} rules.",
+    "topic": "Specific skill/topic name from the selected stack",
+    "category": "Technical" | "Behavioral" | "System Design" | "Coding" | "HR",
+    "expected_answer_placeholder": "High-level summary of what a strong answer should cover."
+  }}
+]
+"""
+        return system_prompt, user_prompt
 
     @classmethod
     def build_user_prompt(cls, session_config: dict, session_state: dict) -> str:

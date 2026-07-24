@@ -74,7 +74,7 @@ class AIService:
         return target
 
     @classmethod
-    def route_request(cls, request_type: str, prompt: str, user=None) -> dict:
+    def route_request(cls, request_type: str, prompt: str, user=None, timeout=None) -> dict:
         """
         Route request to active provider endpoint (e.g. Ollama, Gemini, Groq) using live APIs.
         """
@@ -128,7 +128,7 @@ class AIService:
         provider_name = provider.provider_name if provider else "Gemini"
         model_name = provider.model_name if provider else "gemini-2.5-flash"
         base_url = provider.base_url if provider else ""
-        timeout_val = provider.timeout if provider else 30
+        timeout_val = timeout if timeout is not None else (provider.timeout if provider else 30)
 
         # Override model name if empty
         if not model_name:

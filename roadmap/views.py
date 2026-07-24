@@ -376,10 +376,17 @@ class GeneratePersonalizedRoadmapView(APIView):
                 )
 
                 # Create the Roadmap template
+                import json
+                description_payload = {
+                    "inferred_level_reason": roadmap_data.get("inferred_level_reason", ""),
+                    "prerequisites": roadmap_data.get("prerequisites", []),
+                    "preparation_guide": roadmap_data.get("preparation_guide", {})
+                }
+                
                 duration_hours = sum(m.get('estimated_hours', 10) for m in roadmap_data.get('milestones', []))
                 roadmap = Roadmap.objects.create(
                     title=roadmap_data.get('pathway_title', f"Roadmap - {interest}"),
-                    description=roadmap_data.get('inferred_level_reason', f"Level inferred: {roadmap_data.get('inferred_starting_level', 'Medium')}"),
+                    description=json.dumps(description_payload),
                     career_path=career_path,
                     estimated_duration=f"{duration_hours} hours",
                     total_modules=len(roadmap_data.get('milestones', [])),

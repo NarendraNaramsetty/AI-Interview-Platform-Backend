@@ -8,14 +8,17 @@ from .views import (
     ResumeTextView,
     ResumeVersionsView,
     ResumeActivityView,
-    ResumeAnalysisView
+    ResumeAnalysisView,
+    ResumeJobMatchView
 )
 
 urlpatterns = [
     path('', ResumeListView.as_view(), name='resume_list'),
     path('upload', ResumeUploadView.as_view(), name='resume_upload'),
     path('analysis', ResumeAnalysisView.as_view(), name='resume_analysis'),
+    path('match', ResumeJobMatchView.as_view(), name='resume_job_match'),
     path('<int:id>', ResumeDetailView.as_view(), name='resume_detail'),
+
     
     # Custom operations paths
     path('<int:id>/download', ResumeDownloadView.as_view(), name='resume_download'),

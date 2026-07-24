@@ -1,13 +1,12 @@
 """
 Roadmap Generator - PrepAI Roadmap Architect
-Generates personalized, simple, genuinely useful learning roadmaps based on user interest.
-Uses LLM to infer starting level and create 4-6 focused milestones.
+Generates personalized, comprehensive, genuinely useful learning roadmaps based on user interest.
+Uses LLM to infer starting level and create structured milestones, prerequisites, and a complete role preparation guide.
 """
 
 import json
 import re
 from typing import Optional, Dict, Any
-import anthropic
 
 
 def generate_roadmap(
@@ -16,7 +15,7 @@ def generate_roadmap(
     resume_context_summary: Optional[str] = None
 ) -> Dict[str, Any]:
     """
-    Generate a simplified, personalized learning roadmap based on user interest.
+    Generate a comprehensive, personalized learning roadmap based on user interest.
 
     Args:
         user_interest_text: What the user wants to become/learn (e.g., "QA Engineer")
@@ -24,7 +23,7 @@ def generate_roadmap(
         resume_context_summary: Optional - summary from connected resume
 
     Returns:
-        Dict with pathway_title, inferred_starting_level, milestones, etc.
+        Dict with pathway_title, inferred_starting_level, prerequisites, preparation_guide, milestones, etc.
         Matches the JSON schema exactly.
     """
 
@@ -42,31 +41,40 @@ def generate_roadmap(
     context_str = "\n".join(context_parts)
 
     # System prompt - the "PrepAI Roadmap Architect" persona
-    system_prompt = """You are "PrepAI Roadmap Architect" — an expert career mentor who designs simple, genuinely useful, personalized learning roadmaps based on a candidate's stated interest or target role.
+    system_prompt = """You are "PrepAI Roadmap Architect" — an expert career mentor who designs comprehensive, highly detailed, personalized learning roadmaps and preparation documentation based on a candidate's stated interest or target role.
 
 RULES:
-1. Keep it SIMPLE. Do not over-engineer the roadmap with excessive nodes, sub-tracks, or jargon. A good roadmap has 4-6 clear milestones, not 15.
-2. Every milestone must be GENUINELY USEFUL — something the candidate would actually need to learn/practice for real job readiness, not filler topics added just to make the roadmap look comprehensive.
-3. Infer the right starting difficulty tier from how the user describes themselves (e.g. "I'm new to testing" → Beginner; "I've done manual QA for 2 years, want to move to automation" → Intermediate).
-4. Order milestones in a logical learning sequence — foundational concepts first, then tools/frameworks, then real-world application, then interview readiness.
-5. Each milestone must include a short reason WHY it matters for the target role, not just a title — this is what makes it feel genuine vs generic.
-6. Avoid duplicate or overlapping milestones. Each one should teach something distinct.
-7. Give a realistic estimated learning time per milestone, based on typical part-time self-study pace (5-8 hrs/week).
-8. Respond ONLY in the JSON schema provided. No markdown, no preamble."""
+1. Provide a COMPREHENSIVE learning roadmap. Do not make it too simple. A complete roadmap should have 5-10 detailed milestones to fully prepare a candidate from core basics to advanced/interview-ready levels.
+2. Every milestone must be GENUINELY USEFUL — including real-world relevance, estimated commitment hours, and key topics.
+3. Infer the right starting difficulty tier (Beginner, Intermediate, or Advanced) from how the user describes themselves.
+4. Order milestones in a logical learning sequence: foundations first, then tools/frameworks, then real-world application, then interview readiness.
+5. Provide "Prerequisites & Basics" (what he wants to know earlier / basic knowledge they should check off before starting).
+6. Provide a complete "Role Preparation Guide" detailing a concrete strategy, key focus areas, mock interview advice, and recommended learning resources to help them prepare completely for that role.
+7. Respond ONLY in the JSON schema provided. No markdown block wrapper, no preamble."""
 
     # User prompt with the task
-    user_prompt = f"""Based on the following context, generate a SIMPLE, genuine, 4-6 milestone learning roadmap.
+    user_prompt = f"""Based on the following context, generate a complete learning roadmap and preparation documentation.
 
 {context_str}
 
-TASK: Generate a realistic roadmap that will prepare them for their stated goal. Infer the appropriate starting difficulty automatically.
+TASK: Generate a realistic, detailed roadmap with prerequisites and a prep guide that will prepare them completely for their target goal.
 
-Respond STRICTLY in this JSON schema (no markdown, no preamble):
+Respond STRICTLY in this JSON schema (no markdown block wrapper, no preamble, no tail):
 {{
   "pathway_title": "...",
   "inferred_starting_level": "Beginner" | "Intermediate" | "Advanced",
   "inferred_level_reason": "<1 line explaining why>",
   "overall_readiness_estimate_percent": <int 0-100>,
+  "prerequisites": [
+    "Prerequisite skill or basic concept 1",
+    "Prerequisite skill or basic concept 2"
+  ],
+  "preparation_guide": {{
+    "strategy": "Detailed strategy explanation on how to completely prepare for the role.",
+    "focus_areas": ["Focus area 1", "Focus area 2", "Focus area 3"],
+    "interview_tips": ["Interview tip 1", "Interview tip 2"],
+    "recommended_resources": ["Official documentation link or book 1", "Practice resource 2"]
+  }},
   "milestones": [
     {{
       "milestone_number": 1,
@@ -102,7 +110,6 @@ Respond STRICTLY in this JSON schema (no markdown, no preamble):
         return roadmap_data
 
     except json.JSONDecodeError as e:
-        # Fallback: return error response
         raise ValueError(f"Failed to parse LLM response as JSON: {str(e)}")
     except Exception as e:
         raise ValueError(f"API error calling AI Service: {type(e).__name__}: {str(e)}")
@@ -137,12 +144,35 @@ def _validate_and_normalize_roadmap(data: Dict[str, Any]) -> Dict[str, Any]:
     if not isinstance(readiness, int) or readiness < 0 or readiness > 100:
         raise ValueError(f"Readiness percent must be 0-100, got {readiness}")
 
+    # Normalize/Validate prerequisites
+    if "prerequisites" not in data or not isinstance(data["prerequisites"], list):
+        data["prerequisites"] = []
+    
+    # Normalize/Validate preparation_guide
+    if "preparation_guide" not in data or not isinstance(data["preparation_guide"], dict):
+        data["preparation_guide"] = {
+            "strategy": "No strategy provided.",
+            "focus_areas": [],
+            "interview_tips": [],
+            "recommended_resources": []
+        }
+    else:
+        guide = data["preparation_guide"]
+        if "strategy" not in guide or not isinstance(guide["strategy"], str):
+            guide["strategy"] = "No strategy provided."
+        if "focus_areas" not in guide or not isinstance(guide["focus_areas"], list):
+            guide["focus_areas"] = []
+        if "interview_tips" not in guide or not isinstance(guide["interview_tips"], list):
+            guide["interview_tips"] = []
+        if "recommended_resources" not in guide or not isinstance(guide["recommended_resources"], list):
+            guide["recommended_resources"] = []
+
     # Validate milestones
     if not isinstance(data["milestones"], list) or len(data["milestones"]) == 0:
         raise ValueError("Milestones must be a non-empty list")
 
-    if len(data["milestones"]) > 6:
-        raise ValueError("Roadmap should have 4-6 milestones, got more than 6")
+    if len(data["milestones"]) > 10:
+        raise ValueError("Roadmap should have at most 10 milestones")
 
     for i, milestone in enumerate(data["milestones"]):
         _validate_milestone(milestone, i + 1)
